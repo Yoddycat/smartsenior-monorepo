@@ -9,8 +9,8 @@
     "test": "turbo test",
     "lint": "turbo lint",
     "clean": "turbo clean && rm -rf node_modules",
-    "storybook": "pnpm --filter @smartsenior/design-system storybook",
-    "storybook:build": "pnpm --filter @smartsenior/design-system build-storybook"
+    "storybook": "pnpm --filter @smartsenior/ui-design-system storybook",
+    "storybook:build": "pnpm --filter @smartsenior/ui-design-system build-storybook"
   },
   "devDependencies": {
     "turbo": "^2.3.0"

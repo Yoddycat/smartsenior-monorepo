@@ -17,9 +17,9 @@ importers:
       '@smartsenior/aios-core':
         specifier: workspace:*
         version: link:../../packages/aios-core
-      '@smartsenior/design-system':
+      '@smartsenior/ui-design-system':
         specifier: workspace:*
-        version: link:../../packages/design-system
+        version: link:../../packages/ui-design-system
       react:
         specifier: ^18.3.0
         version: 18.3.1
@@ -52,7 +52,7 @@ importers:
         specifier: ^2.1.0
         version: 2.1.9(lightningcss@1.31.1)
 
-  packages/design-system:
+  packages/ui-design-system:
     dependencies:
       '@fontsource-variable/inter':
         specifier: ^5.2.8

@@ -13,7 +13,7 @@ import {
   Typography,
   AIChat,
   ChatMessage,
-} from '@smartsenior/design-system'
+} from '@smartsenior/ui-design-system'
 
 import {
   AGENT_ROLES,
