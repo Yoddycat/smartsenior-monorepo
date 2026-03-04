@@ -1,0 +1,684 @@
+# SmartSenior Design System - Design Tokens
+# W3C Design Tokens Community Group (DTCG) Format
+# 3-Layer Architecture: Primitive → Semantic → Component
+
+metadata:
+  name: "SmartSenior Design System"
+  version: "0.1.0"
+  description: "Design tokens for SmartSenior brand - focused on accessibility and clarity for senior users"
+  generated_at: "2026-03-03"
+  dtcg_spec: "2024.11"
+  color_space: "oklch"
+  wcag_target: "AA"
+
+# =============================================================================
+# LAYER 1: PRIMITIVE TOKENS (Raw values - never use directly in components)
+# =============================================================================
+primitive:
+  color:
+    $type: color
+    $description: "Raw color values in OKLCH for wide gamut and accessibility"
+
+    # === AZUIS INSTITUCIONAIS ===
+    blue-900:
+      $value: "oklch(0.25 0.065 245)"
+      $description: "Primary institutional blue - darkest (#003057)"
+    blue-700:
+      $value: "oklch(0.38 0.11 245)"
+      $description: "Primary institutional blue (#004b87)"
+
+    # === CIANOS E VERDES (Apoio/Sucesso) ===
+    cyan-500:
+      $value: "oklch(0.68 0.12 200)"
+      $description: "Cyan accent (#00AEC7)"
+    teal-800:
+      $value: "oklch(0.40 0.08 185)"
+      $description: "Dark teal (#115E67)"
+    teal-500:
+      $value: "oklch(0.58 0.10 175)"
+      $description: "Teal success (#279989)"
+
+    # === LARANJAS E AMARELOS (Destaque/Aviso) ===
+    orange-600:
+      $value: "oklch(0.62 0.21 35)"
+      $description: "Primary orange CTA (#FE5000)"
+    orange-500:
+      $value: "oklch(0.68 0.19 42)"
+      $description: "Orange accent (#FF6A13)"
+    orange-400:
+      $value: "oklch(0.72 0.17 50)"
+      $description: "Light orange (#FF8200)"
+    amber-400:
+      $value: "oklch(0.80 0.14 65)"
+      $description: "Amber warning (#FFAA4D)"
+    yellow-400:
+      $value: "oklch(0.88 0.16 90)"
+      $description: "Yellow highlight (#FFC600)"
+
+    # === NEUTROS ===
+    white:
+      $value: "oklch(1.0 0 0)"
+      $description: "Pure white"
+    gray-50:
+      $value: "oklch(0.98 0.005 250)"
+      $description: "Lightest gray"
+    gray-100:
+      $value: "oklch(0.95 0.008 250)"
+      $description: "Very light gray"
+    gray-200:
+      $value: "oklch(0.90 0.010 250)"
+      $description: "Light gray"
+    gray-300:
+      $value: "oklch(0.82 0.012 250)"
+      $description: "Medium light gray"
+    gray-400:
+      $value: "oklch(0.70 0.015 250)"
+      $description: "Medium gray"
+    gray-500:
+      $value: "oklch(0.55 0.015 250)"
+      $description: "Gray"
+    gray-600:
+      $value: "oklch(0.45 0.015 250)"
+      $description: "Medium dark gray"
+    gray-700:
+      $value: "oklch(0.35 0.015 250)"
+      $description: "Dark gray"
+    gray-800:
+      $value: "oklch(0.25 0.015 250)"
+      $description: "Very dark gray"
+    gray-900:
+      $value: "oklch(0.18 0.015 250)"
+      $description: "Darkest gray"
+    black:
+      $value: "oklch(0.0 0 0)"
+      $description: "Pure black"
+
+  spacing:
+    $type: dimension
+    $description: "Spacing scale based on 4px base unit"
+    0:
+      $value: "0px"
+    px:
+      $value: "1px"
+    0.5:
+      $value: "2px"
+    1:
+      $value: "4px"
+    1.5:
+      $value: "6px"
+    2:
+      $value: "8px"
+    2.5:
+      $value: "10px"
+    3:
+      $value: "12px"
+    3.5:
+      $value: "14px"
+    4:
+      $value: "16px"
+    5:
+      $value: "20px"
+    6:
+      $value: "24px"
+    7:
+      $value: "28px"
+    8:
+      $value: "32px"
+    9:
+      $value: "36px"
+    10:
+      $value: "40px"
+    11:
+      $value: "44px"
+    12:
+      $value: "48px"
+    14:
+      $value: "56px"
+    16:
+      $value: "64px"
+    20:
+      $value: "80px"
+    24:
+      $value: "96px"
+
+  typography:
+    $type: typography
+    $description: "Typography primitives - Gotham for headings, Proxima Nova for body"
+
+    font-family:
+      heading:
+        $value: "'Gotham', 'Gotham Narrow', 'Gotham Condensed', system-ui, sans-serif"
+        $description: "Headings - Gotham family"
+      body:
+        $value: "'Proxima Nova', 'Figtree', 'Barlow', system-ui, sans-serif"
+        $description: "Body text - Proxima Nova with fallbacks"
+      mono:
+        $value: "'JetBrains Mono', 'Fira Code', monospace"
+        $description: "Monospace for code"
+
+    font-size:
+      $description: "Font sizes optimized for senior readability (larger base)"
+      xs:
+        $value: "14px"
+      sm:
+        $value: "16px"
+      base:
+        $value: "18px"
+        $description: "Base size increased for senior accessibility"
+      lg:
+        $value: "20px"
+      xl:
+        $value: "24px"
+      2xl:
+        $value: "28px"
+      3xl:
+        $value: "32px"
+      4xl:
+        $value: "40px"
+      5xl:
+        $value: "48px"
+      6xl:
+        $value: "60px"
+
+    font-weight:
+      normal:
+        $value: "400"
+      medium:
+        $value: "500"
+      semibold:
+        $value: "600"
+      bold:
+        $value: "700"
+      extrabold:
+        $value: "800"
+
+    line-height:
+      tight:
+        $value: "1.2"
+      snug:
+        $value: "1.35"
+      normal:
+        $value: "1.5"
+        $description: "Increased for readability"
+      relaxed:
+        $value: "1.65"
+      loose:
+        $value: "1.8"
+
+  radius:
+    $type: dimension
+    $description: "Border radius scale"
+    none:
+      $value: "0px"
+    sm:
+      $value: "4px"
+    md:
+      $value: "8px"
+    lg:
+      $value: "12px"
+    xl:
+      $value: "16px"
+    2xl:
+      $value: "24px"
+    full:
+      $value: "9999px"
+
+  shadow:
+    $type: shadow
+    $description: "Box shadow definitions"
+    sm:
+      $value: "0 1px 2px 0 oklch(0 0 0 / 0.05)"
+    md:
+      $value: "0 4px 6px -1px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.1)"
+    lg:
+      $value: "0 10px 15px -3px oklch(0 0 0 / 0.1), 0 4px 6px -4px oklch(0 0 0 / 0.1)"
+    xl:
+      $value: "0 20px 25px -5px oklch(0 0 0 / 0.1), 0 8px 10px -6px oklch(0 0 0 / 0.1)"
+
+  z-index:
+    $type: number
+    $description: "Z-index scale for layering elements"
+    hide:
+      $value: -1
+      $description: "Hidden below base layer"
+    base:
+      $value: 0
+      $description: "Base layer"
+    dropdown:
+      $value: 10
+      $description: "Dropdowns, select menus"
+    sticky:
+      $value: 20
+      $description: "Sticky headers, navbars"
+    fixed:
+      $value: 30
+      $description: "Fixed elements"
+    drawer:
+      $value: 40
+      $description: "Drawer/Sheet overlays"
+    modal:
+      $value: 50
+      $description: "Modal dialogs"
+    popover:
+      $value: 60
+      $description: "Popovers, tooltips"
+    toast:
+      $value: 70
+      $description: "Toast notifications"
+    tooltip:
+      $value: 80
+      $description: "Tooltips (highest)"
+    max:
+      $value: 9999
+      $description: "Maximum z-index (skip links, critical overlays)"
+
+  breakpoint:
+    $type: dimension
+    $description: "Responsive breakpoints (mobile-first)"
+    xs:
+      $value: "320px"
+      $description: "Extra small devices (small phones)"
+    sm:
+      $value: "640px"
+      $description: "Small devices (large phones)"
+    md:
+      $value: "768px"
+      $description: "Medium devices (tablets)"
+    lg:
+      $value: "1024px"
+      $description: "Large devices (laptops)"
+    xl:
+      $value: "1280px"
+      $description: "Extra large devices (desktops)"
+    2xl:
+      $value: "1536px"
+      $description: "2XL devices (large desktops)"
+
+  transition:
+    $type: duration
+    $description: "Animation and transition durations"
+    duration:
+      instant:
+        $value: "0ms"
+        $description: "No transition"
+      fast:
+        $value: "150ms"
+        $description: "Quick micro-interactions"
+      normal:
+        $value: "200ms"
+        $description: "Standard transitions"
+      slow:
+        $value: "300ms"
+        $description: "Deliberate animations"
+      slower:
+        $value: "500ms"
+        $description: "Emphasis animations"
+    easing:
+      default:
+        $value: "cubic-bezier(0.4, 0, 0.2, 1)"
+        $description: "Standard easing"
+      in:
+        $value: "cubic-bezier(0.4, 0, 1, 1)"
+        $description: "Ease in (accelerate)"
+      out:
+        $value: "cubic-bezier(0, 0, 0.2, 1)"
+        $description: "Ease out (decelerate)"
+      in-out:
+        $value: "cubic-bezier(0.4, 0, 0.2, 1)"
+        $description: "Ease in-out"
+      linear:
+        $value: "linear"
+        $description: "Linear (no easing)"
+
+  opacity:
+    $type: number
+    $description: "Opacity scale for various states"
+    0:
+      $value: 0
+      $description: "Invisible"
+    5:
+      $value: 0.05
+    10:
+      $value: 0.1
+    20:
+      $value: 0.2
+    30:
+      $value: 0.3
+    40:
+      $value: 0.4
+    50:
+      $value: 0.5
+      $description: "Half opacity"
+    60:
+      $value: 0.6
+    70:
+      $value: 0.7
+    80:
+      $value: 0.8
+    90:
+      $value: 0.9
+    100:
+      $value: 1
+      $description: "Fully opaque"
+    disabled:
+      $value: 0.5
+      $description: "Disabled state"
+    hover:
+      $value: 0.8
+      $description: "Hover overlay"
+
+  border-width:
+    $type: dimension
+    $description: "Border width scale"
+    0:
+      $value: "0px"
+    1:
+      $value: "1px"
+      $description: "Default border"
+    2:
+      $value: "2px"
+      $description: "Medium border"
+    4:
+      $value: "4px"
+      $description: "Thick border"
+    8:
+      $value: "8px"
+      $description: "Extra thick border"
+
+# =============================================================================
+# LAYER 2: SEMANTIC TOKENS (Purpose-driven aliases)
+# =============================================================================
+semantic:
+  color:
+    $type: color
+    $description: "Semantic color assignments - Light Mode defaults"
+
+    # === BACKGROUNDS ===
+    background:
+      $value: "{primitive.color.white}"
+      $description: "Page background"
+    background-subtle:
+      $value: "{primitive.color.gray-50}"
+      $description: "Subtle background for cards/sections"
+    background-muted:
+      $value: "{primitive.color.gray-100}"
+      $description: "Muted background"
+    background-emphasis:
+      $value: "{primitive.color.blue-900}"
+      $description: "Emphasis/hero backgrounds"
+
+    # === FOREGROUND (Text) ===
+    foreground:
+      $value: "{primitive.color.blue-900}"
+      $description: "Primary text - uses institutional blue for brand consistency"
+    foreground-muted:
+      $value: "{primitive.color.gray-600}"
+      $description: "Secondary/muted text"
+    foreground-subtle:
+      $value: "{primitive.color.gray-500}"
+      $description: "Subtle text (placeholders)"
+    foreground-inverse:
+      $value: "{primitive.color.white}"
+      $description: "Text on dark backgrounds"
+
+    # === PRIMARY (Brand/CTA) ===
+    primary:
+      $value: "{primitive.color.blue-700}"
+      $description: "Primary brand color"
+    primary-hover:
+      $value: "{primitive.color.blue-900}"
+      $description: "Primary hover state"
+    primary-foreground:
+      $value: "{primitive.color.white}"
+      $description: "Text on primary"
+
+    # === ACCENT (CTA alternativo) ===
+    accent:
+      $value: "{primitive.color.orange-600}"
+      $description: "Accent/CTA color - high visibility orange"
+    accent-hover:
+      $value: "oklch(0.55 0.22 35)"
+      $description: "Accent hover - darker"
+    accent-foreground:
+      $value: "{primitive.color.white}"
+      $description: "Text on accent"
+
+    # === SEMANTIC STATES ===
+    success:
+      $value: "{primitive.color.teal-500}"
+      $description: "Success state"
+    success-foreground:
+      $value: "{primitive.color.white}"
+
+    warning:
+      $value: "{primitive.color.amber-400}"
+      $description: "Warning state"
+    warning-foreground:
+      $value: "{primitive.color.gray-900}"
+
+    error:
+      $value: "oklch(0.55 0.22 25)"
+      $description: "Error state - accessible red"
+    error-foreground:
+      $value: "{primitive.color.white}"
+
+    info:
+      $value: "{primitive.color.cyan-500}"
+      $description: "Info state"
+    info-foreground:
+      $value: "{primitive.color.gray-900}"
+
+    # === BORDERS ===
+    border:
+      $value: "{primitive.color.gray-200}"
+      $description: "Default border"
+    border-muted:
+      $value: "{primitive.color.gray-100}"
+      $description: "Subtle border"
+    border-emphasis:
+      $value: "{primitive.color.gray-400}"
+      $description: "Emphasized border"
+
+    # === FOCUS (Accessibility critical) ===
+    focus-ring:
+      $value: "{primitive.color.orange-600}"
+      $description: "Focus ring color - high contrast for visibility"
+    focus-ring-offset:
+      $value: "{primitive.color.white}"
+      $description: "Focus ring offset background"
+
+  # Dark mode overrides
+  color-dark:
+    $type: color
+    $description: "Dark mode semantic overrides"
+
+    background:
+      $value: "oklch(0.18 0.04 245)"
+      $description: "Dark background - based on blue-900 darkened"
+    background-subtle:
+      $value: "oklch(0.22 0.04 245)"
+    background-muted:
+      $value: "oklch(0.26 0.04 245)"
+    background-emphasis:
+      $value: "{primitive.color.blue-700}"
+
+    foreground:
+      $value: "{primitive.color.gray-100}"
+    foreground-muted:
+      $value: "{primitive.color.gray-400}"
+    foreground-subtle:
+      $value: "{primitive.color.gray-500}"
+    foreground-inverse:
+      $value: "{primitive.color.blue-900}"
+
+    primary:
+      $value: "oklch(0.65 0.14 245)"
+      $description: "Lightened primary for dark mode"
+    primary-hover:
+      $value: "oklch(0.72 0.12 245)"
+    primary-foreground:
+      $value: "{primitive.color.gray-900}"
+
+    accent:
+      $value: "oklch(0.72 0.18 40)"
+      $description: "Lightened accent for dark mode contrast"
+    accent-hover:
+      $value: "oklch(0.78 0.16 45)"
+    accent-foreground:
+      $value: "{primitive.color.gray-900}"
+
+    border:
+      $value: "oklch(0.35 0.03 245)"
+    border-muted:
+      $value: "oklch(0.28 0.03 245)"
+    border-emphasis:
+      $value: "oklch(0.45 0.03 245)"
+
+    focus-ring:
+      $value: "oklch(0.75 0.18 45)"
+      $description: "Brighter focus ring for dark mode"
+    focus-ring-offset:
+      $value: "oklch(0.18 0.04 245)"
+
+  spacing:
+    $type: dimension
+    $description: "Semantic spacing aliases"
+    page-gutter:
+      $value: "{primitive.spacing.4}"
+    section-gap:
+      $value: "{primitive.spacing.12}"
+    card-padding:
+      $value: "{primitive.spacing.6}"
+    input-padding-x:
+      $value: "{primitive.spacing.4}"
+    input-padding-y:
+      $value: "{primitive.spacing.3}"
+    button-padding-x:
+      $value: "{primitive.spacing.6}"
+    button-padding-y:
+      $value: "{primitive.spacing.3}"
+
+  typography:
+    $description: "Semantic typography compositions"
+    heading-1:
+      font-family: "{primitive.typography.font-family.heading}"
+      font-size: "{primitive.typography.font-size.5xl}"
+      font-weight: "{primitive.typography.font-weight.bold}"
+      line-height: "{primitive.typography.line-height.tight}"
+    heading-2:
+      font-family: "{primitive.typography.font-family.heading}"
+      font-size: "{primitive.typography.font-size.4xl}"
+      font-weight: "{primitive.typography.font-weight.bold}"
+      line-height: "{primitive.typography.line-height.tight}"
+    heading-3:
+      font-family: "{primitive.typography.font-family.heading}"
+      font-size: "{primitive.typography.font-size.3xl}"
+      font-weight: "{primitive.typography.font-weight.semibold}"
+      line-height: "{primitive.typography.line-height.snug}"
+    heading-4:
+      font-family: "{primitive.typography.font-family.heading}"
+      font-size: "{primitive.typography.font-size.2xl}"
+      font-weight: "{primitive.typography.font-weight.semibold}"
+      line-height: "{primitive.typography.line-height.snug}"
+    body:
+      font-family: "{primitive.typography.font-family.body}"
+      font-size: "{primitive.typography.font-size.base}"
+      font-weight: "{primitive.typography.font-weight.normal}"
+      line-height: "{primitive.typography.line-height.normal}"
+    body-large:
+      font-family: "{primitive.typography.font-family.body}"
+      font-size: "{primitive.typography.font-size.lg}"
+      font-weight: "{primitive.typography.font-weight.normal}"
+      line-height: "{primitive.typography.line-height.relaxed}"
+    caption:
+      font-family: "{primitive.typography.font-family.body}"
+      font-size: "{primitive.typography.font-size.sm}"
+      font-weight: "{primitive.typography.font-weight.normal}"
+      line-height: "{primitive.typography.line-height.normal}"
+
+# =============================================================================
+# LAYER 3: COMPONENT TOKENS (Component-specific mappings)
+# =============================================================================
+component:
+  button:
+    $description: "Button component tokens"
+
+    primary:
+      background: "{semantic.color.primary}"
+      background-hover: "{semantic.color.primary-hover}"
+      foreground: "{semantic.color.primary-foreground}"
+      border: "transparent"
+
+    secondary:
+      background: "{semantic.color.background-subtle}"
+      background-hover: "{semantic.color.background-muted}"
+      foreground: "{semantic.color.foreground}"
+      border: "{semantic.color.border}"
+
+    accent:
+      background: "{semantic.color.accent}"
+      background-hover: "{semantic.color.accent-hover}"
+      foreground: "{semantic.color.accent-foreground}"
+      border: "transparent"
+
+    destructive:
+      background: "{semantic.color.error}"
+      background-hover: "oklch(0.48 0.22 25)"
+      foreground: "{semantic.color.error-foreground}"
+      border: "transparent"
+
+    ghost:
+      background: "transparent"
+      background-hover: "{semantic.color.background-muted}"
+      foreground: "{semantic.color.foreground}"
+      border: "transparent"
+
+    outline:
+      background: "transparent"
+      background-hover: "{semantic.color.background-subtle}"
+      foreground: "{semantic.color.primary}"
+      border: "{semantic.color.primary}"
+
+    # Sizes (larger for senior accessibility)
+    size-sm:
+      height: "{primitive.spacing.10}"
+      padding-x: "{primitive.spacing.4}"
+      font-size: "{primitive.typography.font-size.sm}"
+
+    size-md:
+      height: "{primitive.spacing.12}"
+      padding-x: "{primitive.spacing.6}"
+      font-size: "{primitive.typography.font-size.base}"
+
+    size-lg:
+      height: "{primitive.spacing.14}"
+      padding-x: "{primitive.spacing.8}"
+      font-size: "{primitive.typography.font-size.lg}"
+
+  input:
+    $description: "Input/form field tokens"
+    background: "{semantic.color.background}"
+    foreground: "{semantic.color.foreground}"
+    border: "{semantic.color.border}"
+    border-focus: "{semantic.color.primary}"
+    placeholder: "{semantic.color.foreground-subtle}"
+    height: "{primitive.spacing.12}"
+    padding-x: "{primitive.spacing.4}"
+    radius: "{primitive.radius.md}"
+
+  card:
+    $description: "Card component tokens"
+    background: "{semantic.color.background}"
+    foreground: "{semantic.color.foreground}"
+    border: "{semantic.color.border}"
+    radius: "{primitive.radius.lg}"
+    padding: "{primitive.spacing.6}"
+    shadow: "{primitive.shadow.md}"
+
+  badge:
+    $description: "Badge/tag component tokens"
+    padding-x: "{primitive.spacing.2.5}"
+    padding-y: "{primitive.spacing.0.5}"
+    radius: "{primitive.radius.full}"
+    font-size: "{primitive.typography.font-size.xs}"
+    font-weight: "{primitive.typography.font-weight.medium}"

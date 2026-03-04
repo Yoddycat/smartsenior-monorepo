@@ -1,0 +1,173 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$description": "SmartSenior Design System - W3C DTCG Format",
+  "$version": "0.1.0",
+
+  "primitive": {
+    "$description": "Layer 1: Raw values",
+
+    "color": {
+      "$type": "color",
+
+      "blue-900": { "$value": "oklch(0.25 0.065 245)", "$description": "Primary institutional blue - darkest (#003057)" },
+      "blue-700": { "$value": "oklch(0.38 0.11 245)", "$description": "Primary institutional blue (#004b87)" },
+
+      "cyan-500": { "$value": "oklch(0.68 0.12 200)", "$description": "Cyan accent (#00AEC7)" },
+      "teal-800": { "$value": "oklch(0.40 0.08 185)", "$description": "Dark teal (#115E67)" },
+      "teal-500": { "$value": "oklch(0.58 0.10 175)", "$description": "Teal success (#279989)" },
+
+      "orange-600": { "$value": "oklch(0.62 0.21 35)", "$description": "Primary orange CTA (#FE5000)" },
+      "orange-500": { "$value": "oklch(0.68 0.19 42)", "$description": "Orange accent (#FF6A13)" },
+      "orange-400": { "$value": "oklch(0.72 0.17 50)", "$description": "Light orange (#FF8200)" },
+      "amber-400": { "$value": "oklch(0.80 0.14 65)", "$description": "Amber warning (#FFAA4D)" },
+      "yellow-400": { "$value": "oklch(0.88 0.16 90)", "$description": "Yellow highlight (#FFC600)" },
+
+      "white": { "$value": "oklch(1.0 0 0)" },
+      "gray-50": { "$value": "oklch(0.98 0.005 250)" },
+      "gray-100": { "$value": "oklch(0.95 0.008 250)" },
+      "gray-200": { "$value": "oklch(0.90 0.010 250)" },
+      "gray-300": { "$value": "oklch(0.82 0.012 250)" },
+      "gray-400": { "$value": "oklch(0.70 0.015 250)" },
+      "gray-500": { "$value": "oklch(0.55 0.015 250)" },
+      "gray-600": { "$value": "oklch(0.45 0.015 250)" },
+      "gray-700": { "$value": "oklch(0.35 0.015 250)" },
+      "gray-800": { "$value": "oklch(0.25 0.015 250)" },
+      "gray-900": { "$value": "oklch(0.18 0.015 250)" },
+      "black": { "$value": "oklch(0.0 0 0)" }
+    },
+
+    "spacing": {
+      "$type": "dimension",
+      "0": { "$value": "0px" },
+      "px": { "$value": "1px" },
+      "0.5": { "$value": "2px" },
+      "1": { "$value": "4px" },
+      "1.5": { "$value": "6px" },
+      "2": { "$value": "8px" },
+      "2.5": { "$value": "10px" },
+      "3": { "$value": "12px" },
+      "3.5": { "$value": "14px" },
+      "4": { "$value": "16px" },
+      "5": { "$value": "20px" },
+      "6": { "$value": "24px" },
+      "7": { "$value": "28px" },
+      "8": { "$value": "32px" },
+      "9": { "$value": "36px" },
+      "10": { "$value": "40px" },
+      "11": { "$value": "44px" },
+      "12": { "$value": "48px" },
+      "14": { "$value": "56px" },
+      "16": { "$value": "64px" },
+      "20": { "$value": "80px" },
+      "24": { "$value": "96px" }
+    },
+
+    "typography": {
+      "fontFamily": {
+        "$type": "fontFamily",
+        "heading": { "$value": ["Gotham", "Gotham Narrow", "system-ui", "sans-serif"] },
+        "body": { "$value": ["Proxima Nova", "Figtree", "Barlow", "system-ui", "sans-serif"] },
+        "mono": { "$value": ["JetBrains Mono", "Fira Code", "monospace"] }
+      },
+      "fontSize": {
+        "$type": "dimension",
+        "xs": { "$value": "14px" },
+        "sm": { "$value": "16px" },
+        "base": { "$value": "18px", "$description": "Increased for senior accessibility" },
+        "lg": { "$value": "20px" },
+        "xl": { "$value": "24px" },
+        "2xl": { "$value": "28px" },
+        "3xl": { "$value": "32px" },
+        "4xl": { "$value": "40px" },
+        "5xl": { "$value": "48px" },
+        "6xl": { "$value": "60px" }
+      },
+      "fontWeight": {
+        "$type": "fontWeight",
+        "normal": { "$value": 400 },
+        "medium": { "$value": 500 },
+        "semibold": { "$value": 600 },
+        "bold": { "$value": 700 },
+        "extrabold": { "$value": 800 }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "tight": { "$value": 1.2 },
+        "snug": { "$value": 1.35 },
+        "normal": { "$value": 1.5 },
+        "relaxed": { "$value": 1.65 },
+        "loose": { "$value": 1.8 }
+      }
+    },
+
+    "radius": {
+      "$type": "dimension",
+      "none": { "$value": "0px" },
+      "sm": { "$value": "4px" },
+      "md": { "$value": "8px" },
+      "lg": { "$value": "12px" },
+      "xl": { "$value": "16px" },
+      "2xl": { "$value": "24px" },
+      "full": { "$value": "9999px" }
+    }
+  },
+
+  "semantic": {
+    "$description": "Layer 2: Purpose-driven aliases",
+
+    "color": {
+      "$type": "color",
+
+      "background": { "$value": "{primitive.color.white}" },
+      "background-subtle": { "$value": "{primitive.color.gray-50}" },
+      "background-muted": { "$value": "{primitive.color.gray-100}" },
+      "background-emphasis": { "$value": "{primitive.color.blue-900}" },
+
+      "foreground": { "$value": "{primitive.color.blue-900}" },
+      "foreground-muted": { "$value": "{primitive.color.gray-600}" },
+      "foreground-subtle": { "$value": "{primitive.color.gray-500}" },
+      "foreground-inverse": { "$value": "{primitive.color.white}" },
+
+      "primary": { "$value": "{primitive.color.blue-700}" },
+      "primary-hover": { "$value": "{primitive.color.blue-900}" },
+      "primary-foreground": { "$value": "{primitive.color.white}" },
+
+      "accent": { "$value": "{primitive.color.orange-600}" },
+      "accent-hover": { "$value": "oklch(0.55 0.22 35)" },
+      "accent-foreground": { "$value": "{primitive.color.white}" },
+
+      "success": { "$value": "{primitive.color.teal-500}" },
+      "warning": { "$value": "{primitive.color.amber-400}" },
+      "error": { "$value": "oklch(0.55 0.22 25)" },
+      "info": { "$value": "{primitive.color.cyan-500}" },
+
+      "border": { "$value": "{primitive.color.gray-200}" },
+      "border-muted": { "$value": "{primitive.color.gray-100}" },
+      "border-emphasis": { "$value": "{primitive.color.gray-400}" },
+
+      "focus-ring": { "$value": "{primitive.color.orange-600}" }
+    }
+  },
+
+  "component": {
+    "$description": "Layer 3: Component-specific mappings",
+
+    "button": {
+      "primary": {
+        "background": { "$value": "{semantic.color.primary}" },
+        "background-hover": { "$value": "{semantic.color.primary-hover}" },
+        "foreground": { "$value": "{semantic.color.primary-foreground}" }
+      },
+      "accent": {
+        "background": { "$value": "{semantic.color.accent}" },
+        "background-hover": { "$value": "{semantic.color.accent-hover}" },
+        "foreground": { "$value": "{semantic.color.accent-foreground}" }
+      },
+      "size": {
+        "sm": { "height": { "$value": "{primitive.spacing.10}" } },
+        "md": { "height": { "$value": "{primitive.spacing.12}" } },
+        "lg": { "height": { "$value": "{primitive.spacing.14}" } }
+      }
+    }
+  }
+}

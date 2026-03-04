@@ -1,0 +1,23 @@
+{
+  "name": "@smartsenior/monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SmartSenior Monorepo - Design System, AIOS Core e Aplicações",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "clean": "turbo clean && rm -rf node_modules",
+    "storybook": "pnpm --filter @smartsenior/design-system storybook",
+    "storybook:build": "pnpm --filter @smartsenior/design-system build-storybook"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}
