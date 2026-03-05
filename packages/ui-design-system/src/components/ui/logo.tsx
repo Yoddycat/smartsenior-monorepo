@@ -1,236 +1,174 @@
 import * as React from "react"
 
+// Import logo images
+import logoVerticalGradient from '../../assets/logo/PNG_transparente/AF_fenix_curvas_SS_logoV_degrade.png'
+import logoVerticalOrange from '../../assets/logo/PNG_transparente/AF_fenix_curvas_AA_logoV_laranja.png'
+import logoVerticalWhite from '../../assets/logo/PNG_transparente/AF_fenix_curvas_AA_logoV_negativo.png'
+import logoVerticalBlack from '../../assets/logo/PNG_transparente/AF_fenix_curvas_AA_logoV_PB.png'
+
+import logoHorizontalGradient from '../../assets/logo/PNG_transparente/AF_fenix_curvas_SS_logoH_degrade.png'
+import logoHorizontalOrange from '../../assets/logo/PNG_transparente/AF_fenix_curvas_SS_logoH_laranja.png'
+import logoHorizontalWhite from '../../assets/logo/PNG_transparente/AF_fenix_curvas_SS_logoH_negativo.png'
+import logoHorizontalBlack from '../../assets/logo/PNG_transparente/AF_fenix_curvas_SS_logoH_PB.png'
+
+import logoIconGradient from '../../assets/logo/PNG_transparente/logo.png'
+import logoIconGradientLarge from '../../assets/logo/PNG_transparente/AF.png'
+
+import faviconGradient from '../../assets/logo/FAVICON/SS_icone_degradefavicon.png'
+import faviconOrange from '../../assets/logo/FAVICON/SS_icone_laranjafavicon.png'
+import faviconWhite from '../../assets/logo/FAVICON/SS_icone_negativofavicon.png'
+import faviconBlueBg from '../../assets/logo/FAVICON/SS_icone_blueBGfavicon.png'
+
 function cn(...classes: (string | undefined | null | false)[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export interface LogoProps extends React.SVGAttributes<SVGElement> {
-  variant?: 'full' | 'icon' | 'wordmark'
+export interface LogoProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  /** Logo layout variant */
+  variant?: 'vertical' | 'horizontal' | 'icon' | 'favicon'
+  /** Logo size */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
-  color?: 'default' | 'white' | 'primary' | 'mono'
-  animated?: boolean
+  /** Logo color scheme */
+  color?: 'gradient' | 'orange' | 'white' | 'black'
+  /** Additional CSS classes */
   className?: string
 }
 
-const sizes = {
-  xs: { icon: 24, full: 100, wordmark: 80 },
-  sm: { icon: 32, full: 120, wordmark: 96 },
-  md: { icon: 40, full: 160, wordmark: 128 },
-  lg: { icon: 48, full: 200, wordmark: 160 },
-  xl: { icon: 64, full: 240, wordmark: 192 },
-  '2xl': { icon: 80, full: 300, wordmark: 240 },
+const sizeMap = {
+  vertical: {
+    xs: { height: 48 },
+    sm: { height: 64 },
+    md: { height: 80 },
+    lg: { height: 120 },
+    xl: { height: 160 },
+    '2xl': { height: 200 },
+  },
+  horizontal: {
+    xs: { height: 24 },
+    sm: { height: 32 },
+    md: { height: 40 },
+    lg: { height: 56 },
+    xl: { height: 72 },
+    '2xl': { height: 96 },
+  },
+  icon: {
+    xs: { height: 24, width: 24 },
+    sm: { height: 32, width: 32 },
+    md: { height: 40, width: 40 },
+    lg: { height: 56, width: 56 },
+    xl: { height: 72, width: 72 },
+    '2xl': { height: 96, width: 96 },
+  },
+  favicon: {
+    xs: { height: 16, width: 16 },
+    sm: { height: 24, width: 24 },
+    md: { height: 32, width: 32 },
+    lg: { height: 48, width: 48 },
+    xl: { height: 64, width: 64 },
+    '2xl': { height: 96, width: 96 },
+  },
+}
+
+const logoSources = {
+  vertical: {
+    gradient: logoVerticalGradient,
+    orange: logoVerticalOrange,
+    white: logoVerticalWhite,
+    black: logoVerticalBlack,
+  },
+  horizontal: {
+    gradient: logoHorizontalGradient,
+    orange: logoHorizontalOrange,
+    white: logoHorizontalWhite,
+    black: logoHorizontalBlack,
+  },
+  icon: {
+    gradient: logoIconGradientLarge,
+    orange: logoIconGradientLarge, // Using gradient as fallback
+    white: logoIconGradientLarge,
+    black: logoIconGradientLarge,
+  },
+  favicon: {
+    gradient: faviconGradient,
+    orange: faviconOrange,
+    white: faviconWhite,
+    black: faviconBlueBg, // Using blue bg as "dark" variant
+  },
 }
 
 /**
  * SmartSenior Logo Component
  *
+ * Uses the official SmartSenior phoenix (fênix) brand identity.
+ *
  * Variants:
- * - full: Icon + wordmark (horizontal)
- * - icon: Icon only (heart with hand)
- * - wordmark: Text only
+ * - vertical: Full logo with phoenix icon above "SmartSenior" text
+ * - horizontal: Phoenix icon beside "SmartSenior" text
+ * - icon: Phoenix icon only
+ * - favicon: Small favicon version
+ *
+ * Colors:
+ * - gradient: Orange to yellow gradient (default brand color)
+ * - orange: Solid orange
+ * - white: White/negative (for dark backgrounds)
+ * - black: Black/grayscale
  */
-const Logo = React.forwardRef<SVGSVGElement, LogoProps>(
+const Logo = React.forwardRef<HTMLImageElement, LogoProps>(
   (
     {
-      variant = 'full',
+      variant = 'horizontal',
       size = 'md',
-      color = 'default',
-      animated = false,
+      color = 'gradient',
       className,
+      alt = 'SmartSenior',
       ...props
     },
     ref
   ) => {
-    const dimensions = sizes[size]
+    const dimensions = sizeMap[variant][size]
+    const src = logoSources[variant][color]
 
-    const colorMap = {
-      default: {
-        primary: 'var(--primary)',
-        accent: 'var(--accent)',
-        text: 'var(--foreground)',
-      },
-      white: {
-        primary: '#ffffff',
-        accent: '#ffffff',
-        text: '#ffffff',
-      },
-      primary: {
-        primary: 'var(--primary)',
-        accent: 'var(--primary)',
-        text: 'var(--primary)',
-      },
-      mono: {
-        primary: 'currentColor',
-        accent: 'currentColor',
-        text: 'currentColor',
-      },
-    }
-
-    const colors = colorMap[color]
-
-    // Icon - Heart with caring hand
-    const IconSVG = () => (
-      <svg
+    return (
+      <img
         ref={ref}
-        viewBox="0 0 48 48"
-        width={dimensions.icon}
-        height={dimensions.icon}
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+        src={src}
+        alt={alt}
         className={cn(
-          animated && "transition-transform hover:scale-105",
+          "object-contain",
           className
         )}
-        aria-label="SmartSenior"
-        role="img"
+        style={{
+          height: dimensions.height,
+          width: 'width' in dimensions ? dimensions.width : 'auto',
+          ...props.style,
+        }}
         {...props}
-      >
-        {/* Heart shape */}
-        <path
-          d="M24 42C24 42 6 30 6 18C6 12 10.5 7 16.5 7C20.5 7 23 9.5 24 11C25 9.5 27.5 7 31.5 7C37.5 7 42 12 42 18C42 30 24 42 24 42Z"
-          fill={colors.primary}
-          className={animated ? "transition-colors duration-300" : ""}
-        />
-        {/* Caring hand */}
-        <path
-          d="M18 24C18 24 20 22 24 22C28 22 30 24 30 24"
-          stroke={colors.accent}
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          fill="none"
-          opacity="0.9"
-        />
-        <path
-          d="M15 28C15 28 18 26 24 26C30 26 33 28 33 28"
-          stroke={colors.accent}
-          strokeWidth="2"
-          strokeLinecap="round"
-          fill="none"
-          opacity="0.7"
-        />
-        {/* Plus/cross symbol for healthcare */}
-        <path
-          d="M24 14V20M21 17H27"
-          stroke="white"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
+      />
     )
-
-    // Wordmark - SmartSenior text
-    const WordmarkSVG = () => (
-      <svg
-        ref={ref}
-        viewBox="0 0 200 40"
-        width={dimensions.wordmark}
-        height={dimensions.wordmark * 0.2}
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className={cn(
-          animated && "transition-transform hover:scale-105",
-          className
-        )}
-        aria-label="SmartSenior"
-        role="img"
-        {...props}
-      >
-        <text
-          x="0"
-          y="30"
-          fontFamily="var(--font-family-inter, 'Inter', sans-serif)"
-          fontSize="28"
-          fontWeight="700"
-          fill={colors.text}
-        >
-          <tspan fill={colors.primary}>Smart</tspan>
-          <tspan fill={colors.accent}>Senior</tspan>
-        </text>
-      </svg>
-    )
-
-    // Full logo - Icon + Wordmark
-    const FullSVG = () => (
-      <svg
-        ref={ref}
-        viewBox="0 0 260 48"
-        width={dimensions.full}
-        height={dimensions.full * 0.185}
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className={cn(
-          animated && "transition-transform hover:scale-105",
-          className
-        )}
-        aria-label="SmartSenior"
-        role="img"
-        {...props}
-      >
-        {/* Heart icon */}
-        <g transform="translate(0, 0)">
-          <path
-            d="M24 42C24 42 6 30 6 18C6 12 10.5 7 16.5 7C20.5 7 23 9.5 24 11C25 9.5 27.5 7 31.5 7C37.5 7 42 12 42 18C42 30 24 42 24 42Z"
-            fill={colors.primary}
-          />
-          <path
-            d="M18 24C18 24 20 22 24 22C28 22 30 24 30 24"
-            stroke={colors.accent}
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            fill="none"
-            opacity="0.9"
-          />
-          <path
-            d="M15 28C15 28 18 26 24 26C30 26 33 28 33 28"
-            stroke={colors.accent}
-            strokeWidth="2"
-            strokeLinecap="round"
-            fill="none"
-            opacity="0.7"
-          />
-          <path
-            d="M24 14V20M21 17H27"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </g>
-        {/* Wordmark */}
-        <text
-          x="56"
-          y="34"
-          fontFamily="var(--font-family-inter, 'Inter', sans-serif)"
-          fontSize="28"
-          fontWeight="700"
-        >
-          <tspan fill={colors.primary}>Smart</tspan>
-          <tspan fill={colors.accent}>Senior</tspan>
-        </text>
-      </svg>
-    )
-
-    if (variant === 'icon') return <IconSVG />
-    if (variant === 'wordmark') return <WordmarkSVG />
-    return <FullSVG />
   }
 )
 
 Logo.displayName = "Logo"
 
-// Convenience exports
-const LogoIcon = React.forwardRef<SVGSVGElement, Omit<LogoProps, 'variant'>>(
+// Convenience exports for specific variants
+const LogoIcon = React.forwardRef<HTMLImageElement, Omit<LogoProps, 'variant'>>(
   (props, ref) => <Logo ref={ref} variant="icon" {...props} />
 )
 LogoIcon.displayName = "LogoIcon"
 
-const LogoWordmark = React.forwardRef<SVGSVGElement, Omit<LogoProps, 'variant'>>(
-  (props, ref) => <Logo ref={ref} variant="wordmark" {...props} />
+const LogoVertical = React.forwardRef<HTMLImageElement, Omit<LogoProps, 'variant'>>(
+  (props, ref) => <Logo ref={ref} variant="vertical" {...props} />
 )
-LogoWordmark.displayName = "LogoWordmark"
+LogoVertical.displayName = "LogoVertical"
 
-const LogoFull = React.forwardRef<SVGSVGElement, Omit<LogoProps, 'variant'>>(
-  (props, ref) => <Logo ref={ref} variant="full" {...props} />
+const LogoHorizontal = React.forwardRef<HTMLImageElement, Omit<LogoProps, 'variant'>>(
+  (props, ref) => <Logo ref={ref} variant="horizontal" {...props} />
 )
-LogoFull.displayName = "LogoFull"
+LogoHorizontal.displayName = "LogoHorizontal"
 
-export { Logo, LogoIcon, LogoWordmark, LogoFull }
+const LogoFavicon = React.forwardRef<HTMLImageElement, Omit<LogoProps, 'variant'>>(
+  (props, ref) => <Logo ref={ref} variant="favicon" {...props} />
+)
+LogoFavicon.displayName = "LogoFavicon"
+
+export { Logo, LogoIcon, LogoVertical, LogoHorizontal, LogoFavicon }

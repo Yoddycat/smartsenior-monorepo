@@ -204,5 +204,5 @@ export type {
 // ============================================
 // BRAND
 // ============================================
-export { Logo, LogoIcon, LogoWordmark, LogoFull } from './logo'
+export { Logo, LogoIcon, LogoVertical, LogoHorizontal, LogoFavicon } from './logo'
 export type { LogoProps } from './logo'
