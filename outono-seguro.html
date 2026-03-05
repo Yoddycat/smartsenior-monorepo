@@ -1,0 +1,2241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartSenior - Outono Seguro: Guia Preventivo do Personal Senior</title>
+  <style>
+    /* ============================================
+       SMARTSENIOR DESIGN SYSTEM - PDF STYLES
+       ============================================ */
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      /* Brand Colors */
+      --ss-orange: #FF7A00;
+      --ss-orange-light: #FF9A3C;
+      --ss-orange-dark: #E66A00;
+      --ss-navy: #1A365D;
+      --ss-navy-light: #2D4A73;
+      --ss-navy-dark: #0F1F35;
+
+      /* Semantic Colors */
+      --ss-success: #22C55E;
+      --ss-warning: #F59E0B;
+      --ss-danger: #EF4444;
+      --ss-info: #3B82F6;
+
+      /* Neutral Colors */
+      --ss-white: #FFFFFF;
+      --ss-gray-50: #F9FAFB;
+      --ss-gray-100: #F3F4F6;
+      --ss-gray-200: #E5E7EB;
+      --ss-gray-300: #D1D5DB;
+      --ss-gray-400: #9CA3AF;
+      --ss-gray-500: #6B7280;
+      --ss-gray-600: #4B5563;
+      --ss-gray-700: #374151;
+      --ss-gray-800: #1F2937;
+      --ss-gray-900: #111827;
+
+      /* Typography */
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 11pt;
+    }
+
+    body {
+      font-family: var(--font-family);
+      color: var(--ss-gray-800);
+      line-height: 1.6;
+      background: var(--ss-white);
+    }
+
+    /* ============================================
+       PRINT STYLES - PREVENT PAGE BREAKS
+       ============================================ */
+
+    @media print {
+      @page {
+        size: A4;
+        margin: 20mm 15mm 25mm 15mm;
+      }
+
+      body {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      /* Prevent page breaks inside elements */
+      table, .table-container, .checklist, .card, .info-box, .week-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      /* Keep headings with following content */
+      h1, h2, h3, h4, .table-title {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+
+      /* Force page breaks before chapters */
+      .chapter-start {
+        page-break-before: always !important;
+        break-before: page !important;
+      }
+
+      .no-break {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+    }
+
+    /* ============================================
+       LAYOUT
+       ============================================ */
+
+    .page {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 0 15mm;
+    }
+
+    .chapter-start {
+      page-break-before: always;
+    }
+
+    /* ============================================
+       COVER PAGE
+       ============================================ */
+
+    .cover {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--ss-navy) 0%, var(--ss-navy-dark) 100%);
+      color: var(--ss-white);
+      display: flex;
+      flex-direction: column;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -30%;
+      width: 80%;
+      height: 150%;
+      background: radial-gradient(circle, rgba(255,122,0,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cover-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .cover-logo {
+      height: 60px;
+      width: auto;
+    }
+
+    .cover-brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cover-brand-name {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .cover-brand-name span:first-child {
+      color: var(--ss-orange);
+    }
+
+    .cover-tagline {
+      font-size: 12px;
+      color: var(--ss-gray-300);
+      margin-top: 2px;
+    }
+
+    .cover-title {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--ss-orange);
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .cover-subtitle {
+      font-size: 16px;
+      color: var(--ss-gray-300);
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+
+    .cover-hero {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border: 2px solid var(--ss-orange);
+    }
+
+    .cover-stats {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: nowrap;
+    }
+
+    .stat-card {
+      padding: 14px 16px;
+      border-radius: 10px;
+      min-width: 100px;
+      flex: 1;
+      text-align: center;
+    }
+
+    .stat-card.orange { background: var(--ss-orange); }
+    .stat-card.red { background: var(--ss-danger); }
+    .stat-card.green { background: var(--ss-success); }
+    .stat-card.blue { background: var(--ss-info); }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      opacity: 0.9;
+      line-height: 1.2;
+    }
+
+    .cover-tags {
+      display: flex;
+      gap: 16px;
+      flex-wrap: nowrap;
+      margin-bottom: 20px;
+      padding: 14px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+    }
+
+    .cover-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--ss-gray-200);
+    }
+
+    .cover-tag::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--ss-orange);
+      border-radius: 2px;
+    }
+
+    .cover-quote {
+      font-style: italic;
+      font-size: 14px;
+      color: var(--ss-gray-300);
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .cover-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--ss-orange);
+      padding: 12px 40px;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    /* ============================================
+       HEADER & FOOTER
+       ============================================ */
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 2px solid var(--ss-orange);
+      margin-bottom: 24px;
+    }
+
+    .page-header-logo {
+      height: 32px;
+    }
+
+    .page-header-title {
+      font-size: 11px;
+      color: var(--ss-gray-500);
+    }
+
+    .page-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--ss-navy);
+      color: var(--ss-white);
+      padding: 10px 40px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+    }
+
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--ss-navy);
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--ss-navy);
+      margin: 32px 0 16px;
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ss-orange);
+      margin: 24px 0 12px;
+    }
+
+    h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ss-gray-700);
+      margin: 16px 0 8px;
+    }
+
+    p {
+      margin-bottom: 12px;
+    }
+
+    strong {
+      font-weight: 600;
+      color: var(--ss-gray-900);
+    }
+
+    /* ============================================
+       CHAPTER HEADER
+       ============================================ */
+
+    .chapter-header {
+      background: linear-gradient(135deg, var(--ss-navy) 0%, var(--ss-navy-light) 100%);
+      color: var(--ss-white);
+      padding: 32px;
+      border-radius: 16px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chapter-header::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 50%, var(--ss-orange) 50%);
+      opacity: 0.3;
+    }
+
+    .chapter-badge {
+      display: inline-block;
+      background: var(--ss-orange);
+      color: var(--ss-white);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .chapter-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 1;
+      color: var(--ss-white) !important;
+    }
+
+    .chapter-subtitle {
+      font-size: 14px;
+      color: var(--ss-white);
+      opacity: 0.85;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chapter-header-logo {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      height: 50px;
+      width: auto;
+      opacity: 0.9;
+      z-index: 2;
+    }
+
+    /* ============================================
+       TABLES
+       ============================================ */
+
+    .table-container {
+      margin: 24px 0;
+      page-break-inside: avoid;
+    }
+
+    .table-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ss-navy);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .table-title::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: var(--ss-orange);
+      border-radius: 2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      background: var(--ss-white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    thead {
+      background: var(--ss-navy);
+      color: var(--ss-white);
+    }
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--ss-gray-200);
+    }
+
+    tbody tr:nth-child(even) {
+      background: var(--ss-gray-50);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .risk-high {
+      color: var(--ss-danger);
+      font-weight: 600;
+    }
+
+    .risk-medium {
+      color: var(--ss-warning);
+      font-weight: 600;
+    }
+
+    .risk-low {
+      color: var(--ss-success);
+      font-weight: 600;
+    }
+
+    /* ============================================
+       INFO BOXES
+       ============================================ */
+
+    .info-box {
+      padding: 20px 24px;
+      border-radius: 12px;
+      margin: 20px 0;
+      page-break-inside: avoid;
+    }
+
+    .info-box.alert {
+      background: linear-gradient(135deg, #FEF2F2 0%, #FECACA 100%);
+      border-left: 4px solid var(--ss-danger);
+    }
+
+    .info-box.success {
+      background: linear-gradient(135deg, #F0FDF4 0%, #BBF7D0 100%);
+      border-left: 4px solid var(--ss-success);
+    }
+
+    .info-box.info {
+      background: linear-gradient(135deg, #EFF6FF 0%, #BFDBFE 100%);
+      border-left: 4px solid var(--ss-info);
+    }
+
+    .info-box.warning {
+      background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 100%);
+      border-left: 4px solid var(--ss-warning);
+    }
+
+    .info-box-icon {
+      font-size: 20px;
+      margin-right: 12px;
+    }
+
+    .info-box-content {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* ============================================
+       CHECKLISTS
+       ============================================ */
+
+    .checklist {
+      background: var(--ss-gray-50);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      border-left: 4px solid var(--ss-success);
+      page-break-inside: avoid;
+    }
+
+    .checklist-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ss-success);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--ss-gray-200);
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 8px 0;
+    }
+
+    .checklist-box {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--ss-gray-400);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .checklist-text {
+      font-size: 12px;
+      color: var(--ss-gray-700);
+    }
+
+    /* ============================================
+       CARDS
+       ============================================ */
+
+    .card {
+      background: var(--ss-white);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin: 16px 0;
+      page-break-inside: avoid;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .nutrient-card {
+      background: var(--ss-gray-50);
+      border-radius: 12px;
+      padding: 20px;
+      page-break-inside: avoid;
+    }
+
+    .nutrient-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ss-orange);
+      margin-bottom: 8px;
+    }
+
+    .nutrient-desc {
+      font-size: 12px;
+      color: var(--ss-gray-600);
+      margin-bottom: 8px;
+    }
+
+    .nutrient-stat {
+      font-size: 11px;
+      color: var(--ss-navy);
+      font-weight: 600;
+      background: var(--ss-white);
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    /* ============================================
+       WEEK CARDS (30-Day Plan)
+       ============================================ */
+
+    .week-card {
+      background: var(--ss-white);
+      border-radius: 16px;
+      margin: 24px 0;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      page-break-inside: avoid;
+    }
+
+    .week-header {
+      padding: 20px 24px;
+      color: var(--ss-white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .week-1 .week-header { background: var(--ss-info); }
+    .week-2 .week-header { background: var(--ss-orange); }
+    .week-3 .week-header { background: var(--ss-success); }
+    .week-4 .week-header { background: var(--ss-danger); }
+
+    .week-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .week-theme {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .week-number {
+      font-size: 48px;
+      font-weight: 800;
+      opacity: 0.3;
+    }
+
+    .week-tasks {
+      padding: 24px;
+    }
+
+    .week-task {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--ss-gray-100);
+    }
+
+    .week-task:last-child {
+      border-bottom: none;
+    }
+
+    .week-task-bullet {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .week-1 .week-task-bullet { background: var(--ss-info); }
+    .week-2 .week-task-bullet { background: var(--ss-orange); }
+    .week-3 .week-task-bullet { background: var(--ss-success); }
+    .week-4 .week-task-bullet { background: var(--ss-danger); }
+
+    .week-task-text {
+      font-size: 13px;
+      color: var(--ss-gray-700);
+    }
+
+    /* ============================================
+       SUMMARY SECTION
+       ============================================ */
+
+    .toc {
+      background: var(--ss-white);
+      padding: 40px;
+    }
+
+    .toc-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--ss-navy);
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--ss-orange);
+    }
+
+    .toc-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--ss-gray-200);
+    }
+
+    .toc-chapter {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ss-orange);
+      min-width: 80px;
+    }
+
+    .toc-name {
+      flex: 1;
+      font-size: 13px;
+      color: var(--ss-gray-700);
+    }
+
+    .toc-page {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ss-navy);
+    }
+
+    /* ============================================
+       LISTS
+       ============================================ */
+
+    .arrow-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+
+    .arrow-list li {
+      padding: 8px 0 8px 24px;
+      position: relative;
+      font-size: 13px;
+    }
+
+    .arrow-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--ss-orange);
+      font-weight: 700;
+    }
+
+    .bullet-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+
+    .bullet-list li {
+      padding: 6px 0 6px 20px;
+      position: relative;
+      font-size: 12px;
+    }
+
+    .bullet-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 8px;
+      height: 8px;
+      background: var(--ss-orange);
+      border-radius: 2px;
+    }
+
+    /* ============================================
+       PROTOCOL BOX
+       ============================================ */
+
+    .protocol-box {
+      background: linear-gradient(135deg, var(--ss-navy) 0%, var(--ss-navy-light) 100%);
+      color: var(--ss-white);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 24px 0;
+      page-break-inside: avoid;
+    }
+
+    .protocol-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--ss-orange);
+    }
+
+    .protocol-step {
+      display: flex;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .protocol-step:last-child {
+      border-bottom: none;
+    }
+
+    .protocol-time {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ss-orange);
+      min-width: 80px;
+    }
+
+    .protocol-action {
+      font-size: 13px;
+      color: var(--ss-white);
+    }
+
+    /* ============================================
+       CALENDAR TABLE
+       ============================================ */
+
+    .calendar-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 11px;
+    }
+
+    .calendar-table th {
+      background: var(--ss-orange);
+      color: var(--ss-white);
+      padding: 10px 8px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .calendar-table td {
+      padding: 10px 8px;
+      text-align: center;
+      border: 1px solid var(--ss-gray-200);
+    }
+
+    .calendar-table td:first-child {
+      text-align: left;
+      font-weight: 500;
+      background: var(--ss-gray-50);
+    }
+
+    .calendar-check {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--ss-gray-300);
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    /* ============================================
+       FINAL PAGE
+       ============================================ */
+
+    .final-page {
+      background: var(--ss-gray-50);
+      padding: 40px;
+      text-align: center;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    .final-logo {
+      height: 80px;
+      margin-bottom: 24px;
+    }
+
+    .final-logo-horizontal {
+      height: 50px;
+      margin-bottom: 12px;
+    }
+
+    .final-brand {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .final-brand span:first-child {
+      color: var(--ss-orange);
+    }
+
+    .final-brand span:last-child {
+      color: var(--ss-navy);
+    }
+
+    .cta-box {
+      background: var(--ss-white);
+      border-radius: 16px;
+      padding: 32px;
+      margin: 32px 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .cta-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--ss-navy);
+      margin-bottom: 16px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .feature-item {
+      padding: 16px;
+      background: var(--ss-gray-50);
+      border-radius: 12px;
+    }
+
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .feature-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ss-navy);
+      margin-bottom: 4px;
+    }
+
+    .feature-desc {
+      font-size: 10px;
+      color: var(--ss-gray-500);
+    }
+
+    .disclaimer {
+      font-size: 10px;
+      color: var(--ss-gray-500);
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--ss-gray-200);
+    }
+
+    /* Source/Citation */
+    .source {
+      font-size: 9px;
+      color: var(--ss-gray-400);
+      font-style: italic;
+      margin-top: 8px;
+    }
+
+    /* Summary cards */
+    .summary-grid {
+      display: grid;
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .summary-card {
+      display: flex;
+      gap: 16px;
+      padding: 16px;
+      background: var(--ss-gray-50);
+      border-radius: 12px;
+      border-left: 4px solid;
+      page-break-inside: avoid;
+    }
+
+    .summary-card.hydration { border-color: var(--ss-info); }
+    .summary-card.nutrition { border-color: var(--ss-success); }
+    .summary-card.movement { border-color: var(--ss-orange); }
+    .summary-card.vaccine { border-color: var(--ss-danger); }
+    .summary-card.safety { border-color: var(--ss-navy); }
+
+    .summary-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .summary-card.hydration .summary-icon { background: #DBEAFE; }
+    .summary-card.nutrition .summary-icon { background: #D1FAE5; }
+    .summary-card.movement .summary-icon { background: #FED7AA; }
+    .summary-card.vaccine .summary-icon { background: #FEE2E2; }
+    .summary-card.safety .summary-icon { background: #E0E7FF; }
+
+    .summary-content h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ss-gray-800);
+      margin: 0 0 4px 0;
+    }
+
+    .summary-content p {
+      font-size: 12px;
+      color: var(--ss-gray-600);
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================
+       COVER PAGE
+       ============================================ -->
+  <div class="cover">
+    <div class="cover-header">
+      <img src="assets/logo/AF.png" alt="SmartSenior" class="cover-logo">
+      <div class="cover-brand">
+        <div class="cover-brand-name">
+          <span>Smart</span><span>Senior</span>
+        </div>
+        <div class="cover-tagline">Cuidado com ciência. Amor com protocolo.</div>
+      </div>
+    </div>
+
+    <h1 class="cover-title">Outono<br>seguro</h1>
+    <p class="cover-subtitle">O guia preventivo do personal senior para proteger o seu familiar idoso antes do inverno chegar</p>
+
+    <img src="pMaxQuad-1200x628.jpg" alt="SmartSenior - Cuidado com idosos" class="cover-hero">
+
+    <div class="cover-stats">
+      <div class="stat-card orange">
+        <span class="stat-value">70–89</span>
+        <span class="stat-label">anos: faixa mais<br>vulnerável</span>
+      </div>
+      <div class="stat-card red">
+        <span class="stat-value">3x</span>
+        <span class="stat-label">mais risco de<br>pneumonia no frio</span>
+      </div>
+      <div class="stat-card green">
+        <span class="stat-value">40%</span>
+        <span class="stat-label">das quedas ocorrem<br>nos meses frios</span>
+      </div>
+      <div class="stat-card blue">
+        <span class="stat-value">5</span>
+        <span class="stat-label">protocolos<br>preventivos</span>
+      </div>
+    </div>
+
+    <div class="cover-tags">
+      <span class="cover-tag">Saúde no outono</span>
+      <span class="cover-tag">Baseado em evidências científicas</span>
+      <span class="cover-tag">Para o personal senior</span>
+      <span class="cover-tag">Protocolo prático e objetivo</span>
+    </div>
+
+    <p class="cover-quote">"Evite a crise antes que ela aconteça.<br>Cuide com ciência, não com achismo."</p>
+
+    <div class="cover-footer">
+      smartsenior.com.br • Todos os direitos reservados • 2026
+    </div>
+  </div>
+
+  <!-- ============================================
+       TABLE OF CONTENTS
+       ============================================ -->
+  <div class="page toc chapter-start">
+    <h2 class="toc-title">Sumário</h2>
+
+    <div class="toc-item">
+      <span class="toc-chapter">Introdução</span>
+      <span class="toc-name">A janela de oportunidade que a maioria das famílias ignora</span>
+      <span class="toc-page">3</span>
+    </div>
+    <div class="toc-item">
+      <span class="toc-chapter">Capítulo 1</span>
+      <span class="toc-name">O que muda no corpo do familiar idoso com a chegada do frio</span>
+      <span class="toc-page">5</span>
+    </div>
+    <div class="toc-item">
+      <span class="toc-chapter">Capítulo 2</span>
+      <span class="toc-name">Hidratação no outono: o inimigo invisível</span>
+      <span class="toc-page">7</span>
+    </div>
+    <div class="toc-item">
+      <span class="toc-chapter">Capítulo 3</span>
+      <span class="toc-name">Nutrição e imunidade: o que colocar no prato agora</span>
+      <span class="toc-page">10</span>
+    </div>
+    <div class="toc-item">
+      <span class="toc-chapter">Capítulo 4</span>
+      <span class="toc-name">Movimento é remédio: como manter o familiar idoso ativo</span>
+      <span class="toc-page">13</span>
+    </div>
+    <div class="toc-item">
+      <span class="toc-chapter">Capítulo 5</span>
+      <span class="toc-name">Vacinação e prevenção de doenças respiratórias</span>
+      <span class="toc-page">15</span>
+    </div>
+    <div class="toc-item">
+      <span class="toc-chapter">Capítulo 6</span>
+      <span class="toc-name">Medicação, rotina e segurança em casa</span>
+      <span class="toc-page">18</span>
+    </div>
+    <div class="toc-item">
+      <span class="toc-chapter">Capítulo 7</span>
+      <span class="toc-name">O plano de 30 dias do personal senior</span>
+      <span class="toc-page">20</span>
+    </div>
+    <div class="toc-item">
+      <span class="toc-chapter">Conclusão</span>
+      <span class="toc-name">De cuidador reativo para cuidador estratégico</span>
+      <span class="toc-page">24</span>
+    </div>
+  </div>
+
+  <!-- ============================================
+       INTRODUCTION
+       ============================================ -->
+  <div class="page chapter-start">
+    <div class="chapter-header">
+      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <span class="chapter-badge">Introdução</span>
+      <h1 class="chapter-title">A janela de oportunidade</h1>
+      <p class="chapter-subtitle">que a maioria das famílias ignora</p>
+    </div>
+
+    <h3>Se você cuida de um familiar idoso, este guia foi escrito especialmente para você.</h3>
+
+    <p>Todo ano, milhares de famílias são pegas de surpresa pelos meses frios. Uma gripe que virou pneumonia. Uma queda no chão frio da madrugada. Uma internação que poderia ter sido evitada. A boa notícia: a maioria dessas crises é <strong>previsível e evitável</strong> — se você agir antes que o frio chegue.</p>
+
+    <div class="info-box success">
+      <div class="info-box-content">
+        <strong>O outono (março a junho)</strong> é o momento mais estratégico do ano para proteger um familiar idoso. Quem se prepara nessa janela reduz em até <strong>60% o risco de hospitalização</strong> no inverno.
+      </div>
+    </div>
+
+    <h3>Por que este guia é diferente?</h3>
+
+    <div class="card no-break">
+      <h4 style="color: var(--ss-orange);">Não é alarmismo</h4>
+      <p>Não vamos te assustar com listas de doenças graves. Vamos te dar o protocolo exato do que fazer.</p>
+    </div>
+
+    <div class="card no-break">
+      <h4 style="color: var(--ss-orange);">Baseado em ciência</h4>
+      <p>Cada recomendação tem origem em pesquisas de geriatria, a especialidade médica focada no envelhecimento.</p>
+    </div>
+
+    <div class="card no-break">
+      <h4 style="color: var(--ss-orange);">É prático</h4>
+      <p>Ao final de cada capítulo há um checklist que você pode aplicar ainda hoje.</p>
+    </div>
+
+    <h3>Para quem é este guia?</h3>
+
+    <ul class="bullet-list">
+      <li><strong>O personal senior (filho/a cuidador/a)</strong> — Que mora próximo e acompanha de perto a rotina do familiar</li>
+      <li><strong>O cuidador planejador</strong> — Que quer evitar crises antes que elas aconteçam</li>
+      <li><strong>O familiar idoso ativo</strong> — Que quer entender o que fazer para cuidar da própria saúde</li>
+    </ul>
+
+    <h3>Como usar este guia:</h3>
+
+    <ul class="arrow-list">
+      <li>Leia cada capítulo em ordem — eles foram construídos em sequência lógica</li>
+      <li>Use os <strong>checklists</strong> ao final de cada capítulo para agir imediatamente</li>
+      <li>Compartilhe com outros membros da família — cuidado bom é cuidado coletivo</li>
+      <li>Guarde o <strong>Plano de 30 dias</strong> (capítulo 7) e siga semana a semana</li>
+    </ul>
+  </div>
+
+  <!-- ============================================
+       CHAPTER 1
+       ============================================ -->
+  <div class="page chapter-start">
+    <div class="chapter-header">
+      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <span class="chapter-badge">Capítulo 1</span>
+      <h1 class="chapter-title">O que muda no corpo do familiar idoso</h1>
+      <p class="chapter-subtitle">com a chegada do frio</p>
+    </div>
+
+    <p>O corpo de uma pessoa com mais de 70 anos responde ao frio de forma muito diferente do corpo de um adulto jovem. Entender isso é o primeiro passo para proteger quem você ama.</p>
+
+    <p class="source">Fonte: OMS – World Report on Ageing and Health, 2015; Sociedade Brasileira de Geriatria e Gerontologia (SBGG), 2023</p>
+
+    <div class="table-container no-break">
+      <h4 class="table-title">Por que o familiar idoso sente o frio diferente?</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Função</th>
+            <th>Adulto jovem</th>
+            <th>Familiar idoso (70+)</th>
+            <th>Risco</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Termorregulação</td>
+            <td>Eficiente</td>
+            <td>Reduzida em 30%</td>
+            <td class="risk-high">Alto</td>
+          </tr>
+          <tr>
+            <td>Percepção de frio</td>
+            <td>Clara</td>
+            <td>Embotada</td>
+            <td class="risk-high">Alto</td>
+          </tr>
+          <tr>
+            <td>Percepção de sede</td>
+            <td>Normal</td>
+            <td>Reduzida em 40%</td>
+            <td class="risk-high">Alto</td>
+          </tr>
+          <tr>
+            <td>Massa muscular</td>
+            <td>Preservada</td>
+            <td>Perde 1–2%/ano</td>
+            <td class="risk-medium">Médio</td>
+          </tr>
+          <tr>
+            <td>Sistema imune</td>
+            <td>Robusto</td>
+            <td>Senescência imune</td>
+            <td class="risk-high">Alto</td>
+          </tr>
+          <tr>
+            <td>Velocidade de reação</td>
+            <td>Normal</td>
+            <td>Reduzida em 25%</td>
+            <td class="risk-medium">Médio</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="source">Fonte: Kenney WL et al. – Thermoregulation and Aging, J Appl Physiol, 2014; Fulop T et al. – Immunosenescence, Clin Pharmacol Ther, 2016</p>
+    </div>
+
+    <h3>As 3 mudanças silenciosas do outono</h3>
+
+    <p>Entre março e junho, três processos acontecem de forma silenciosa e gradual no organismo do familiar idoso. Poucos percebem — até que a crise já está instalada:</p>
+
+    <div class="card no-break">
+      <h4 style="color: var(--ss-info);">1. Queda na percepção de sede</h4>
+      <ul class="bullet-list">
+        <li>O familiar idoso simplesmente não sente sede, mesmo desidratado</li>
+        <li>Com o frio, o hábito de beber água cai ainda mais</li>
+        <li>Resultado: desidratação oculta → confusão mental, quedas, infecções</li>
+      </ul>
+    </div>
+
+    <div class="card no-break">
+      <h4 style="color: var(--ss-warning);">2. Redução espontânea de mobilidade</h4>
+      <ul class="bullet-list">
+        <li>O frio leva ao sedentarismo natural</li>
+        <li>Músculos se atrofiam com surpreendente rapidez nos idosos</li>
+        <li>Resultado: perda muscular acelerada → instabilidade → risco de queda</li>
+      </ul>
+    </div>
+
+    <div class="card no-break">
+      <h4 style="color: var(--ss-danger);">3. Imunidade mais baixa</h4>
+      <ul class="bullet-list">
+        <li>Temperatura fria favorece a sobrevivência de vírus respiratórios</li>
+        <li>O familiar idoso já tem imunidade reduzida por causa da idade</li>
+        <li>Resultado: porta aberta para gripes, pneumonias e infecções urinárias</li>
+      </ul>
+    </div>
+
+    <div class="checklist no-break">
+      <h4 class="checklist-title">Checklist do Capítulo 1 — Avaliação inicial</h4>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Observe se o seu familiar idoso bebe água espontaneamente ao longo do dia</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Anote o número de passos ou atividades físicas da semana atual</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Verifique se já fez as vacinas da temporada (ver capítulo 5)</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Observe sinais de confusão mental, tontura ou lentidão — podem indicar desidratação</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       CHAPTER 2
+       ============================================ -->
+  <div class="page chapter-start">
+    <div class="chapter-header">
+      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <span class="chapter-badge">Capítulo 2</span>
+      <h1 class="chapter-title">Hidratação no outono</h1>
+      <p class="chapter-subtitle">o inimigo invisível</p>
+    </div>
+
+    <div class="info-box alert">
+      <div class="info-box-content">
+        Pesquisas mostram que <strong>até 50% dos idosos hospitalizados</strong> chegam com algum grau de desidratação — e muitos nem sabem. No outono/inverno esse número sobe ainda mais.
+      </div>
+    </div>
+    <p class="source">Fonte: Hooper L et al. – Dehydration prevention in older people, Cochrane Review, 2019</p>
+
+    <h3>Por que o familiar idoso não sente sede?</h3>
+    <p>A sensação de sede é controlada por receptores no cérebro. Com o envelhecimento, esses receptores ficam menos sensíveis. Isso significa que o familiar idoso pode estar com o corpo precisando de água e não perceber nenhum sinal de alerta.</p>
+
+    <div class="table-container no-break">
+      <h4 class="table-title">Graus de desidratação e ações</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Grau de desidratação</th>
+            <th>Sintomas visíveis</th>
+            <th>Ação imediata</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Leve (1–2%)</td>
+            <td>Boca seca, cansaço, urina amarela escura</td>
+            <td>Oferecer água imediatamente</td>
+          </tr>
+          <tr>
+            <td>Moderada (3–5%)</td>
+            <td>Tontura, dor de cabeça, confusão leve</td>
+            <td>Hidratação oral + monitorar</td>
+          </tr>
+          <tr>
+            <td>Grave (>5%)</td>
+            <td>Confusão intensa, queda, urinar pouco</td>
+            <td class="risk-high">Pronto-socorro</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="source">Fonte: Thomas DR et al. – Understanding Clinical Dehydration, J Am Med Dir Assoc, 2008</p>
+    </div>
+
+    <h3>Protocolo prático de hidratação no frio</h3>
+    <p>O objetivo é garantir entre 1,5 e 2 litros de líquidos por dia — mesmo que o familiar idoso diga não ter sede.</p>
+
+    <div class="table-container no-break">
+      <h4 class="table-title">Distribuição diária de líquidos</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Horário</th>
+            <th>Quantidade</th>
+            <th>Sugestão</th>
+            <th>Dica</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Ao acordar</td><td>200 ml</td><td>Água morna ou chá leve</td><td>Antes do café</td></tr>
+          <tr><td>Café da manhã</td><td>200 ml</td><td>Suco, leite ou chá</td><td>Com a refeição</td></tr>
+          <tr><td>Metade da manhã</td><td>150 ml</td><td>Água ou chá de ervas</td><td>Com lembrete/alarme</td></tr>
+          <tr><td>Almoço</td><td>200 ml</td><td>Água ou suco natural</td><td>Com a refeição</td></tr>
+          <tr><td>Início da tarde</td><td>150 ml</td><td>Água ou chá morno</td><td>Horário fixo</td></tr>
+          <tr><td>Lanche</td><td>150 ml</td><td>Vitamina, iogurte líq.</td><td>Conta como líquido</td></tr>
+          <tr><td>Final da tarde</td><td>150 ml</td><td>Água ou chá suave</td><td>Evitar café</td></tr>
+          <tr><td>Jantar</td><td>200 ml</td><td>Sopa conta muito!</td><td>Caldo = hidratação</td></tr>
+          <tr><td>Antes de dormir</td><td>100 ml</td><td>Água morna</td><td>Pequena quantidade</td></tr>
+          <tr><td><strong>TOTAL</strong></td><td><strong>~1.500 ml</strong></td><td>—</td><td>Ajustar com médico</td></tr>
+        </tbody>
+      </table>
+      <p class="source">Fonte: SBGG – Hidratação do Idoso: Consenso Brasileiro, 2020; Stookey JD, Nutrients, 2023</p>
+    </div>
+
+    <div class="table-container no-break">
+      <h4 class="table-title">Bebidas quentes que hidratam (excelentes para o outono)</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Bebida</th>
+            <th>Conta como hidratação?</th>
+            <th>Observação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Chá de camomila</td><td class="risk-low">Sim</td><td>Sem cafeína, calmante</td></tr>
+          <tr><td>Chá de gengibre</td><td class="risk-low">Sim</td><td>Anti-inflamatório natural</td></tr>
+          <tr><td>Caldo de legumes</td><td class="risk-low">Sim</td><td>Rico em sódio: atenção se tem pressão alta</td></tr>
+          <tr><td>Sopa líquida</td><td class="risk-low">Sim</td><td>Excelente opção de inverno</td></tr>
+          <tr><td>Café (1–2 xícaras)</td><td class="risk-medium">Parcial</td><td>Leve efeito diurético</td></tr>
+          <tr><td>Chá preto/verde</td><td class="risk-medium">Parcial</td><td>Cafeína: limitar à tarde</td></tr>
+          <tr><td>Bebidas alcoólicas</td><td class="risk-high">Não</td><td>Desidratam — evitar</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box warning no-break">
+      <div class="info-box-content">
+        <strong>Sinais de alerta que o personal senior não pode ignorar:</strong><br>
+        • Urina muito escura (cor de chá forte) — desidratação moderada<br>
+        • Confusão mental de início súbito — pode ser desidratação grave<br>
+        • Lábios secos e língua esbranquiçada — falta de líquido<br>
+        • Não urinou há mais de 8 horas — sinal de alerta sério<br>
+        • Pele que demora a voltar ao lugar quando beliscada levemente
+      </div>
+    </div>
+
+    <div class="checklist no-break">
+      <h4 class="checklist-title">Checklist do Capítulo 2 — Hidratação</h4>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Defina 6 horários fixos para oferecer líquidos (use alarmes no celular)</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Coloque uma garrafa de água visível no lugar onde o familiar idoso passa mais tempo</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Inclua sopas e caldos nas refeições do outono/inverno</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Observe a cor da urina: amarelo claro = bem hidratado; escura = atenção</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Se o familiar usa diurético, converse com o médico sobre ajuste na ingesta</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       CHAPTER 3
+       ============================================ -->
+  <div class="page chapter-start">
+    <div class="chapter-header">
+      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <span class="chapter-badge">Capítulo 3</span>
+      <h1 class="chapter-title">Nutrição e imunidade</h1>
+      <p class="chapter-subtitle">o que colocar no prato do seu familiar idoso agora</p>
+    </div>
+
+    <p>A alimentação é o principal aliado do sistema imune. Um familiar idoso bem nutrido tem muito mais recursos para combater vírus e bactérias. E o outono é o momento certo para fazer os ajustes necessários.</p>
+
+    <h3>Os 5 nutrientes-chave para imunidade na terceira idade</h3>
+
+    <div class="card-grid">
+      <div class="nutrient-card no-break">
+        <div class="nutrient-name">Vitamina D</div>
+        <div class="nutrient-desc">Fundamental para imunidade e saúde óssea. Exposição ao sol (difícil no frio!) + peixes gordos, ovos, leite fortificado.</div>
+        <div class="nutrient-stat">Deficiência em +70% dos idosos brasileiros no inverno</div>
+      </div>
+      <div class="nutrient-card no-break">
+        <div class="nutrient-name">Proteína</div>
+        <div class="nutrient-desc">Evita a perda muscular (sarcopenia). Frango, peixe, ovos, feijão, lentilha. Meta: 1,2–1,5 g por kg de peso/dia.</div>
+        <div class="nutrient-stat">Idosos precisam de 50% mais proteína que adultos jovens</div>
+      </div>
+      <div class="nutrient-card no-break">
+        <div class="nutrient-name">Vitamina C</div>
+        <div class="nutrient-desc">Antioxidante que reforça as defesas do organismo. Acerola, caju, laranja, brócolis, pimentão.</div>
+        <div class="nutrient-stat">Reduz duração e gravidade de infecções respiratórias</div>
+      </div>
+      <div class="nutrient-card no-break">
+        <div class="nutrient-name">Zinco</div>
+        <div class="nutrient-desc">Regula a resposta imune e reduz inflamação. Carnes, sementes de abóbora, castanha-do-pará (1 por dia!).</div>
+        <div class="nutrient-stat">Deficiência de zinco = imunidade 40% menos eficiente</div>
+      </div>
+    </div>
+
+    <div class="nutrient-card no-break" style="margin-top: 16px;">
+      <div class="nutrient-name">Ômega-3</div>
+      <div class="nutrient-desc">Anti-inflamatório natural, protege o coração e o cérebro. Sardinha, salmão, atum, linhaça, chia.</div>
+      <div class="nutrient-stat">Reduz marcadores inflamatórios em idosos em até 30%</div>
+    </div>
+
+    <div class="table-container no-break">
+      <h4 class="table-title">Substituições de verão para outono/inverno</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Evitar no frio</th>
+            <th>Substituir por</th>
+            <th>Benefício</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Salada fria (almoço)</td><td>Sopa de legumes quente</td><td>Hidratação + vitaminas + calor</td></tr>
+          <tr><td>Iogurte gelado</td><td>Iogurte natural (temp. ambiente)</td><td>Menos stress no intestino</td></tr>
+          <tr><td>Suco de fruta gelado</td><td>Vitamina morna ou chá de frutas</td><td>Hidratação sem resfriar</td></tr>
+          <tr><td>Sorvete/açaí</td><td>Frutas cozidas com canela</td><td>Vitaminas + anti-inflamatório</td></tr>
+          <tr><td>Frituras pesadas</td><td>Assados com azeite de oliva</td><td>Menos inflamação + ômega-3</td></tr>
+          <tr><td>Embutidos/frios</td><td>Ovos mexidos ou frango desfiado</td><td>Proteína de qualidade</td></tr>
+          <tr><td>Biscoito doce (lanche)</td><td>Castanhas + fruta seca</td><td>Zinco + energia + fibra</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box alert no-break">
+      <div class="info-box-content">
+        <strong>Sobre suplementação:</strong> NUNCA comece suplementos vitamínicos sem orientação médica. Excesso de algumas vitaminas (como D e A) pode ser tóxico para idosos.
+      </div>
+    </div>
+
+    <div class="checklist no-break">
+      <h4 class="checklist-title">Checklist do Capítulo 3 — Nutrição</h4>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Garanta pelo menos 1 fonte de proteína em cada refeição principal</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Inclua 1 punhado de castanhas ou sementes nos lanches da semana</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Adicione brócolis, cenoura ou espinafre pelo menos 4x por semana</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Inclua sardinha, atum ou ovos pelo menos 3x na semana</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Solicite exame de vitamina D na próxima consulta médica</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Evite frituras e embutidos durante os meses frios</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       CHAPTER 4
+       ============================================ -->
+  <div class="page chapter-start">
+    <div class="chapter-header">
+      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <span class="chapter-badge">Capítulo 4</span>
+      <h1 class="chapter-title">Movimento é remédio</h1>
+      <p class="chapter-subtitle">como manter o familiar idoso ativo com o frio chegando</p>
+    </div>
+
+    <div class="info-box alert">
+      <div class="info-box-content">
+        Cada semana de repouso total em um idoso equivale à <strong>perda de 3–5% da massa muscular</strong>. O sedentarismo do inverno é uma das principais causas de hospitalização na primavera.
+      </div>
+    </div>
+    <p class="source">Fonte: Kortebein P et al. – Effect of 10 days of bed rest on skeletal muscle, JAMA, 2007</p>
+
+    <h3>O ciclo perigoso do sedentarismo no frio</h3>
+    <div class="protocol-box no-break">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 14px;">
+        <span>Frio</span>
+        <span>→</span>
+        <span style="color: var(--ss-warning);">Sedentarismo</span>
+        <span>→</span>
+        <span>Perda muscular</span>
+        <span>→</span>
+        <span style="color: var(--ss-warning);">Instabilidade</span>
+        <span>→</span>
+        <span style="color: var(--ss-danger);">Queda / internação</span>
+      </div>
+    </div>
+
+    <div class="table-container no-break">
+      <h4 class="table-title">Protocolo de 15 minutos diários (dentro de casa)</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Exercício</th>
+            <th>Duração</th>
+            <th>Como fazer</th>
+            <th>Nível</th>
+            <th>Benefício</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Caminhada em casa</td><td>5 min</td><td>Circular pelos cômodos da casa</td><td class="risk-low">Fácil</td><td>Circulação + equilíbrio</td></tr>
+          <tr><td>Elevação de calcanhares</td><td>2 min</td><td>Em pé, apoiado na cadeira, subir nas pontas dos pés</td><td class="risk-low">Fácil</td><td>Força panturrilha</td></tr>
+          <tr><td>Sentar e levantar</td><td>2 min</td><td>5–8 repetições devagar, de uma cadeira firme</td><td class="risk-medium">Médio</td><td>Força de pernas</td></tr>
+          <tr><td>Rotação de ombros</td><td>1 min</td><td>Circular os ombros lentamente, para frente e atrás</td><td class="risk-low">Fácil</td><td>Mobilidade</td></tr>
+          <tr><td>Força de braços</td><td>2 min</td><td>Com garrafa d'água (500 ml), 8 flexões de cotovelo</td><td class="risk-medium">Médio</td><td>Força membros sup.</td></tr>
+          <tr><td>Respiração profunda</td><td>3 min</td><td>Inspirar fundo pelo nariz, soltar devagar pela boca</td><td class="risk-low">Fácil</td><td>Capacidade pulmonar</td></tr>
+        </tbody>
+      </table>
+      <p class="source">Fonte: American College of Sports Medicine – Exercise Guidelines for Older Adults, 2023</p>
+    </div>
+
+    <h3>Como criar uma rotina sustentável no frio</h3>
+    <ul class="bullet-list">
+      <li><strong>Mesmo horário todos os dias</strong> — o cérebro do familiar idoso responde muito bem à rotina</li>
+      <li><strong>Roupas quentes prontas</strong> — remova a barreira de 'está frio para se mexer'</li>
+      <li><strong>Ative a TV/rádio</strong> — músicas animadas aumentam o engajamento</li>
+      <li><strong>Faça junto</strong> — o personal senior participando aumenta em 3x a adesão</li>
+      <li><strong>Recompensa simbólica</strong> — um café quentinho depois dos exercícios funciona muito</li>
+    </ul>
+
+    <div class="info-box warning no-break">
+      <div class="info-box-content">
+        <strong>Antes de iniciar ou intensificar qualquer atividade física, consulte o médico.</strong> Especialmente se o familiar idoso tiver doença cardíaca, osteoporose avançada ou tiver sofrido queda recente.
+      </div>
+    </div>
+
+    <div class="checklist no-break">
+      <h4 class="checklist-title">Checklist do Capítulo 4 — Movimento</h4>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Defina um horário diário fixo para 15 minutos de atividade (ex.: 10h da manhã)</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Prepare roupas confortáveis e quentes para os exercícios dentro de casa</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Inicie com apenas 5 minutos se o familiar estiver muito sedentário</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Registre a atividade realizada (aplicativo ou caderninho)</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Converse com médico ou fisioterapeuta sobre o protocolo adequado</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       CHAPTER 5
+       ============================================ -->
+  <div class="page chapter-start">
+    <div class="chapter-header">
+      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <span class="chapter-badge">Capítulo 5</span>
+      <h1 class="chapter-title">Vacinação e prevenção</h1>
+      <p class="chapter-subtitle">de doenças respiratórias</p>
+    </div>
+
+    <p>A vacinação é a intervenção preventiva de maior custo-benefício existente na medicina. Para idosos, ela pode ser literalmente a diferença entre a vida e a morte.</p>
+
+    <div class="info-box alert">
+      <div class="info-box-content">
+        Idosos com 65+ anos têm <strong>risco 20x maior de morte por influenza</strong> do que adultos jovens. A vacina reduz este risco em até 60%.
+      </div>
+    </div>
+    <p class="source">Fonte: Ministério da Saúde do Brasil – Calendário Nacional de Vacinação do Idoso, 2024</p>
+
+    <div class="table-container no-break">
+      <h4 class="table-title">Calendário de vacinas essenciais para o familiar idoso</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Vacina</th>
+            <th>Quando tomar</th>
+            <th>Onde</th>
+            <th>Proteção contra</th>
+            <th>Periodicidade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Influenza (gripe)</td><td class="risk-high">Março–abril (agora!)</td><td>UBS gratuita</td><td>Gripe sazonal</td><td>Anual</td></tr>
+          <tr><td>Pneumocócica (pneumo 23)</td><td>Qualquer época (se não tomou)</td><td>UBS gratuita</td><td>Pneumonia bacteriana</td><td>Reforço em 5 anos</td></tr>
+          <tr><td>Covid-19</td><td>Conforme campanha atual</td><td>UBS gratuita</td><td>Covid-19 grave</td><td>Conforme ANVISA</td></tr>
+          <tr><td>Herpes-zóster (zostax)</td><td>60+ anos</td><td>Rede privada</td><td>Cobreiro (dor severa)</td><td>Dose única</td></tr>
+          <tr><td>dTpa (difteria/tétano)</td><td>A cada 10 anos</td><td>UBS gratuita</td><td>Difteria, tétano, coqueluche</td><td>A cada 10 anos</td></tr>
+        </tbody>
+      </table>
+      <p class="source">Fonte: Ministério da Saúde – Calendário Nacional de Vacinação 2024; SBIm – Sociedade Brasileira de Imunizações</p>
+    </div>
+
+    <h3>Como organizar o histórico vacinal do seu familiar idoso</h3>
+    <ul class="arrow-list">
+      <li>Guarde a <strong>Caderneta de Saúde da Pessoa Idosa</strong> em lugar acessível</li>
+      <li>Fotografe cada página da caderneta e salve no celular (nuvem)</li>
+      <li>Crie uma pasta no Google Drive/WhatsApp com todas as fotos das vacinas</li>
+      <li>Leve a caderneta a toda consulta médica</li>
+      <li>Pergunte sempre ao médico: <strong>'Tem alguma vacina em atraso?'</strong></li>
+    </ul>
+
+    <div class="protocol-box no-break">
+      <div class="protocol-title">Protocolo das primeiras 48h com sintomas respiratórios</div>
+      <div class="protocol-step">
+        <span class="protocol-time">0–6h:</span>
+        <span class="protocol-action">Isolar do frio, oferecer líquidos mornos, verificar temperatura</span>
+      </div>
+      <div class="protocol-step">
+        <span class="protocol-time">6–12h:</span>
+        <span class="protocol-action">Se febre > 38°C: paracetamol (com orientação médica prévia)</span>
+      </div>
+      <div class="protocol-step">
+        <span class="protocol-time">12–24h:</span>
+        <span class="protocol-action">Se não melhorou: ligar para o médico ou UPA</span>
+      </div>
+      <div class="protocol-step">
+        <span class="protocol-time">24–48h:</span>
+        <span class="protocol-action">Se piorou ou tem falta de ar: ir imediatamente ao pronto-socorro</span>
+      </div>
+      <div class="protocol-step">
+        <span class="protocol-time" style="color: #FF6B6B;">Em qq momento:</span>
+        <span class="protocol-action"><strong style="color: #FF6B6B;">Confusão mental súbita = emergência. Chame o SAMU (192)</strong></span>
+      </div>
+    </div>
+
+    <div class="table-container no-break">
+      <h4 class="table-title">Doenças respiratórias: diferenciando o normal do grave</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Sintoma / sinal</th>
+            <th>Resfriado comum</th>
+            <th>Gripe (influenza)</th>
+            <th>Pneumonia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Início</td><td>Gradual (2–3 dias)</td><td>Súbito (horas)</td><td>Gradual ou súbito</td></tr>
+          <tr><td>Febre</td><td>Rara / baixa</td><td>Alta (38–40°C)</td><td>Alta e persistente</td></tr>
+          <tr><td>Tosse</td><td>Leve, seca</td><td>Intensa, seca</td><td>Produtiva (com catarro)</td></tr>
+          <tr><td>Falta de ar</td><td>Não</td><td>Leve</td><td class="risk-high">Presente / grave</td></tr>
+          <tr><td>Dor no corpo</td><td>Não / leve</td><td>Intensa</td><td>Moderada</td></tr>
+          <tr><td>Confusão mental</td><td>Não</td><td>Pode ocorrer</td><td class="risk-high">Comum em idosos!</td></tr>
+          <tr><td>Ação indicada</td><td>Repouso + líquidos</td><td>Médico em 24–48h</td><td class="risk-high">URGÊNCIA</td></tr>
+        </tbody>
+      </table>
+      <p class="source">Fonte: SBPT – Sociedade Brasileira de Pneumologia e Tisiologia, Diretrizes para Pneumonia, 2023</p>
+    </div>
+
+    <div class="checklist no-break">
+      <h4 class="checklist-title">Checklist do Capítulo 5 — Vacinação</h4>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Localize a Caderneta de Saúde do seu familiar idoso agora mesmo</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Verifique se a vacina da gripe (influenza) está em dia — tomada este ano?</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Verifique a pneumocócica — se não tomou ou faz +5 anos, agendar na UBS</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Confirme o status vacinal de Covid-19 e agende reforço se necessário</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Anote os números: UBS do bairro + SAMU (192) + UPA mais próxima</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       CHAPTER 6
+       ============================================ -->
+  <div class="page chapter-start">
+    <div class="chapter-header">
+      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <span class="chapter-badge">Capítulo 6</span>
+      <h1 class="chapter-title">Medicação, rotina e segurança em casa</h1>
+      <p class="chapter-subtitle">no outono e no inverno</p>
+    </div>
+
+    <p>Dois temas costumam ser ignorados pelo personal senior nessa época do ano: a necessidade de revisar medicamentos e a adaptação do ambiente doméstico para o frio. Ambos têm grande impacto na segurança do familiar idoso.</p>
+
+    <div class="table-container no-break">
+      <h4 class="table-title">Como o frio afeta os medicamentos</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Classe de medicamento</th>
+            <th>Efeito no frio</th>
+            <th>O que fazer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Anti-hipertensivos (pressão alta)</td><td>Pressão sobe no frio: pode precisar ajuste</td><td>Monitorar PA diariamente</td></tr>
+          <tr><td>Diuréticos</td><td>Podem aumentar desidratação</td><td>Revisar dose com médico</td></tr>
+          <tr><td>Anticoagulantes (varfarina)</td><td>Dieta muda no inverno: afeta INR</td><td>Mais exames de controle</td></tr>
+          <tr><td>Insulina</td><td>Frio altera absorção subcutânea</td><td>Guardar em local com temp. estável</td></tr>
+          <tr><td>Antidepressivos/ansiolíticos</td><td>Sedação + frio = maior risco de queda</td><td>Redobrar atenção noturna</td></tr>
+          <tr><td>Nenhum medicamento</td><td>Parar por conta própria no inverno</td><td class="risk-high">NUNCA interromper sem médico</td></tr>
+        </tbody>
+      </table>
+      <p class="source">Fonte: Fick DM et al. – American Geriatrics Society Beers Criteria Update, J Am Geriatr Soc, 2023</p>
+    </div>
+
+    <h3>Revisão de medicamentos: por que fazer agora?</h3>
+    <ul class="arrow-list">
+      <li>Leve <strong>todos os medicamentos</strong> (na caixa) à próxima consulta</li>
+      <li>Pergunte: <strong>'Algum desses medicamentos pode causar queda ou sonolência?'</strong></li>
+      <li>Pergunte: <strong>'Preciso ajustar alguma dose para o inverno?'</strong></li>
+      <li>Organize os remédios em <strong>porta-comprimidos semanal com horários</strong></li>
+    </ul>
+
+    <div class="table-container no-break">
+      <h4 class="table-title">Mini-auditoria domiciliar de segurança para o inverno</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Cômodo</th>
+            <th>Risco a verificar</th>
+            <th>Solução simples</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Banheiro</td><td class="risk-high">Piso molhado + sem apoio</td><td>Tapete antiderrapante + barra de apoio</td></tr>
+          <tr><td>Quarto</td><td class="risk-medium">Caminho escuro à noite</td><td>Luz noturna automática no corredor</td></tr>
+          <tr><td>Cozinha</td><td class="risk-high">Tapetes soltos + chão liso</td><td>Remover tapetes ou fixar com fita dupla-face</td></tr>
+          <tr><td>Sala</td><td class="risk-medium">Fios soltos + móveis baixos</td><td>Organizar fiação + retirar obstáculos do caminho</td></tr>
+          <tr><td>Corredor/escada</td><td class="risk-high">Iluminação baixa</td><td>Interruptores em ambas as extremidades</td></tr>
+          <tr><td>Calçados</td><td class="risk-high">Meias escorregadias / chinelas velhas</td><td>Calçados fechados com solado antiderrapante</td></tr>
+          <tr><td>Roupas</td><td class="risk-medium">Roupa de frio longa pode fazer tropeçar</td><td>Roupas no tamanho certo, nada arrastando</td></tr>
+        </tbody>
+      </table>
+      <p class="source">Fonte: CDC – STEADI: Stopping Elderly Accidents, Deaths & Injuries, 2023</p>
+    </div>
+
+    <h3>Rotina: o melhor remédio para a saúde cognitiva</h3>
+    <ul class="arrow-list">
+      <li>Mantenha <strong>horários fixos</strong> para acordar, comer e dormir</li>
+      <li><strong>Luz natural</strong> pela manhã regula o ritmo circadiano — abra as janelas</li>
+      <li>Evite <strong>televisão intensa à noite</strong> — prejudica o sono</li>
+      <li>Atividades manuais (tricô, pintura, quebra-cabeça) <strong>estimulam o cérebro</strong></li>
+      <li>Contato social regular — mesmo por vídeo — <strong>reduz o risco de depressão em 40%</strong></li>
+    </ul>
+
+    <div class="checklist no-break">
+      <h4 class="checklist-title">Checklist do Capítulo 6 — Medicação e segurança</h4>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Agende revisão de medicamentos com geriatra ou clínico antes do inverno</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Compre porta-comprimidos semanal com separação por horário</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Instale luz noturna automática no corredor e no banheiro</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Retire tapetes soltos ou fixe com fita antiderrapante</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Verifique se os calçados têm solado antiderrapante</span>
+      </div>
+      <div class="checklist-item">
+        <span class="checklist-box"></span>
+        <span class="checklist-text">Monitore a pressão arterial diariamente durante os meses frios</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       CHAPTER 7 - 30-Day Plan (VERTICAL LAYOUT)
+       ============================================ -->
+  <div class="page chapter-start">
+    <div class="chapter-header">
+      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <span class="chapter-badge">Capítulo 7</span>
+      <h1 class="chapter-title">O plano de 30 dias</h1>
+      <p class="chapter-subtitle">do personal senior</p>
+    </div>
+
+    <p>Agora que você tem o conhecimento, é hora de agir. Este plano organiza tudo que você aprendeu em 4 semanas práticas e aplicáveis. Comece na semana em que estiver lendo este guia.</p>
+
+    <!-- WEEK 1 -->
+    <div class="week-card week-1 no-break">
+      <div class="week-header">
+        <div>
+          <div class="week-title">Semana 1</div>
+          <div class="week-theme">Avaliação</div>
+        </div>
+        <div class="week-number">1</div>
+      </div>
+      <div class="week-tasks">
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Localize a caderneta de vacinas e verifique pendências</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Observe a hidratação e o nível de atividade atual</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Liste todos os medicamentos em uso</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Faça a auditoria de segurança domiciliar (cap. 6)</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Converse com o familiar sobre o plano preventivo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 2 -->
+    <div class="week-card week-2 no-break">
+      <div class="week-header">
+        <div>
+          <div class="week-title">Semana 2</div>
+          <div class="week-theme">Ajustes</div>
+        </div>
+        <div class="week-number">2</div>
+      </div>
+      <div class="week-tasks">
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Implante a rotina de 6 ofertas diárias de líquido</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Introduza o protocolo de 15 minutos de movimento</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Faça as trocas alimentares do outono (tabela cap. 3)</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Organize porta-comprimidos semanal com horários</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Instale luz noturna e corrija riscos de queda</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 3 -->
+    <div class="week-card week-3 no-break">
+      <div class="week-header">
+        <div>
+          <div class="week-title">Semana 3</div>
+          <div class="week-theme">Proteção</div>
+        </div>
+        <div class="week-number">3</div>
+      </div>
+      <div class="week-tasks">
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Agende e tome vacinas pendentes (gripe é prioridade!)</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Agende revisão de medicamentos com médico</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Solicite exame de vitamina D na consulta</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Registre os sinais vitais basais (PA, temperatura, peso)</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Salve o histórico vacinal em fotos no celular</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 4 -->
+    <div class="week-card week-4 no-break">
+      <div class="week-header">
+        <div>
+          <div class="week-title">Semana 4</div>
+          <div class="week-theme">Monitoramento</div>
+        </div>
+        <div class="week-number">4</div>
+      </div>
+      <div class="week-tasks">
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Faça o check semanal dos 5 protocolos deste guia</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Registre qualquer sintoma novo ou mudança de humor</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Avalie a hidratação pela cor da urina diariamente</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Cheque os exercícios: está conseguindo manter?</span>
+        </div>
+        <div class="week-task">
+          <span class="week-task-bullet"></span>
+          <span class="week-task-text">Prepare-se: aguarde o próximo e-book SmartSenior (inverno!)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALENDAR PAGE -->
+  <div class="page">
+    <h3>Calendário de cuidados — imprima e cole na geladeira</h3>
+
+    <div class="table-container no-break">
+      <table class="calendar-table">
+        <thead>
+          <tr>
+            <th>Tarefa</th>
+            <th>Seg</th>
+            <th>Ter</th>
+            <th>Qua</th>
+            <th>Qui</th>
+            <th>Sex</th>
+            <th>Sáb</th>
+            <th>Dom</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Hidratação (6 ofertas)</td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+          </tr>
+          <tr>
+            <td>Exercício 15 min</td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+          </tr>
+          <tr>
+            <td>Medicação</td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+          </tr>
+          <tr>
+            <td>Frutas/Verduras</td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+          </tr>
+          <tr>
+            <td>Verificar temperatura</td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+          </tr>
+          <tr>
+            <td>Luz natural (manhã)</td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+            <td><span class="calendar-check"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="text-align: center; font-size: 11px; color: var(--ss-gray-500); margin-top: 16px;">
+      ✂ Recorte aqui e cole na geladeira ou no quarto do seu familiar idoso.
+    </p>
+  </div>
+
+  <!-- ============================================
+       CONCLUSION
+       ============================================ -->
+  <div class="page chapter-start">
+    <div class="chapter-header">
+      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <span class="chapter-badge">Conclusão</span>
+      <h1 class="chapter-title">De cuidador reativo</h1>
+      <p class="chapter-subtitle">para cuidador estratégico</p>
+    </div>
+
+    <h3>Você chegou até aqui. Isso já diz muito sobre o tipo de personal senior que você é.</h3>
+
+    <p>A maioria das famílias só age quando a crise já chegou. Você escolheu diferente: escolheu se preparar antes, com informação de qualidade e protocolos baseados em ciência. Isso é o que chamamos de <strong>cuidado estratégico</strong>.</p>
+
+    <h3>Os 5 protocolos essenciais — resumo final</h3>
+
+    <div class="summary-grid">
+      <div class="summary-card hydration no-break">
+        <div class="summary-icon">💧</div>
+        <div class="summary-content">
+          <h4>Hidratação</h4>
+          <p>6 ofertas diárias de líquido. Meta: 1,5–2 L/dia. Urina clara = hidratado.</p>
+        </div>
+      </div>
+
+      <div class="summary-card nutrition no-break">
+        <div class="summary-icon">🥗</div>
+        <div class="summary-content">
+          <h4>Nutrição</h4>
+          <p>Proteína em cada refeição. Vitamina D, zinco, ômega-3 no cardápio.</p>
+        </div>
+      </div>
+
+      <div class="summary-card movement no-break">
+        <div class="summary-icon">🏃</div>
+        <div class="summary-content">
+          <h4>Movimento</h4>
+          <p>15 minutos diários dentro de casa. Consistência > intensidade.</p>
+        </div>
+      </div>
+
+      <div class="summary-card vaccine no-break">
+        <div class="summary-icon">💉</div>
+        <div class="summary-content">
+          <h4>Vacinação</h4>
+          <p>Gripe (obrigatória!), pneumo 23 e Covid-19 em dia.</p>
+        </div>
+      </div>
+
+      <div class="summary-card safety no-break">
+        <div class="summary-icon">🏠</div>
+        <div class="summary-content">
+          <h4>Segurança</h4>
+          <p>Revisão de medicamentos + ambiente livre de riscos de queda.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box success">
+      <div class="info-box-content">
+        <strong>Lembre-se:</strong> você não precisa ser perfeito. Você precisa ser consistente. Cada um desses protocolos aplicado parcialmente já faz diferença. Comece com o que for mais fácil e vá avançando.
+      </div>
+    </div>
+
+    <h3>O próximo passo: e-book do inverno</h3>
+    <p>Este guia foi o seu preparo. Em julho, a SmartSenior lança o próximo material: <strong>'Doenças respiratórias e inverno — prepare-se'</strong>, com protocolos específicos para lidar com gripe, bronquite, pneumonia e DPOC nos meses mais críticos.</p>
+  </div>
+
+  <!-- ============================================
+       FINAL PAGE - CTA
+       ============================================ -->
+  <div class="page final-page chapter-start">
+    <img src="assets/logo/AF_fenix_curvas_SS_logoH_degrade.png" alt="SmartSenior" class="final-logo-horizontal">
+    <p style="color: var(--ss-gray-500); margin-bottom: 24px; font-size: 14px;">Cuidado com ciência. Amor com protocolo.</p>
+
+    <div class="cta-box">
+      <h2 class="cta-title">Você não precisa fazer isso sozinho.</h2>
+      <p style="color: var(--ss-gray-600);">Imagine ter o agente <strong>Dux</strong> e o agente <strong>Carina</strong> monitorando a rotina de hidratação, medicação e sinais vitais do seu familiar idoso — <strong>todo dia, em tempo real</strong>, direto do seu celular.</p>
+
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-name">Agente Dux (IA)</div>
+          <div class="feature-desc">Orientações personalizadas baseadas no perfil do familiar idoso</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">👩‍⚕️</div>
+          <div class="feature-name">Agente Carina (IA)</div>
+          <div class="feature-desc">Monitoramento de medicação, hidratação e rotina diária</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-name">Dashboard</div>
+          <div class="feature-desc">Painel completo de saúde para o personal senior</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🔔</div>
+          <div class="feature-name">Alertas</div>
+          <div class="feature-desc">Notificações no celular quando algo foge da rotina</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📋</div>
+          <div class="feature-name">Relatórios</div>
+          <div class="feature-desc">Histórico de saúde para compartilhar com o médico</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">❤️</div>
+          <div class="feature-name">Suporte 24h</div>
+          <div class="feature-desc">Chat com a equipe SmartSenior sempre que precisar</div>
+        </div>
+      </div>
+
+      <div style="background: linear-gradient(135deg, var(--ss-orange) 0%, var(--ss-orange-dark) 100%); color: white; padding: 24px; border-radius: 12px; margin-top: 24px;">
+        <p style="font-size: 16px; font-weight: 600; margin: 0;">Tudo isso e muito mais será lançado em breve.<br>Tecnologia que trará alívio para as famílias.</p>
+      </div>
+
+      <p style="margin-top: 24px; font-size: 14px; color: var(--ss-gray-600);">
+        Acompanhe o desenvolvimento da plataforma.<br>
+        Acesse nosso site <strong style="color: var(--ss-orange);">www.smartsenior.com.br</strong>
+      </p>
+    </div>
+
+    <p class="disclaimer">
+      Este material foi produzido com base em evidências científicas e revisado por profissionais de saúde especializados em geriatria. Não substitui consulta médica. Sempre converse com o médico do seu familiar antes de fazer mudanças na rotina, alimentação ou medicação.
+    </p>
+  </div>
+
+</body>
+</html>
