@@ -200,3 +200,9 @@ export type {
   GradientTextProps,
   ProseProps,
 } from './typography'
+
+// ============================================
+// BRAND
+// ============================================
+export { Logo, LogoIcon, LogoWordmark, LogoFull } from './logo'
+export type { LogoProps } from './logo'
