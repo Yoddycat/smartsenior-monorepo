@@ -231,16 +231,16 @@ export const WhiteOnDark: Story = {
 export const AllColors: Story = {
   render: () => (
     <div className="space-y-6">
-      <div className="p-6 bg-white rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-500 mb-3">Gradient (Padrão)</p>
+      <div className="p-6 bg-white rounded-lg border border-[var(--border)]">
+        <p className="text-sm text-gray-600 mb-3">Gradient (Padrão)</p>
         <Logo variant="horizontal" color="gradient" size="lg" />
       </div>
-      <div className="p-6 bg-white rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-500 mb-3">Orange (Laranja sólido)</p>
+      <div className="p-6 bg-white rounded-lg border border-[var(--border)]">
+        <p className="text-sm text-gray-600 mb-3">Orange (Laranja sólido)</p>
         <Logo variant="horizontal" color="orange" size="lg" />
       </div>
-      <div className="p-6 bg-white rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-500 mb-3">Black (P&B)</p>
+      <div className="p-6 bg-white rounded-lg border border-[var(--border)]">
+        <p className="text-sm text-gray-600 mb-3">Black (P&B)</p>
         <Logo variant="horizontal" color="black" size="lg" />
       </div>
       <div className="p-6 bg-[#1a365d] rounded-lg">
@@ -254,17 +254,17 @@ export const AllColors: Story = {
 export const VerticalColors: Story = {
   render: () => (
     <div className="flex gap-8">
-      <div className="p-6 bg-white rounded-lg border border-gray-200 text-center">
+      <div className="p-6 bg-white rounded-lg border border-[var(--border)] text-center">
         <LogoVertical color="gradient" size="lg" />
-        <p className="text-xs text-gray-500 mt-2">Gradient</p>
+        <p className="text-xs text-gray-600 mt-2">Gradient</p>
       </div>
-      <div className="p-6 bg-white rounded-lg border border-gray-200 text-center">
+      <div className="p-6 bg-white rounded-lg border border-[var(--border)] text-center">
         <LogoVertical color="orange" size="lg" />
-        <p className="text-xs text-gray-500 mt-2">Orange</p>
+        <p className="text-xs text-gray-600 mt-2">Orange</p>
       </div>
-      <div className="p-6 bg-white rounded-lg border border-gray-200 text-center">
+      <div className="p-6 bg-white rounded-lg border border-[var(--border)] text-center">
         <LogoVertical color="black" size="lg" />
-        <p className="text-xs text-gray-500 mt-2">Black</p>
+        <p className="text-xs text-gray-600 mt-2">Black</p>
       </div>
       <div className="p-6 bg-[#1a365d] rounded-lg text-center">
         <LogoVertical color="white" size="lg" />
@@ -280,16 +280,16 @@ export const VerticalColors: Story = {
 
 export const Header: Story = {
   render: () => (
-    <header className="w-full max-w-4xl flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
+    <header className="w-full max-w-4xl flex items-center justify-between p-4 bg-[var(--background)] border border-[var(--border)] rounded-xl shadow-sm">
       <Logo variant="horizontal" size="sm" />
       <nav className="flex gap-6">
-        <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
+        <a href="#" className="text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)]">
           Início
         </a>
-        <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
+        <a href="#" className="text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)]">
           Serviços
         </a>
-        <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
+        <a href="#" className="text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)]">
           Contato
         </a>
       </nav>
@@ -312,24 +312,36 @@ export const Footer: Story = {
 
 export const LoadingScreen: Story = {
   render: () => (
-    <div className="w-80 h-60 flex flex-col items-center justify-center gap-4 bg-white rounded-xl border border-gray-200">
+    <div className="w-80 h-60 flex flex-col items-center justify-center gap-4 bg-[var(--background)] rounded-xl border border-[var(--border)]">
       <LogoIcon size="xl" />
-      <p className="text-sm text-gray-500">Carregando...</p>
+      <p className="text-sm text-[var(--foreground-muted)]">Carregando...</p>
     </div>
   ),
 }
 
 export const AppIcon: Story = {
   render: () => (
-    <div className="flex gap-4">
-      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-lg p-3">
-        <LogoIcon size="xl" />
+    <div className="flex items-end gap-4">
+      {/* App icon - Navy background with white logo */}
+      <div className="text-center">
+        <div className="w-20 h-20 rounded-2xl bg-[#1a365d] flex items-center justify-center shadow-lg">
+          <LogoFavicon size="xl" color="white" />
+        </div>
+        <p className="text-xs text-[var(--foreground-muted)] mt-2">App Icon</p>
       </div>
-      <div className="w-14 h-14 rounded-xl bg-[#1a365d] flex items-center justify-center shadow-md p-2">
-        <LogoFavicon size="lg" color="white" />
+      {/* Medium icon - White background */}
+      <div className="text-center">
+        <div className="w-14 h-14 rounded-xl bg-white border border-[var(--border)] flex items-center justify-center shadow-md">
+          <LogoFavicon size="lg" color="gradient" />
+        </div>
+        <p className="text-xs text-[var(--foreground-muted)] mt-2">Médio</p>
       </div>
-      <div className="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center shadow p-1">
-        <LogoFavicon size="md" />
+      {/* Small icon - Subtle background */}
+      <div className="text-center">
+        <div className="w-10 h-10 rounded-lg bg-[var(--background-subtle)] border border-[var(--border)] flex items-center justify-center shadow-sm">
+          <LogoFavicon size="md" color="orange" />
+        </div>
+        <p className="text-xs text-[var(--foreground-muted)] mt-2">Pequeno</p>
       </div>
     </div>
   ),
@@ -339,7 +351,7 @@ export const SocialMedia: Story = {
   render: () => (
     <div className="flex gap-4">
       {/* Profile Picture */}
-      <div className="w-24 h-24 rounded-full bg-white border-4 border-orange-500 flex items-center justify-center overflow-hidden">
+      <div className="w-24 h-24 rounded-full bg-[var(--background)] border-4 border-orange-500 flex items-center justify-center overflow-hidden">
         <LogoIcon size="xl" />
       </div>
       {/* Cover Image Corner */}
@@ -352,12 +364,12 @@ export const SocialMedia: Story = {
 
 export const BusinessCard: Story = {
   render: () => (
-    <div className="w-96 h-56 bg-white rounded-xl shadow-xl p-6 flex flex-col justify-between border border-gray-100">
+    <div className="w-96 h-56 bg-[var(--background)] rounded-xl shadow-xl p-6 flex flex-col justify-between border border-[var(--border)]">
       <Logo variant="horizontal" size="md" />
       <div>
-        <h3 className="font-semibold text-gray-900">João Silva</h3>
-        <p className="text-sm text-gray-500">Diretor de Operações</p>
-        <p className="text-xs text-gray-400 mt-2">joao@smartsenior.com.br</p>
+        <h3 className="font-semibold text-[var(--foreground)]">João Silva</h3>
+        <p className="text-sm text-[var(--foreground-muted)]">Diretor de Operações</p>
+        <p className="text-xs text-[var(--foreground-muted)] mt-2">joao@smartsenior.com.br</p>
       </div>
     </div>
   ),
@@ -369,10 +381,10 @@ export const BusinessCard: Story = {
 
 export const BrandGuidelines: Story = {
   render: () => (
-    <div className="max-w-3xl space-y-8 p-6 bg-white rounded-xl border border-gray-200">
+    <div className="max-w-3xl space-y-8 p-6 bg-[var(--background)] rounded-xl border border-[var(--border)]">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">SmartSenior Brand</h2>
-        <p className="text-sm text-gray-600 mb-6">
+        <h2 className="text-xl font-semibold text-[var(--foreground)] mb-2">SmartSenior Brand</h2>
+        <p className="text-sm text-[var(--foreground-muted)] mb-6">
           O logo SmartSenior apresenta uma fênix estilizada, simbolizando renascimento,
           vitalidade e cuidado. As cores laranja e azul marinho transmitem energia,
           confiança e profissionalismo.
@@ -380,63 +392,63 @@ export const BrandGuidelines: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-medium text-gray-800 mb-4">Variantes do Logo</h3>
+        <h3 className="text-lg font-medium text-[var(--foreground)] mb-4">Variantes do Logo</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="p-4 bg-gray-50 rounded-lg text-center">
+          <div className="p-4 bg-[var(--background-subtle)] rounded-lg text-center">
             <Logo variant="horizontal" size="sm" />
-            <p className="text-xs text-gray-500 mt-3">Horizontal</p>
+            <p className="text-xs text-[var(--foreground-muted)] mt-3">Horizontal</p>
           </div>
-          <div className="p-4 bg-gray-50 rounded-lg text-center">
+          <div className="p-4 bg-[var(--background-subtle)] rounded-lg text-center">
             <LogoVertical size="md" />
-            <p className="text-xs text-gray-500 mt-3">Vertical</p>
+            <p className="text-xs text-[var(--foreground-muted)] mt-3">Vertical</p>
           </div>
-          <div className="p-4 bg-gray-50 rounded-lg text-center">
+          <div className="p-4 bg-[var(--background-subtle)] rounded-lg text-center">
             <LogoIcon size="lg" />
-            <p className="text-xs text-gray-500 mt-3">Ícone</p>
+            <p className="text-xs text-[var(--foreground-muted)] mt-3">Ícone</p>
           </div>
-          <div className="p-4 bg-gray-50 rounded-lg text-center">
+          <div className="p-4 bg-[var(--background-subtle)] rounded-lg text-center">
             <LogoFavicon size="lg" />
-            <p className="text-xs text-gray-500 mt-3">Favicon</p>
+            <p className="text-xs text-[var(--foreground-muted)] mt-3">Favicon</p>
           </div>
         </div>
       </div>
 
       <div>
-        <h3 className="text-lg font-medium text-gray-800 mb-4">Cores da Marca</h3>
+        <h3 className="text-lg font-medium text-[var(--foreground)] mb-4">Cores da Marca</h3>
         <div className="flex gap-4">
           <div className="text-center">
             <div className="w-16 h-16 rounded-lg bg-gradient-to-b from-[#ff9a3c] to-[#ff6b00]"></div>
-            <p className="text-xs text-gray-500 mt-2">Laranja<br/>Gradient</p>
+            <p className="text-xs text-[var(--foreground-muted)] mt-2">Laranja<br/>Gradient</p>
           </div>
           <div className="text-center">
             <div className="w-16 h-16 rounded-lg bg-[#ff7a00]"></div>
-            <p className="text-xs text-gray-500 mt-2">Laranja<br/>#FF7A00</p>
+            <p className="text-xs text-[var(--foreground-muted)] mt-2">Laranja<br/>#FF7A00</p>
           </div>
           <div className="text-center">
             <div className="w-16 h-16 rounded-lg bg-[#1a365d]"></div>
-            <p className="text-xs text-gray-500 mt-2">Azul Marinho<br/>#1A365D</p>
+            <p className="text-xs text-[var(--foreground-muted)] mt-2">Azul Marinho<br/>#1A365D</p>
           </div>
         </div>
       </div>
 
       <div>
-        <h3 className="text-lg font-medium text-gray-800 mb-4">Área de Proteção</h3>
-        <div className="p-8 bg-gray-50 rounded-lg inline-block">
+        <h3 className="text-lg font-medium text-[var(--foreground)] mb-4">Área de Proteção</h3>
+        <div className="p-8 bg-[var(--background-subtle)] rounded-lg inline-block">
           <div className="border-2 border-dashed border-orange-300 p-6">
             <Logo variant="horizontal" size="lg" />
           </div>
         </div>
-        <p className="text-xs text-gray-500 mt-3">
+        <p className="text-xs text-[var(--foreground-muted)] mt-3">
           Mantenha uma área de respiro ao redor do logo equivalente à altura do ícone.
         </p>
       </div>
 
       <div>
-        <h3 className="text-lg font-medium text-gray-800 mb-4">Uso em Fundos</h3>
+        <h3 className="text-lg font-medium text-[var(--foreground)] mb-4">Uso em Fundos</h3>
         <div className="grid grid-cols-2 gap-4">
-          <div className="p-6 bg-white border border-gray-200 rounded-lg">
+          <div className="p-6 bg-white rounded-lg border border-[var(--border)]">
             <Logo variant="horizontal" color="gradient" size="md" />
-            <p className="text-xs text-gray-500 mt-3">Fundo claro: usar gradient ou orange</p>
+            <p className="text-xs text-gray-600 mt-3">Fundo claro: usar gradient ou orange</p>
           </div>
           <div className="p-6 bg-[#1a365d] rounded-lg">
             <Logo variant="horizontal" color="white" size="md" />
@@ -446,15 +458,15 @@ export const BrandGuidelines: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-medium text-gray-800 mb-4">Tamanho Mínimo</h3>
+        <h3 className="text-lg font-medium text-[var(--foreground)] mb-4">Tamanho Mínimo</h3>
         <div className="flex items-end gap-6">
           <div>
             <Logo variant="horizontal" size="xs" />
-            <p className="text-xs text-gray-500 mt-2">Mínimo horizontal: 24px altura</p>
+            <p className="text-xs text-[var(--foreground-muted)] mt-2">Mínimo horizontal: 24px altura</p>
           </div>
           <div>
             <LogoFavicon size="xs" />
-            <p className="text-xs text-gray-500 mt-2">Mínimo favicon: 16px</p>
+            <p className="text-xs text-[var(--foreground-muted)] mt-2">Mínimo favicon: 16px</p>
           </div>
         </div>
       </div>
