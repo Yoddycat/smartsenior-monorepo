@@ -1,12 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Text } from 'react-native'
+import { Text, View, ActivityIndicator } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { HomeScreen, ProtocolScreen, MonthDetailScreen, ProgressScreen, ProfileScreen } from './src/screens'
+import {
+  HomeScreen,
+  ProtocolScreen,
+  MonthDetailScreen,
+  ProgressScreen,
+  ProfileScreen,
+  OnboardingScreen,
+} from './src/screens'
 import { colors } from './src/constants/theme'
+
+const ONBOARDING_COMPLETE_KEY = '@longevidade:onboarding_complete'
 
 // Stack navigator for Protocol tab
 type ProtocolStackParamList = {
@@ -15,7 +25,6 @@ type ProtocolStackParamList = {
 }
 
 const ProtocolStack = createNativeStackNavigator<ProtocolStackParamList>()
-
 const Tab = createBottomTabNavigator()
 
 function ProtocolStackScreen() {
@@ -40,7 +49,7 @@ function ProtocolStackScreen() {
         name="MonthDetail"
         component={MonthDetailScreen}
         options={({ route }) => ({
-          title: `Mes ${route.params.month}`,
+          title: `Mês ${route.params.month}`,
           headerShown: true,
         })}
       />
@@ -48,7 +57,7 @@ function ProtocolStackScreen() {
   )
 }
 
-export default function App() {
+function MainApp() {
   return (
     <NavigationContainer>
       <StatusBar style="light" />
@@ -119,4 +128,48 @@ export default function App() {
       </Tab.Navigator>
     </NavigationContainer>
   )
+}
+
+export default function App() {
+  const [isLoading, setIsLoading] = useState(true)
+  const [showOnboarding, setShowOnboarding] = useState(false)
+
+  useEffect(() => {
+    checkOnboardingStatus()
+  }, [])
+
+  const checkOnboardingStatus = async () => {
+    try {
+      const onboardingComplete = await AsyncStorage.getItem(ONBOARDING_COMPLETE_KEY)
+      setShowOnboarding(onboardingComplete !== 'true')
+    } catch (error) {
+      console.error('Error checking onboarding status:', error)
+      setShowOnboarding(true)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false)
+  }
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.secondary }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    )
+  }
+
+  if (showOnboarding) {
+    return (
+      <>
+        <StatusBar style="light" />
+        <OnboardingScreen onComplete={handleOnboardingComplete} />
+      </>
+    )
+  }
+
+  return <MainApp />
 }
