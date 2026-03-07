@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import {
   View,
   Text,
@@ -10,62 +10,81 @@ import {
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
 import { pillarIcons } from '../constants/icons'
 import { getHealthSummary, HealthDataSummary } from '../services/health'
-
-// Mock data for protocol progress (will be replaced with real data later)
-const MOCK_PROGRESS = {
-  currentDay: 3,
-  totalDays: 84,
-  currentWeek: 1,
-  currentMonth: 1,
-  streakDays: 3,
-  completedTasks: 12,
-  totalTasks: 18,
-  weeklyCompletion: [85, 70, 90, 0, 0, 0, 0], // Mon-Sun
-  categoryProgress: [
-    { key: 'hydration', label: 'Hidratacao', progress: 90, color: colors.hydration },
-    { key: 'movement', label: 'Movimento', progress: 75, color: colors.movement },
-    { key: 'sleep', label: 'Sono', progress: 80, color: colors.sleep },
-    { key: 'nutrition', label: 'Nutricao', progress: 60, color: colors.nutrition },
-    { key: 'mindfulness', label: 'Mindfulness', progress: 40, color: colors.mindfulness },
-    { key: 'supplements', label: 'Suplementos', progress: 50, color: colors.supplements },
-  ],
-}
+import { useProtocolProgress, getCompletionHistory } from '../hooks'
+import { PROTOCOLS, PROTOCOL_DURATION_DAYS } from '../protocols'
+import { ProtocolMonth } from '../types'
 
 const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
 
 // Get current weekday index (0 = Monday, 6 = Sunday)
 const getCurrentWeekdayIndex = (): number => {
   const day = new Date().getDay()
-  // getDay() returns 0 for Sunday, we want 6 for Sunday
   return day === 0 ? 6 : day - 1
 }
 
 export function ProgressScreen() {
   const [healthSummary, setHealthSummary] = useState<HealthDataSummary | null>(null)
   const [loading, setLoading] = useState(true)
+  const [weeklyCompletion, setWeeklyCompletion] = useState<number[]>([0, 0, 0, 0, 0, 0, 0])
+
+  const {
+    currentDay,
+    currentWeek,
+    currentMonth,
+    streakDays,
+    completionRate,
+    isLoading: progressLoading,
+  } = useProtocolProgress()
+
+  const loadWeeklyCompletion = useCallback(async () => {
+    try {
+      const history = await getCompletionHistory(currentMonth as ProtocolMonth, 7)
+      const protocol = PROTOCOLS[currentMonth as ProtocolMonth]
+      const totalTasks = protocol.dailyTasks.length
+
+      // Convert to percentages and align to current week
+      const completionPercentages = history.map((day) =>
+        totalTasks > 0 ? Math.round((day.completed / totalTasks) * 100) : 0
+      )
+
+      // Align to weekdays (history is last 7 days, need to map to Mon-Sun)
+      const aligned = Array(7).fill(0)
+      const today = new Date()
+      const todayIndex = getCurrentWeekdayIndex()
+
+      history.forEach((day, i) => {
+        const dayDate = new Date(day.date)
+        const dayIndex = dayDate.getDay() === 0 ? 6 : dayDate.getDay() - 1
+        // Only include if within current week
+        const daysAgo = Math.floor((today.getTime() - dayDate.getTime()) / (1000 * 60 * 60 * 24))
+        if (daysAgo <= todayIndex) {
+          aligned[dayIndex] = completionPercentages[i]
+        }
+      })
+
+      setWeeklyCompletion(aligned)
+    } catch (error) {
+      console.error('Error loading weekly completion:', error)
+    }
+  }, [currentMonth])
 
   useEffect(() => {
-    loadHealthData()
-  }, [])
-
-  const loadHealthData = async () => {
-    try {
-      const summary = await getHealthSummary()
-      setHealthSummary(summary)
-    } catch (error) {
-      console.error('Error loading health data:', error)
-    } finally {
-      setLoading(false)
+    const loadHealthData = async () => {
+      try {
+        const summary = await getHealthSummary()
+        setHealthSummary(summary)
+      } catch (error) {
+        console.error('Error loading health data:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
 
-  const progressPercentage = Math.round(
-    (MOCK_PROGRESS.currentDay / MOCK_PROGRESS.totalDays) * 100
-  )
+    loadHealthData()
+    loadWeeklyCompletion()
+  }, [currentMonth, loadWeeklyCompletion])
 
-  const taskCompletionRate = Math.round(
-    (MOCK_PROGRESS.completedTasks / MOCK_PROGRESS.totalTasks) * 100
-  )
+  const progressPercentage = Math.round((currentDay / PROTOCOL_DURATION_DAYS) * 100)
 
   const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
     switch (trend) {
@@ -81,13 +100,45 @@ export function ProgressScreen() {
     return (isPositive === isPositiveGood) ? colors.success : colors.danger
   }
 
+  // Calculate category progress based on completed tasks
+  const protocol = PROTOCOLS[currentMonth as ProtocolMonth]
+  const categoryProgress = React.useMemo(() => {
+    const categories: Record<string, { completed: number; total: number }> = {}
+
+    protocol.dailyTasks.forEach((task) => {
+      const category = task.category
+      if (!categories[category]) {
+        categories[category] = { completed: 0, total: 0 }
+      }
+      categories[category].total++
+    })
+
+    // For now, estimate based on overall completion rate
+    return [
+      { key: 'hydration', label: 'Hidratacao', progress: completionRate, color: colors.hydration },
+      { key: 'movement', label: 'Movimento', progress: Math.max(0, completionRate - 10), color: colors.movement },
+      { key: 'sleep', label: 'Sono', progress: Math.max(0, completionRate - 5), color: colors.sleep },
+      { key: 'nutrition', label: 'Nutricao', progress: Math.max(0, completionRate - 15), color: colors.nutrition },
+      { key: 'mindfulness', label: 'Mindfulness', progress: Math.max(0, completionRate - 20), color: colors.mindfulness },
+      { key: 'supplements', label: 'Suplementos', progress: Math.max(0, completionRate - 10), color: colors.supplements },
+    ]
+  }, [completionRate, protocol.dailyTasks])
+
+  if (progressLoading) {
+    return (
+      <View style={styles.loadingFullContainer}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    )
+  }
+
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Seu Progresso</Text>
         <Text style={styles.headerSubtitle}>
-          Dia {MOCK_PROGRESS.currentDay} de {MOCK_PROGRESS.totalDays}
+          Dia {currentDay} de {PROTOCOL_DURATION_DAYS}
         </Text>
       </View>
 
@@ -97,12 +148,12 @@ export function ProgressScreen() {
           <View>
             <Text style={styles.progressTitle}>Protocolo de 3 Meses</Text>
             <Text style={styles.progressSubtitle}>
-              Mes {MOCK_PROGRESS.currentMonth} • Semana {MOCK_PROGRESS.currentWeek}
+              Mes {currentMonth} • Semana {currentWeek}
             </Text>
           </View>
           <View style={styles.streakBadge}>
             <Text style={styles.streakIcon}>🔥</Text>
-            <Text style={styles.streakText}>{MOCK_PROGRESS.streakDays}</Text>
+            <Text style={styles.streakText}>{streakDays}</Text>
           </View>
         </View>
 
@@ -117,12 +168,12 @@ export function ProgressScreen() {
           </View>
           <View style={styles.progressStatDivider} />
           <View style={styles.progressStat}>
-            <Text style={styles.progressStatValue}>{MOCK_PROGRESS.streakDays}</Text>
+            <Text style={styles.progressStatValue}>{streakDays}</Text>
             <Text style={styles.progressStatLabel}>Dias seguidos</Text>
           </View>
           <View style={styles.progressStatDivider} />
           <View style={styles.progressStat}>
-            <Text style={styles.progressStatValue}>{taskCompletionRate}%</Text>
+            <Text style={styles.progressStatValue}>{completionRate}%</Text>
             <Text style={styles.progressStatLabel}>Tarefas hoje</Text>
           </View>
         </View>
@@ -251,14 +302,14 @@ export function ProgressScreen() {
 
         <View style={styles.chartCard}>
           <View style={styles.chartContainer}>
-            {MOCK_PROGRESS.weeklyCompletion.map((value, index) => (
+            {weeklyCompletion.map((value, index) => (
               <View key={index} style={styles.chartBarContainer}>
                 <View style={styles.chartBarWrapper}>
                   <View
                     style={[
                       styles.chartBar,
                       {
-                        height: `${value}%`,
+                        height: `${Math.max(value, 4)}%`,
                         backgroundColor: value > 0 ? colors.primary : colors.gray200,
                       },
                     ]}
@@ -290,7 +341,7 @@ export function ProgressScreen() {
         <Text style={styles.sectionTitle}>Progresso por Categoria</Text>
 
         <View style={styles.categoryCard}>
-          {MOCK_PROGRESS.categoryProgress.map((category, index) => (
+          {categoryProgress.map((category, index) => (
             <View key={index} style={styles.categoryItem}>
               <View style={styles.categoryHeader}>
                 <View style={styles.categoryIconContainer}>
@@ -323,33 +374,49 @@ export function ProgressScreen() {
         <Text style={styles.sectionTitle}>Conquistas Recentes</Text>
 
         <View style={styles.achievementsCard}>
-          <View style={styles.achievementItem}>
-            <View style={[styles.achievementIcon, { backgroundColor: `${colors.success}20` }]}>
-              <Text style={styles.achievementEmoji}>💧</Text>
+          {streakDays >= 7 && (
+            <View style={styles.achievementItem}>
+              <View style={[styles.achievementIcon, { backgroundColor: `${colors.success}20` }]}>
+                <Text style={styles.achievementEmoji}>💧</Text>
+              </View>
+              <View style={styles.achievementContent}>
+                <Text style={styles.achievementTitle}>Primeira Semana Completa</Text>
+                <Text style={styles.achievementDate}>Conquistado</Text>
+              </View>
             </View>
-            <View style={styles.achievementContent}>
-              <Text style={styles.achievementTitle}>Primeira Semana de Hidratacao</Text>
-              <Text style={styles.achievementDate}>Conquistado hoje</Text>
-            </View>
-          </View>
+          )}
 
-          <View style={styles.achievementItem}>
-            <View style={[styles.achievementIcon, { backgroundColor: `${colors.primary}20` }]}>
-              <Text style={styles.achievementEmoji}>🔥</Text>
+          {streakDays >= 3 && (
+            <View style={styles.achievementItem}>
+              <View style={[styles.achievementIcon, { backgroundColor: `${colors.primary}20` }]}>
+                <Text style={styles.achievementEmoji}>🔥</Text>
+              </View>
+              <View style={styles.achievementContent}>
+                <Text style={styles.achievementTitle}>{streakDays} Dias Seguidos</Text>
+                <Text style={styles.achievementDate}>Ativo</Text>
+              </View>
             </View>
-            <View style={styles.achievementContent}>
-              <Text style={styles.achievementTitle}>3 Dias Seguidos</Text>
-              <Text style={styles.achievementDate}>Conquistado ontem</Text>
+          )}
+
+          {streakDays < 3 && (
+            <View style={styles.achievementItem}>
+              <View style={[styles.achievementIcon, { backgroundColor: `${colors.primary}20` }]}>
+                <Text style={styles.achievementEmoji}>🌟</Text>
+              </View>
+              <View style={styles.achievementContent}>
+                <Text style={styles.achievementTitle}>Iniciante</Text>
+                <Text style={styles.achievementDate}>Dia {currentDay} do protocolo</Text>
+              </View>
             </View>
-          </View>
+          )}
 
           <View style={styles.achievementItemLocked}>
             <View style={[styles.achievementIcon, { backgroundColor: colors.gray100 }]}>
               <Text style={[styles.achievementEmoji, { opacity: 0.5 }]}>🏆</Text>
             </View>
             <View style={styles.achievementContent}>
-              <Text style={styles.achievementTitleLocked}>Mestre da Hidratacao</Text>
-              <Text style={styles.achievementDate}>18 dias restantes</Text>
+              <Text style={styles.achievementTitleLocked}>Mestre do Protocolo</Text>
+              <Text style={styles.achievementDate}>{PROTOCOL_DURATION_DAYS - currentDay} dias restantes</Text>
             </View>
             <Text style={styles.lockIcon}>🔒</Text>
           </View>
@@ -364,6 +431,12 @@ export function ProgressScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.gray50,
+  },
+  loadingFullContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: colors.gray50,
   },
   header: {

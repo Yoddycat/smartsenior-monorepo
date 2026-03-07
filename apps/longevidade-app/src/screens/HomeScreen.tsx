@@ -6,32 +6,53 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native'
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
 import { pillarIcons } from '../constants/icons'
 import { RecoveryCard } from '../components'
+import { useProtocolProgress, getGreeting, useTaskCompletion } from '../hooks'
+import { PROTOCOLS } from '../protocols'
+import { ProtocolMonth } from '../types'
 
 export function HomeScreen() {
-  // Mock data - will be replaced with actual state
-  const currentMonth = 1
-  const currentWeek = 1
-  const currentDay = 3
-  const completionRate = 67
-  const streakDays = 3
+  const {
+    currentMonth,
+    currentWeek,
+    currentDay,
+    completionRate,
+    streakDays,
+    completedToday,
+    totalTasksToday,
+    protocolTitle,
+    protocolSubtitle,
+    isLoading,
+  } = useProtocolProgress()
+
+  const protocol = PROTOCOLS[currentMonth as ProtocolMonth]
+  const { completedTasks, toggleTask } = useTaskCompletion(currentMonth as ProtocolMonth, totalTasksToday)
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    )
+  }
 
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.greeting}>Bom dia! 👋</Text>
+        <Text style={styles.greeting}>{getGreeting()} 👋</Text>
         <Text style={styles.date}>Dia {currentDay} • Semana {currentWeek} • Mês {currentMonth}</Text>
       </View>
 
       {/* Progress Card */}
       <View style={styles.progressCard}>
         <View style={styles.progressHeader}>
-          <Text style={styles.progressTitle}>Mês 1: Fundação</Text>
-          <Text style={styles.progressSubtitle}>Construindo os Alicerces</Text>
+          <Text style={styles.progressTitle}>Mês {currentMonth}: {protocolTitle}</Text>
+          <Text style={styles.progressSubtitle}>{protocolSubtitle}</Text>
         </View>
 
         <View style={styles.statsRow}>
@@ -46,7 +67,7 @@ export function HomeScreen() {
           </View>
           <View style={styles.statDivider} />
           <View style={styles.statItem}>
-            <Text style={styles.statValue}>4/6</Text>
+            <Text style={styles.statValue}>{completedToday}/{totalTasksToday}</Text>
             <Text style={styles.statLabel}>Tarefas</Text>
           </View>
         </View>
@@ -63,75 +84,59 @@ export function HomeScreen() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Tarefas de Hoje</Text>
 
-        <TouchableOpacity style={styles.taskCard}>
-          <View style={styles.taskIconContainer}>
-            <Image source={pillarIcons.hydration} style={styles.taskImage} />
-          </View>
-          <View style={styles.taskContent}>
-            <Text style={styles.taskTitle}>Água ao acordar</Text>
-            <Text style={styles.taskDescription}>500ml nos primeiros 30 min</Text>
-          </View>
-          <View style={[styles.taskStatus, styles.taskCompleted]}>
-            <Text style={styles.taskStatusText}>✓</Text>
-          </View>
-        </TouchableOpacity>
+        {protocol.dailyTasks.map((task, index) => {
+          const isCompleted = completedTasks.has(index)
+          const iconKey = task.category as keyof typeof pillarIcons
 
-        <TouchableOpacity style={styles.taskCard}>
-          <View style={styles.taskIconContainer}>
-            <Image source={pillarIcons.movement} style={styles.taskImage} />
-          </View>
-          <View style={styles.taskContent}>
-            <Text style={styles.taskTitle}>Caminhada matinal</Text>
-            <Text style={styles.taskDescription}>15 minutos ao ar livre</Text>
-          </View>
-          <View style={[styles.taskStatus, styles.taskCompleted]}>
-            <Text style={styles.taskStatusText}>✓</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.taskCard}>
-          <View style={styles.taskIconContainer}>
-            <Image source={pillarIcons.sleep} style={styles.taskImage} />
-          </View>
-          <View style={styles.taskContent}>
-            <Text style={styles.taskTitle}>Rotina de desconexão</Text>
-            <Text style={styles.taskDescription}>Desligar telas às 21h</Text>
-          </View>
-          <View style={[styles.taskStatus, styles.taskPending]}>
-            <Text style={styles.taskStatusTextPending}>○</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.taskCard}>
-          <View style={styles.taskIconContainer}>
-            <Image source={pillarIcons.hydration} style={styles.taskImage} />
-          </View>
-          <View style={styles.taskContent}>
-            <Text style={styles.taskTitle}>Meta de hidratação</Text>
-            <Text style={styles.taskDescription}>2 litros de água</Text>
-          </View>
-          <View style={[styles.taskStatus, styles.taskPending]}>
-            <Text style={styles.taskStatusTextPending}>○</Text>
-          </View>
-        </TouchableOpacity>
+          return (
+            <TouchableOpacity
+              key={index}
+              style={styles.taskCard}
+              onPress={() => toggleTask(index)}
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: isCompleted }}
+              accessibilityLabel={`${task.title}, ${isCompleted ? 'concluída' : 'pendente'}`}
+            >
+              <View style={styles.taskIconContainer}>
+                <Image
+                  source={pillarIcons[iconKey] || pillarIcons.hydration}
+                  style={styles.taskImage}
+                />
+              </View>
+              <View style={styles.taskContent}>
+                <Text style={[styles.taskTitle, isCompleted && styles.taskTitleCompleted]}>
+                  {task.title}
+                </Text>
+                <Text style={styles.taskDescription}>{task.description}</Text>
+              </View>
+              <View style={[styles.taskStatus, isCompleted ? styles.taskCompleted : styles.taskPending]}>
+                <Text style={isCompleted ? styles.taskStatusText : styles.taskStatusTextPending}>
+                  {isCompleted ? '✓' : '○'}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )
+        })}
       </View>
 
       {/* Weekly Goal */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Meta da Semana</Text>
 
-        <View style={styles.goalCard}>
-          <View style={styles.goalHeader}>
-            <Text style={styles.goalTitle}>Estabelecer rotina de hidratação</Text>
-            <Text style={styles.goalProgress}>3/5 dias</Text>
+        {protocol.weeklyGoals.length > 0 && (
+          <View style={styles.goalCard}>
+            <View style={styles.goalHeader}>
+              <Text style={styles.goalTitle}>{protocol.weeklyGoals[0].title}</Text>
+              <Text style={styles.goalProgress}>{streakDays}/7 dias</Text>
+            </View>
+            <View style={styles.goalProgressBarContainer}>
+              <View style={[styles.goalProgressBar, { width: `${Math.min((streakDays / 7) * 100, 100)}%` }]} />
+            </View>
+            <Text style={styles.goalDescription}>
+              {protocol.weeklyGoals[0].description}
+            </Text>
           </View>
-          <View style={styles.goalProgressBarContainer}>
-            <View style={[styles.goalProgressBar, { width: '60%' }]} />
-          </View>
-          <Text style={styles.goalDescription}>
-            Beber água ao acordar por 5 dias consecutivos
-          </Text>
-        </View>
+        )}
       </View>
 
       <View style={{ height: 100 }} />
@@ -142,6 +147,12 @@ export function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.gray50,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: colors.gray50,
   },
   header: {
@@ -259,6 +270,10 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.base,
     fontWeight: '600',
     color: colors.gray900,
+  },
+  taskTitleCompleted: {
+    textDecorationLine: 'line-through',
+    color: colors.gray500,
   },
   taskDescription: {
     fontSize: typography.fontSize.sm,
