@@ -4,7 +4,7 @@
  * Unified health data service that works across platforms:
  * - iOS: Uses HealthKit via react-native-health
  * - Android: Uses Health Connect via expo-health-connect
- * - Web: Returns unavailable (no health APIs)
+ * - Web: Uses mock data for testing UI
  *
  * Usage:
  * ```
@@ -30,15 +30,21 @@ import type {
   HealthDataSummary,
 } from '../../types/health'
 
+// Enable mock mode for testing (set to true to use mock on all platforms)
+const USE_MOCK_DATA = __DEV__ && Platform.OS === 'web'
+
 // Platform-specific imports using require to avoid bundling issues
 let platformHealthService: HealthServiceInterface
 
-if (Platform.OS === 'ios') {
+if (USE_MOCK_DATA) {
+  // Use mock data for web/testing
+  platformHealthService = require('./healthService.mock').healthService
+} else if (Platform.OS === 'ios') {
   platformHealthService = require('./healthService.ios').healthService
 } else if (Platform.OS === 'android') {
   platformHealthService = require('./healthService.android').healthService
 } else {
-  platformHealthService = require('./healthService.web').healthService
+  platformHealthService = require('./healthService.mock').healthService
 }
 
 export const healthService = platformHealthService
