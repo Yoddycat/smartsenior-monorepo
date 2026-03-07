@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Switch,
   Alert,
+  Platform,
+  ActivityIndicator,
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
@@ -17,6 +19,7 @@ import {
   NotificationSettings,
   defaultNotificationSettings,
 } from '../services/notifications'
+import { useHealth } from '../hooks'
 
 const PROFILE_STORAGE_KEY = '@longevidade:user_profile'
 
@@ -40,6 +43,16 @@ export function ProfileScreen() {
     defaultNotificationSettings
   )
   const [isLoading, setIsLoading] = useState(true)
+  const [isConnecting, setIsConnecting] = useState(false)
+
+  // Health integration
+  const {
+    isAvailable: healthAvailable,
+    isLoading: healthLoading,
+    permissions: healthPermissions,
+    hasAnyPermission,
+    requestPermissions,
+  } = useHealth()
 
   // Calculate age and protocol days
   const currentYear = new Date().getFullYear()
@@ -49,6 +62,9 @@ export function ProfileScreen() {
       (1000 * 60 * 60 * 24)
   )
   const currentMonth = Math.min(3, Math.floor(protocolDays / 28) + 1)
+
+  // Determine health connection status
+  const isHealthConnected = profile.healthConnected && hasAnyPermission
 
   useEffect(() => {
     const loadData = async () => {
@@ -78,19 +94,96 @@ export function ProfileScreen() {
     await saveNotificationSettings(newSettings)
   }
 
-  const handleConnectHealth = () => {
+  const handleConnectHealth = async () => {
+    const healthServiceName = Platform.OS === 'ios' ? 'Apple Health' : 'Health Connect'
+
+    if (!healthAvailable) {
+      Alert.alert(
+        'Serviço Indisponível',
+        Platform.OS === 'ios'
+          ? 'O Apple Health não está disponível neste dispositivo.'
+          : 'O Health Connect não está instalado. Por favor, instale o Health Connect da Google Play Store.',
+        [{ text: 'OK' }]
+      )
+      return
+    }
+
+    if (isHealthConnected) {
+      // Already connected - show status
+      const connectedServices = []
+      if (healthPermissions.steps) connectedServices.push('Passos')
+      if (healthPermissions.heartRate) connectedServices.push('Frequência Cardíaca')
+      if (healthPermissions.hrv) connectedServices.push('HRV')
+      if (healthPermissions.sleep) connectedServices.push('Sono')
+
+      Alert.alert(
+        'Conexão Ativa',
+        `Conectado ao ${healthServiceName}.\n\nDados sincronizados:\n• ${connectedServices.join('\n• ')}`,
+        [
+          { text: 'OK' },
+          {
+            text: 'Desconectar',
+            style: 'destructive',
+            onPress: async () => {
+              const newProfile = { ...profile, healthConnected: false }
+              setProfile(newProfile)
+              await AsyncStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(newProfile))
+              Alert.alert('Desconectado', `Conexão com ${healthServiceName} desativada.`)
+            },
+          },
+        ]
+      )
+      return
+    }
+
+    // Request connection
     Alert.alert(
       'Conectar Saúde',
-      'Deseja conectar com o Apple Health / Google Fit para sincronizar seus dados de saúde?',
+      `Deseja conectar com o ${healthServiceName} para sincronizar seus dados de saúde?\n\nDados que serão acessados:\n• Passos\n• Frequência cardíaca\n• Variabilidade cardíaca (HRV)\n• Sono`,
       [
         { text: 'Cancelar', style: 'cancel' },
         {
           text: 'Conectar',
           onPress: async () => {
-            const newProfile = { ...profile, healthConnected: true }
-            setProfile(newProfile)
-            await AsyncStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(newProfile))
-            Alert.alert('Sucesso', 'Conexão com saúde estabelecida!')
+            setIsConnecting(true)
+            try {
+              const permissions = await requestPermissions()
+              const anyGranted =
+                permissions.steps ||
+                permissions.heartRate ||
+                permissions.hrv ||
+                permissions.sleep
+
+              if (anyGranted) {
+                const newProfile = { ...profile, healthConnected: true }
+                setProfile(newProfile)
+                await AsyncStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(newProfile))
+
+                const grantedList = []
+                if (permissions.steps) grantedList.push('Passos')
+                if (permissions.heartRate) grantedList.push('Frequência Cardíaca')
+                if (permissions.hrv) grantedList.push('HRV')
+                if (permissions.sleep) grantedList.push('Sono')
+
+                Alert.alert(
+                  'Conectado!',
+                  `${healthServiceName} conectado com sucesso.\n\nDados disponíveis:\n• ${grantedList.join('\n• ')}`
+                )
+              } else {
+                Alert.alert(
+                  'Permissões Necessárias',
+                  `Nenhuma permissão foi concedida. Para usar os recursos de saúde, permita o acesso aos dados no ${healthServiceName}.`
+                )
+              }
+            } catch (error) {
+              console.error('Error connecting health:', error)
+              Alert.alert(
+                'Erro',
+                `Não foi possível conectar ao ${healthServiceName}. Tente novamente.`
+              )
+            } finally {
+              setIsConnecting(false)
+            }
           },
         },
       ]
@@ -210,39 +303,75 @@ export function ProfileScreen() {
         <TouchableOpacity
           style={styles.healthCard}
           onPress={handleConnectHealth}
+          disabled={isConnecting || healthLoading}
           accessibilityRole="button"
           accessibilityLabel={
-            profile.healthConnected
-              ? 'Apple Health conectado'
-              : 'Conectar com Apple Health'
+            isHealthConnected
+              ? `${Platform.OS === 'ios' ? 'Apple Health' : 'Health Connect'} conectado`
+              : `Conectar com ${Platform.OS === 'ios' ? 'Apple Health' : 'Health Connect'}`
           }
         >
           <View style={styles.healthIconContainer}>
             <Text style={styles.healthIcon}>❤️</Text>
           </View>
           <View style={styles.healthContent}>
-            <Text style={styles.healthTitle}>Apple Health / Google Fit</Text>
-            <Text style={styles.healthDescription}>
-              {profile.healthConnected
-                ? 'Conectado e sincronizando'
-                : 'Conectar para sincronizar dados'}
+            <Text style={styles.healthTitle}>
+              {Platform.OS === 'ios' ? 'Apple Health' : 'Health Connect'}
             </Text>
+            <Text style={styles.healthDescription}>
+              {!healthAvailable
+                ? 'Serviço não disponível'
+                : isConnecting
+                ? 'Conectando...'
+                : isHealthConnected
+                ? 'Conectado e sincronizando'
+                : 'Toque para conectar'}
+            </Text>
+            {isHealthConnected && (
+              <View style={styles.permissionTags}>
+                {healthPermissions.steps && (
+                  <View style={styles.permissionTag}>
+                    <Text style={styles.permissionTagText}>Passos</Text>
+                  </View>
+                )}
+                {healthPermissions.heartRate && (
+                  <View style={styles.permissionTag}>
+                    <Text style={styles.permissionTagText}>BPM</Text>
+                  </View>
+                )}
+                {healthPermissions.hrv && (
+                  <View style={styles.permissionTag}>
+                    <Text style={styles.permissionTagText}>HRV</Text>
+                  </View>
+                )}
+                {healthPermissions.sleep && (
+                  <View style={styles.permissionTag}>
+                    <Text style={styles.permissionTagText}>Sono</Text>
+                  </View>
+                )}
+              </View>
+            )}
           </View>
-          <View
-            style={[
-              styles.connectionStatus,
-              profile.healthConnected && styles.connectionStatusActive,
-            ]}
-          >
-            <Text
+          {isConnecting || healthLoading ? (
+            <ActivityIndicator size="small" color={colors.primary} />
+          ) : (
+            <View
               style={[
-                styles.connectionStatusText,
-                profile.healthConnected && styles.connectionStatusTextActive,
+                styles.connectionStatus,
+                isHealthConnected && styles.connectionStatusActive,
+                !healthAvailable && styles.connectionStatusUnavailable,
               ]}
             >
-              {profile.healthConnected ? '✓' : '○'}
-            </Text>
-          </View>
+              <Text
+                style={[
+                  styles.connectionStatusText,
+                  isHealthConnected && styles.connectionStatusTextActive,
+                ]}
+              >
+                {isHealthConnected ? '✓' : healthAvailable ? '○' : '✕'}
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
 
@@ -559,6 +688,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.success,
     borderColor: colors.success,
   },
+  connectionStatusUnavailable: {
+    borderColor: colors.gray300,
+    backgroundColor: colors.gray100,
+  },
   connectionStatusText: {
     color: colors.gray400,
     fontSize: 18,
@@ -566,6 +699,23 @@ const styles = StyleSheet.create({
   connectionStatusTextActive: {
     color: colors.white,
     fontWeight: 'bold',
+  },
+  permissionTags: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: spacing.xs,
+    gap: spacing.xs,
+  },
+  permissionTag: {
+    backgroundColor: `${colors.success}20`,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+    borderRadius: borderRadius.full,
+  },
+  permissionTagText: {
+    fontSize: typography.fontSize.xs,
+    color: colors.success,
+    fontWeight: '500',
   },
   settingsCard: {
     backgroundColor: colors.white,
