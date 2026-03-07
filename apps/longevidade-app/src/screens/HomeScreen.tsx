@@ -9,6 +9,7 @@ import {
   ImageSourcePropType,
 } from 'react-native'
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import { RecoveryCard } from '../components'
 
 // Import task icons
 const taskIcons: Record<string, ImageSourcePropType> = {
@@ -61,6 +62,9 @@ export function HomeScreen() {
           <View style={[styles.progressBar, { width: `${completionRate}%` }]} />
         </View>
       </View>
+
+      {/* Recovery Status */}
+      <RecoveryCard />
 
       {/* Today's Tasks */}
       <View style={styles.section}>

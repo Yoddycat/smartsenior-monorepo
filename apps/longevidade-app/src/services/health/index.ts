@@ -238,3 +238,99 @@ export async function getHealthSummary(): Promise<HealthDataSummary | null> {
     return null
   }
 }
+
+// Import recovery types
+import type {
+  RecoveryStatus,
+  RecoveryAnalysis,
+} from '../../types/recovery'
+import {
+  RECOVERY_THRESHOLDS,
+  RECOVERY_SUGGESTIONS,
+} from '../../types/recovery'
+
+// Re-export recovery types
+export type { RecoveryStatus, RecoveryAnalysis }
+export { RECOVERY_SUGGESTIONS }
+
+/**
+ * Analyze HRV to determine recovery status
+ * Compares today's HRV with the 7-day average
+ *
+ * @returns RecoveryAnalysis with status and suggestions
+ */
+export async function analyzeRecoveryStatus(): Promise<RecoveryAnalysis | null> {
+  const isAvailable = await healthService.isAvailable()
+  if (!isAvailable) return null
+
+  const now = new Date()
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+
+  try {
+    // Fetch HRV data in parallel
+    const [todayHRVData, weekHRVData] = await Promise.all([
+      healthService.getHRV(startOfToday, now),
+      healthService.getHRV(sevenDaysAgo, startOfToday), // Excluding today
+    ])
+
+    // Calculate today's average HRV
+    const todayHRV = todayHRVData.length > 0
+      ? todayHRVData.reduce((sum, h) => sum + h.value, 0) / todayHRVData.length
+      : 0
+
+    // Calculate 7-day average HRV (excluding today)
+    const weekAverageHRV = weekHRVData.length > 0
+      ? weekHRVData.reduce((sum, h) => sum + h.value, 0) / weekHRVData.length
+      : 0
+
+    // If no data available, return null
+    if (todayHRV === 0 && weekAverageHRV === 0) {
+      return null
+    }
+
+    // Calculate percentage change
+    const percentageChange = weekAverageHRV > 0
+      ? ((todayHRV - weekAverageHRV) / weekAverageHRV) * 100
+      : 0
+
+    // Determine recovery status based on thresholds
+    const status = determineRecoveryStatus(percentageChange)
+
+    return {
+      status,
+      todayHRV: Math.round(todayHRV),
+      weekAverageHRV: Math.round(weekAverageHRV),
+      percentageChange: Math.round(percentageChange * 10) / 10,
+      suggestion: RECOVERY_SUGGESTIONS[status],
+      analyzedAt: now,
+    }
+  } catch (error) {
+    console.error('[HealthService] Error analyzing recovery status:', error)
+    return null
+  }
+}
+
+/**
+ * Determine recovery status based on HRV percentage change
+ */
+function determineRecoveryStatus(percentageChange: number): RecoveryStatus {
+  if (percentageChange <= RECOVERY_THRESHOLDS.recovery) {
+    return 'recovery'
+  }
+  if (percentageChange <= RECOVERY_THRESHOLDS.moderate) {
+    return 'moderate'
+  }
+  if (percentageChange >= RECOVERY_THRESHOLDS.optimal) {
+    return 'optimal'
+  }
+  return 'good'
+}
+
+/**
+ * Check if user is in recovery mode (HRV 20% or more below average)
+ */
+export async function isInRecoveryMode(): Promise<boolean> {
+  const analysis = await analyzeRecoveryStatus()
+  return analysis?.status === 'recovery'
+}
