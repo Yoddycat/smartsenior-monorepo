@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Text, View } from 'react-native'
 
-import { HomeScreen, ProtocolScreen, MonthDetailScreen } from './src/screens'
+import { HomeScreen, ProtocolScreen, MonthDetailScreen, ProgressScreen } from './src/screens'
 import { colors } from './src/constants/theme'
 
 // Stack navigator for Protocol tab
@@ -19,16 +19,6 @@ const ProtocolStack = createNativeStackNavigator<ProtocolStackParamList>()
 const Tab = createBottomTabNavigator()
 
 // Placeholder screens
-function ProgressScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.gray50 }}>
-      <Text style={{ fontSize: 48 }}>📊</Text>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 16, color: colors.gray900 }}>Progresso</Text>
-      <Text style={{ fontSize: 14, color: colors.gray500, marginTop: 8 }}>Em desenvolvimento</Text>
-    </View>
-  )
-}
-
 function ProfileScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.gray50 }}>
@@ -121,6 +111,7 @@ export default function App() {
           name="Progresso"
           component={ProgressScreen}
           options={{
+            headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <Text style={{ fontSize: size, color }}>📊</Text>
             ),
