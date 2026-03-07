@@ -67,6 +67,29 @@ export function MonthDetailScreen({ route }: Props) {
   const [activeTab, setActiveTab] = useState<TabType>('tasks')
   const [selectedWeek, setSelectedWeek] = useState<ProtocolWeek>(1)
 
+  // Track completed tasks by index
+  const [completedTasks, setCompletedTasks] = useState<Set<number>>(new Set())
+
+  // Toggle task completion
+  const toggleTask = (index: number) => {
+    setCompletedTasks((prev) => {
+      const newSet = new Set(prev)
+      if (newSet.has(index)) {
+        newSet.delete(index)
+      } else {
+        newSet.add(index)
+      }
+      return newSet
+    })
+  }
+
+  // Calculate completion stats
+  const completedCount = completedTasks.size
+  const totalTasks = protocol.dailyTasks.length
+  const completionPercentage = totalTasks > 0
+    ? Math.round((completedCount / totalTasks) * 100)
+    : 0
+
   // Filter weekly goals by selected week
   const weekGoals = protocol.weeklyGoals.filter(
     (goal) => goal.week === selectedWeek
@@ -99,56 +122,127 @@ export function MonthDetailScreen({ route }: Props) {
 
   const renderTasks = () => (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Tarefas Diarias</Text>
-      <Text style={styles.sectionSubtitle}>
-        Complete estas tarefas todos os dias para construir habitos saudaveis
-      </Text>
+      <View style={styles.sectionHeader}>
+        <View>
+          <Text style={styles.sectionTitle}>Tarefas Diarias</Text>
+          <Text style={styles.sectionSubtitle}>
+            Toque para marcar como concluida
+          </Text>
+        </View>
+        <View style={styles.progressBadge}>
+          <Text style={styles.progressBadgeText}>
+            {completedCount}/{totalTasks}
+          </Text>
+        </View>
+      </View>
 
-      {protocol.dailyTasks.map((task, index) => (
-        <View key={index} style={styles.taskCard}>
+      {/* Progress bar */}
+      <View style={styles.taskProgressContainer}>
+        <View style={styles.taskProgressBar}>
           <View
             style={[
-              styles.taskIconContainer,
-              { backgroundColor: `${categoryColors[task.category]}15` },
+              styles.taskProgressFill,
+              { width: `${completionPercentage}%` },
             ]}
-          >
-            <Image
-              source={pillarIcons[task.category]}
-              style={styles.taskIcon}
-            />
-          </View>
+          />
+        </View>
+        <Text style={styles.taskProgressText}>{completionPercentage}% concluido</Text>
+      </View>
 
-          <View style={styles.taskContent}>
-            <View style={styles.taskHeader}>
-              <Text style={styles.taskTitle}>{task.title}</Text>
-              {task.targetTime && (
-                <Text style={styles.taskTime}>{task.targetTime}</Text>
+      {protocol.dailyTasks.map((task, index) => {
+        const isCompleted = completedTasks.has(index)
+
+        return (
+          <TouchableOpacity
+            key={index}
+            style={[styles.taskCard, isCompleted && styles.taskCardCompleted]}
+            onPress={() => toggleTask(index)}
+            activeOpacity={0.7}
+          >
+            <View
+              style={[
+                styles.taskIconContainer,
+                { backgroundColor: `${categoryColors[task.category]}15` },
+                isCompleted && styles.taskIconContainerCompleted,
+              ]}
+            >
+              {isCompleted ? (
+                <View style={styles.checkmarkContainer}>
+                  <Text style={styles.checkmark}>✓</Text>
+                </View>
+              ) : (
+                <Image
+                  source={pillarIcons[task.category]}
+                  style={styles.taskIcon}
+                />
               )}
             </View>
-            <Text style={styles.taskDescription}>{task.description}</Text>
-            <View style={styles.taskMeta}>
-              <View
-                style={[
-                  styles.categoryBadge,
-                  { backgroundColor: `${categoryColors[task.category]}20` },
-                ]}
-              >
+
+            <View style={styles.taskContent}>
+              <View style={styles.taskHeader}>
                 <Text
                   style={[
-                    styles.categoryBadgeText,
-                    { color: categoryColors[task.category] },
+                    styles.taskTitle,
+                    isCompleted && styles.taskTitleCompleted,
                   ]}
                 >
-                  {categoryLabels[task.category]}
+                  {task.title}
                 </Text>
+                {task.targetTime && (
+                  <Text
+                    style={[
+                      styles.taskTime,
+                      isCompleted && styles.taskTimeCompleted,
+                    ]}
+                  >
+                    {task.targetTime}
+                  </Text>
+                )}
               </View>
-              {task.duration && (
-                <Text style={styles.taskDuration}>{task.duration} min</Text>
-              )}
+              <Text
+                style={[
+                  styles.taskDescription,
+                  isCompleted && styles.taskDescriptionCompleted,
+                ]}
+              >
+                {task.description}
+              </Text>
+              <View style={styles.taskMeta}>
+                <View
+                  style={[
+                    styles.categoryBadge,
+                    { backgroundColor: `${categoryColors[task.category]}20` },
+                    isCompleted && styles.categoryBadgeCompleted,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.categoryBadgeText,
+                      { color: categoryColors[task.category] },
+                      isCompleted && styles.categoryBadgeTextCompleted,
+                    ]}
+                  >
+                    {categoryLabels[task.category]}
+                  </Text>
+                </View>
+                {task.duration && (
+                  <Text style={styles.taskDuration}>{task.duration} min</Text>
+                )}
+              </View>
             </View>
-          </View>
-        </View>
-      ))}
+
+            {/* Completion indicator */}
+            <View
+              style={[
+                styles.taskCheckbox,
+                isCompleted && styles.taskCheckboxCompleted,
+              ]}
+            >
+              {isCompleted && <Text style={styles.taskCheckboxIcon}>✓</Text>}
+            </View>
+          </TouchableOpacity>
+        )
+      })}
     </View>
   )
 
@@ -274,13 +368,13 @@ export function MonthDetailScreen({ route }: Props) {
       {/* Stats */}
       <View style={styles.statsRow}>
         <View style={styles.statItem}>
-          <Text style={styles.statValue}>{protocol.dailyTasks.length}</Text>
-          <Text style={styles.statLabel}>Tarefas</Text>
+          <Text style={styles.statValue}>{completedCount}/{totalTasks}</Text>
+          <Text style={styles.statLabel}>Tarefas Hoje</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
-          <Text style={styles.statValue}>{protocol.weeklyGoals.length}</Text>
-          <Text style={styles.statLabel}>Metas</Text>
+          <Text style={styles.statValue}>{completionPercentage}%</Text>
+          <Text style={styles.statLabel}>Concluido</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
@@ -436,6 +530,12 @@ const styles = StyleSheet.create({
   section: {
     paddingHorizontal: spacing.md,
   },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: spacing.sm,
+  },
   sectionTitle: {
     fontSize: typography.fontSize.lg,
     fontWeight: 'bold',
@@ -445,7 +545,41 @@ const styles = StyleSheet.create({
   sectionSubtitle: {
     fontSize: typography.fontSize.sm,
     color: colors.gray500,
+  },
+  progressBadge: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.full,
+  },
+  progressBadgeText: {
+    fontSize: typography.fontSize.sm,
+    fontWeight: 'bold',
+    color: colors.white,
+  },
+  taskProgressContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: spacing.md,
+  },
+  taskProgressBar: {
+    flex: 1,
+    height: 8,
+    backgroundColor: colors.gray200,
+    borderRadius: borderRadius.full,
+    overflow: 'hidden',
+    marginRight: spacing.sm,
+  },
+  taskProgressFill: {
+    height: '100%',
+    backgroundColor: colors.success,
+    borderRadius: borderRadius.full,
+  },
+  taskProgressText: {
+    fontSize: typography.fontSize.xs,
+    color: colors.gray500,
+    fontWeight: '600',
+    minWidth: 80,
   },
   taskCard: {
     flexDirection: 'row',
@@ -458,6 +592,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  taskCardCompleted: {
+    backgroundColor: `${colors.success}08`,
+    borderColor: colors.success,
   },
   taskIconContainer: {
     width: 52,
@@ -465,6 +605,20 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  taskIconContainerCompleted: {
+    backgroundColor: colors.success,
+  },
+  checkmarkContainer: {
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkmark: {
+    fontSize: 24,
+    color: colors.white,
+    fontWeight: 'bold',
   },
   taskIcon: {
     width: 36,
@@ -486,15 +640,25 @@ const styles = StyleSheet.create({
     color: colors.gray900,
     flex: 1,
   },
+  taskTitleCompleted: {
+    color: colors.gray500,
+    textDecorationLine: 'line-through',
+  },
   taskTime: {
     fontSize: typography.fontSize.sm,
     color: colors.primary,
     fontWeight: '600',
   },
+  taskTimeCompleted: {
+    color: colors.gray400,
+  },
   taskDescription: {
     fontSize: typography.fontSize.sm,
     color: colors.gray500,
     marginTop: spacing.xs,
+  },
+  taskDescriptionCompleted: {
+    color: colors.gray400,
   },
   taskMeta: {
     flexDirection: 'row',
@@ -506,14 +670,40 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
     borderRadius: borderRadius.sm,
   },
+  categoryBadgeCompleted: {
+    backgroundColor: colors.gray100,
+  },
   categoryBadgeText: {
     fontSize: typography.fontSize.xs,
     fontWeight: '600',
+  },
+  categoryBadgeTextCompleted: {
+    color: colors.gray400,
   },
   taskDuration: {
     fontSize: typography.fontSize.xs,
     color: colors.gray500,
     marginLeft: spacing.sm,
+  },
+  taskCheckbox: {
+    width: 28,
+    height: 28,
+    borderRadius: borderRadius.full,
+    borderWidth: 2,
+    borderColor: colors.gray300,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: spacing.sm,
+    alignSelf: 'center',
+  },
+  taskCheckboxCompleted: {
+    backgroundColor: colors.success,
+    borderColor: colors.success,
+  },
+  taskCheckboxIcon: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   weekSelector: {
     flexDirection: 'row',
