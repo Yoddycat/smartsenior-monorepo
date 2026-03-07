@@ -3,9 +3,9 @@ import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
 
-import { HomeScreen, ProtocolScreen, MonthDetailScreen, ProgressScreen } from './src/screens'
+import { HomeScreen, ProtocolScreen, MonthDetailScreen, ProgressScreen, ProfileScreen } from './src/screens'
 import { colors } from './src/constants/theme'
 
 // Stack navigator for Protocol tab
@@ -17,17 +17,6 @@ type ProtocolStackParamList = {
 const ProtocolStack = createNativeStackNavigator<ProtocolStackParamList>()
 
 const Tab = createBottomTabNavigator()
-
-// Placeholder screens
-function ProfileScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.gray50 }}>
-      <Text style={{ fontSize: 48 }}>👤</Text>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 16, color: colors.gray900 }}>Perfil</Text>
-      <Text style={{ fontSize: 14, color: colors.gray500, marginTop: 8 }}>Em desenvolvimento</Text>
-    </View>
-  )
-}
 
 function ProtocolStackScreen() {
   return (
@@ -121,6 +110,7 @@ export default function App() {
           name="Perfil"
           component={ProfileScreen}
           options={{
+            headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <Text style={{ fontSize: size, color }}>👤</Text>
             ),

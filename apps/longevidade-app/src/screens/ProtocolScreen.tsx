@@ -6,23 +6,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  ImageSourcePropType,
 } from 'react-native'
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import { pillarIcons } from '../constants/icons'
 import { PROTOCOLS } from '../protocols'
 import { ProtocolMonth } from '../types'
-
-// Import pillar icons
-const pillarIcons: Record<string, ImageSourcePropType> = {
-  hydration: require('../../assets/images/icons/hidratacao.png'),
-  nutrition: require('../../assets/images/icons/nutricao.png'),
-  movement: require('../../assets/images/icons/movimento.png'),
-  sleep: require('../../assets/images/icons/sono.png'),
-  supplements: require('../../assets/images/icons/suplementos.png'),
-  mindfulness: require('../../assets/images/icons/mindfulness.png'),
-  social: require('../../assets/images/icons/social.png'),
-  cognitive: require('../../assets/images/icons/cognitivo.png'),
-}
 
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 

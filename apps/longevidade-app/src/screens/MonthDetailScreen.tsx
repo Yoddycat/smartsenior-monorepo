@@ -6,11 +6,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  ImageSourcePropType,
+  ActivityIndicator,
 } from 'react-native'
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import { pillarIcons, categoryColors, categoryLabels } from '../constants/icons'
 import { PROTOCOLS } from '../protocols'
-import { ProtocolMonth, TaskCategory, ProtocolWeek } from '../types'
+import { ProtocolMonth, ProtocolWeek } from '../types'
+import { useTaskCompletion } from '../hooks'
 
 import type { RouteProp } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -25,40 +27,6 @@ interface Props {
   navigation: NativeStackNavigationProp<RootStackParamList>
 }
 
-// Import pillar icons
-const pillarIcons: Record<string, ImageSourcePropType> = {
-  hydration: require('../../assets/images/icons/hidratacao.png'),
-  nutrition: require('../../assets/images/icons/nutricao.png'),
-  movement: require('../../assets/images/icons/movimento.png'),
-  sleep: require('../../assets/images/icons/sono.png'),
-  supplements: require('../../assets/images/icons/suplementos.png'),
-  mindfulness: require('../../assets/images/icons/mindfulness.png'),
-  social: require('../../assets/images/icons/social.png'),
-  cognitive: require('../../assets/images/icons/cognitivo.png'),
-}
-
-const categoryColors: Record<TaskCategory, string> = {
-  hydration: colors.hydration,
-  nutrition: colors.nutrition,
-  movement: colors.movement,
-  sleep: colors.sleep,
-  supplements: colors.supplements,
-  mindfulness: colors.mindfulness,
-  social: colors.social,
-  cognitive: colors.cognitive,
-}
-
-const categoryLabels: Record<TaskCategory, string> = {
-  hydration: 'Hidratacao',
-  nutrition: 'Nutricao',
-  movement: 'Movimento',
-  sleep: 'Sono',
-  supplements: 'Suplementos',
-  mindfulness: 'Mindfulness',
-  social: 'Social',
-  cognitive: 'Cognitivo',
-}
-
 type TabType = 'tasks' | 'goals' | 'milestones'
 
 export function MonthDetailScreen({ route }: Props) {
@@ -67,25 +35,16 @@ export function MonthDetailScreen({ route }: Props) {
   const [activeTab, setActiveTab] = useState<TabType>('tasks')
   const [selectedWeek, setSelectedWeek] = useState<ProtocolWeek>(1)
 
-  // Track completed tasks by index
-  const [completedTasks, setCompletedTasks] = useState<Set<number>>(new Set())
-
-  // Toggle task completion
-  const toggleTask = (index: number) => {
-    setCompletedTasks((prev) => {
-      const newSet = new Set(prev)
-      if (newSet.has(index)) {
-        newSet.delete(index)
-      } else {
-        newSet.add(index)
-      }
-      return newSet
-    })
-  }
-
-  // Calculate completion stats
-  const completedCount = completedTasks.size
+  // Use persistent task completion hook
   const totalTasks = protocol.dailyTasks.length
+  const {
+    completedTasks,
+    toggleTask,
+    completedCount,
+    isLoading: isLoadingTasks,
+  } = useTaskCompletion(month as ProtocolMonth, totalTasks)
+
+  // Calculate completion percentage
   const completionPercentage = totalTasks > 0
     ? Math.round((completedCount / totalTasks) * 100)
     : 0
@@ -149,6 +108,12 @@ export function MonthDetailScreen({ route }: Props) {
         <Text style={styles.taskProgressText}>{completionPercentage}% concluido</Text>
       </View>
 
+      {isLoadingTasks ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="small" color={colors.primary} />
+        </View>
+      ) : null}
+
       {protocol.dailyTasks.map((task, index) => {
         const isCompleted = completedTasks.has(index)
 
@@ -158,6 +123,10 @@ export function MonthDetailScreen({ route }: Props) {
             style={[styles.taskCard, isCompleted && styles.taskCardCompleted]}
             onPress={() => toggleTask(index)}
             activeOpacity={0.7}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: isCompleted }}
+            accessibilityLabel={`${task.title}. ${task.description}. ${isCompleted ? 'Concluida' : 'Pendente'}`}
+            accessibilityHint="Toque duas vezes para alternar conclusao"
           >
             <View
               style={[
@@ -730,6 +699,10 @@ const styles = StyleSheet.create({
   },
   weekButtonTextActive: {
     color: colors.white,
+  },
+  loadingContainer: {
+    padding: spacing.lg,
+    alignItems: 'center',
   },
   emptyState: {
     padding: spacing.xl,

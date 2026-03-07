@@ -5,24 +5,11 @@ import {
   ScrollView,
   StyleSheet,
   Image,
-  ImageSourcePropType,
   ActivityIndicator,
 } from 'react-native'
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
-// Health data is loaded via getHealthSummary
+import { pillarIcons } from '../constants/icons'
 import { getHealthSummary, HealthDataSummary } from '../services/health'
-
-// Import pillar icons
-const pillarIcons: Record<string, ImageSourcePropType> = {
-  hydration: require('../../assets/images/icons/hidratacao.png'),
-  nutrition: require('../../assets/images/icons/nutricao.png'),
-  movement: require('../../assets/images/icons/movimento.png'),
-  sleep: require('../../assets/images/icons/sono.png'),
-  supplements: require('../../assets/images/icons/suplementos.png'),
-  mindfulness: require('../../assets/images/icons/mindfulness.png'),
-  social: require('../../assets/images/icons/social.png'),
-  cognitive: require('../../assets/images/icons/cognitivo.png'),
-}
 
 // Mock data for protocol progress (will be replaced with real data later)
 const MOCK_PROGRESS = {
@@ -45,6 +32,13 @@ const MOCK_PROGRESS = {
 }
 
 const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
+
+// Get current weekday index (0 = Monday, 6 = Sunday)
+const getCurrentWeekdayIndex = (): number => {
+  const day = new Date().getDay()
+  // getDay() returns 0 for Sunday, we want 6 for Sunday
+  return day === 0 ? 6 : day - 1
+}
 
 export function ProgressScreen() {
   const [healthSummary, setHealthSummary] = useState<HealthDataSummary | null>(null)
@@ -273,7 +267,7 @@ export function ProgressScreen() {
                 <Text
                   style={[
                     styles.chartLabel,
-                    index === new Date().getDay() - 1 && styles.chartLabelActive,
+                    index === getCurrentWeekdayIndex() && styles.chartLabelActive,
                   ]}
                 >
                   {WEEKDAYS[index]}

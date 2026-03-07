@@ -6,17 +6,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  ImageSourcePropType,
 } from 'react-native'
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import { pillarIcons } from '../constants/icons'
 import { RecoveryCard } from '../components'
-
-// Import task icons
-const taskIcons: Record<string, ImageSourcePropType> = {
-  hydration: require('../../assets/images/icons/hidratacao.png'),
-  movement: require('../../assets/images/icons/movimento.png'),
-  sleep: require('../../assets/images/icons/sono.png'),
-}
 
 export function HomeScreen() {
   // Mock data - will be replaced with actual state
@@ -72,7 +65,7 @@ export function HomeScreen() {
 
         <TouchableOpacity style={styles.taskCard}>
           <View style={styles.taskIconContainer}>
-            <Image source={taskIcons.hydration} style={styles.taskImage} />
+            <Image source={pillarIcons.hydration} style={styles.taskImage} />
           </View>
           <View style={styles.taskContent}>
             <Text style={styles.taskTitle}>Água ao acordar</Text>
@@ -85,7 +78,7 @@ export function HomeScreen() {
 
         <TouchableOpacity style={styles.taskCard}>
           <View style={styles.taskIconContainer}>
-            <Image source={taskIcons.movement} style={styles.taskImage} />
+            <Image source={pillarIcons.movement} style={styles.taskImage} />
           </View>
           <View style={styles.taskContent}>
             <Text style={styles.taskTitle}>Caminhada matinal</Text>
@@ -98,7 +91,7 @@ export function HomeScreen() {
 
         <TouchableOpacity style={styles.taskCard}>
           <View style={styles.taskIconContainer}>
-            <Image source={taskIcons.sleep} style={styles.taskImage} />
+            <Image source={pillarIcons.sleep} style={styles.taskImage} />
           </View>
           <View style={styles.taskContent}>
             <Text style={styles.taskTitle}>Rotina de desconexão</Text>
@@ -111,7 +104,7 @@ export function HomeScreen() {
 
         <TouchableOpacity style={styles.taskCard}>
           <View style={styles.taskIconContainer}>
-            <Image source={taskIcons.hydration} style={styles.taskImage} />
+            <Image source={pillarIcons.hydration} style={styles.taskImage} />
           </View>
           <View style={styles.taskContent}>
             <Text style={styles.taskTitle}>Meta de hidratação</Text>
