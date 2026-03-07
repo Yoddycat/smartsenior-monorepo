@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import {
   View,
   Text,
@@ -10,7 +10,14 @@ import {
 } from 'react-native'
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
 import { pillarIcons } from '../constants/icons'
-import { RecoveryCard } from '../components'
+import {
+  RecoveryCard,
+  FadeInView,
+  AnimatedProgressBar,
+  AnimatedCheckbox,
+  AnimatedCounter,
+  SuccessAnimation,
+} from '../components'
 import { useProtocolProgress, getGreeting, useTaskCompletion } from '../hooks'
 import { PROTOCOLS } from '../protocols'
 import { ProtocolMonth } from '../types'
@@ -32,6 +39,25 @@ export function HomeScreen() {
   const protocol = PROTOCOLS[currentMonth as ProtocolMonth]
   const { completedTasks, toggleTask } = useTaskCompletion(currentMonth as ProtocolMonth, totalTasksToday)
 
+  // Success animation state
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [lastCompletedCount, setLastCompletedCount] = useState(0)
+
+  // Handle task toggle with celebration
+  const handleToggleTask = useCallback((index: number) => {
+    const wasCompleted = completedTasks.has(index)
+    toggleTask(index)
+
+    // Show celebration when completing all tasks
+    if (!wasCompleted) {
+      const newCount = completedTasks.size + 1
+      if (newCount === totalTasksToday && newCount > lastCompletedCount) {
+        setShowSuccess(true)
+        setLastCompletedCount(newCount)
+      }
+    }
+  }, [completedTasks, toggleTask, totalTasksToday, lastCompletedCount])
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -42,102 +68,140 @@ export function HomeScreen() {
 
   return (
     <ScrollView style={styles.container}>
+      {/* Success Animation */}
+      <SuccessAnimation
+        visible={showSuccess}
+        onComplete={() => setShowSuccess(false)}
+        emoji="🎉"
+        message="Todas as tarefas concluídas!"
+      />
+
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.greeting}>{getGreeting()} 👋</Text>
-        <Text style={styles.date}>Dia {currentDay} • Semana {currentWeek} • Mês {currentMonth}</Text>
-      </View>
+      <FadeInView delay={0} direction="down">
+        <View style={styles.header}>
+          <Text style={styles.greeting}>{getGreeting()} 👋</Text>
+          <Text style={styles.date}>Dia {currentDay} • Semana {currentWeek} • Mês {currentMonth}</Text>
+        </View>
+      </FadeInView>
 
       {/* Progress Card */}
-      <View style={styles.progressCard}>
-        <View style={styles.progressHeader}>
-          <Text style={styles.progressTitle}>Mês {currentMonth}: {protocolTitle}</Text>
-          <Text style={styles.progressSubtitle}>{protocolSubtitle}</Text>
-        </View>
+      <FadeInView delay={100} direction="up">
+        <View style={styles.progressCard}>
+          <View style={styles.progressHeader}>
+            <Text style={styles.progressTitle}>Mês {currentMonth}: {protocolTitle}</Text>
+            <Text style={styles.progressSubtitle}>{protocolSubtitle}</Text>
+          </View>
 
-        <View style={styles.statsRow}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{completionRate}%</Text>
-            <Text style={styles.statLabel}>Hoje</Text>
+          <View style={styles.statsRow}>
+            <View style={styles.statItem}>
+              <AnimatedCounter
+                value={completionRate}
+                suffix="%"
+                style={styles.statValue}
+                duration={800}
+                delay={200}
+              />
+              <Text style={styles.statLabel}>Hoje</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <AnimatedCounter
+                value={streakDays}
+                style={styles.statValue}
+                duration={800}
+                delay={300}
+              />
+              <Text style={styles.statLabel}>Dias seguidos</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{completedToday}/{totalTasksToday}</Text>
+              <Text style={styles.statLabel}>Tarefas</Text>
+            </View>
           </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{streakDays}</Text>
-            <Text style={styles.statLabel}>Dias seguidos</Text>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{completedToday}/{totalTasksToday}</Text>
-            <Text style={styles.statLabel}>Tarefas</Text>
-          </View>
-        </View>
 
-        <View style={styles.progressBarContainer}>
-          <View style={[styles.progressBar, { width: `${completionRate}%` }]} />
+          <AnimatedProgressBar
+            progress={completionRate}
+            height={8}
+            duration={1000}
+            delay={400}
+          />
         </View>
-      </View>
+      </FadeInView>
 
       {/* Recovery Status */}
-      <RecoveryCard />
+      <FadeInView delay={200} direction="up">
+        <RecoveryCard />
+      </FadeInView>
 
       {/* Today's Tasks */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Tarefas de Hoje</Text>
+        <FadeInView delay={300} direction="up">
+          <Text style={styles.sectionTitle}>Tarefas de Hoje</Text>
+        </FadeInView>
 
         {protocol.dailyTasks.map((task, index) => {
           const isCompleted = completedTasks.has(index)
           const iconKey = task.category as keyof typeof pillarIcons
 
           return (
-            <TouchableOpacity
-              key={index}
-              style={styles.taskCard}
-              onPress={() => toggleTask(index)}
-              accessibilityRole="checkbox"
-              accessibilityState={{ checked: isCompleted }}
-              accessibilityLabel={`${task.title}, ${isCompleted ? 'concluída' : 'pendente'}`}
-            >
-              <View style={styles.taskIconContainer}>
-                <Image
-                  source={pillarIcons[iconKey] || pillarIcons.hydration}
-                  style={styles.taskImage}
+            <FadeInView key={index} delay={400 + index * 80} direction="up">
+              <TouchableOpacity
+                style={styles.taskCard}
+                onPress={() => handleToggleTask(index)}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: isCompleted }}
+                accessibilityLabel={`${task.title}, ${isCompleted ? 'concluída' : 'pendente'}`}
+              >
+                <View style={styles.taskIconContainer}>
+                  <Image
+                    source={pillarIcons[iconKey] || pillarIcons.hydration}
+                    style={styles.taskImage}
+                  />
+                </View>
+                <View style={styles.taskContent}>
+                  <Text style={[styles.taskTitle, isCompleted && styles.taskTitleCompleted]}>
+                    {task.title}
+                  </Text>
+                  <Text style={styles.taskDescription}>{task.description}</Text>
+                </View>
+                <AnimatedCheckbox
+                  checked={isCompleted}
+                  onPress={() => handleToggleTask(index)}
+                  size={28}
+                  accessibilityLabel={`Marcar ${task.title} como ${isCompleted ? 'pendente' : 'concluída'}`}
                 />
-              </View>
-              <View style={styles.taskContent}>
-                <Text style={[styles.taskTitle, isCompleted && styles.taskTitleCompleted]}>
-                  {task.title}
-                </Text>
-                <Text style={styles.taskDescription}>{task.description}</Text>
-              </View>
-              <View style={[styles.taskStatus, isCompleted ? styles.taskCompleted : styles.taskPending]}>
-                <Text style={isCompleted ? styles.taskStatusText : styles.taskStatusTextPending}>
-                  {isCompleted ? '✓' : '○'}
-                </Text>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </FadeInView>
           )
         })}
       </View>
 
       {/* Weekly Goal */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Meta da Semana</Text>
+      <FadeInView delay={600} direction="up">
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Meta da Semana</Text>
 
-        {protocol.weeklyGoals.length > 0 && (
-          <View style={styles.goalCard}>
-            <View style={styles.goalHeader}>
-              <Text style={styles.goalTitle}>{protocol.weeklyGoals[0].title}</Text>
-              <Text style={styles.goalProgress}>{streakDays}/7 dias</Text>
+          {protocol.weeklyGoals.length > 0 && (
+            <View style={styles.goalCard}>
+              <View style={styles.goalHeader}>
+                <Text style={styles.goalTitle}>{protocol.weeklyGoals[0].title}</Text>
+                <Text style={styles.goalProgress}>{streakDays}/7 dias</Text>
+              </View>
+              <AnimatedProgressBar
+                progress={Math.min((streakDays / 7) * 100, 100)}
+                height={6}
+                duration={1000}
+                delay={700}
+                style={styles.goalProgressBar}
+              />
+              <Text style={styles.goalDescription}>
+                {protocol.weeklyGoals[0].description}
+              </Text>
             </View>
-            <View style={styles.goalProgressBarContainer}>
-              <View style={[styles.goalProgressBar, { width: `${Math.min((streakDays / 7) * 100, 100)}%` }]} />
-            </View>
-            <Text style={styles.goalDescription}>
-              {protocol.weeklyGoals[0].description}
-            </Text>
-          </View>
-        )}
-      </View>
+          )}
+        </View>
+      </FadeInView>
 
       <View style={{ height: 100 }} />
     </ScrollView>
@@ -216,17 +280,6 @@ const styles = StyleSheet.create({
     width: 1,
     backgroundColor: colors.gray200,
   },
-  progressBarContainer: {
-    height: 8,
-    backgroundColor: colors.gray200,
-    borderRadius: borderRadius.full,
-    overflow: 'hidden',
-  },
-  progressBar: {
-    height: '100%',
-    backgroundColor: colors.primary,
-    borderRadius: borderRadius.full,
-  },
   section: {
     padding: spacing.md,
   },
@@ -280,28 +333,6 @@ const styles = StyleSheet.create({
     color: colors.gray500,
     marginTop: 2,
   },
-  taskStatus: {
-    width: 28,
-    height: 28,
-    borderRadius: borderRadius.full,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  taskCompleted: {
-    backgroundColor: colors.success,
-  },
-  taskPending: {
-    borderWidth: 2,
-    borderColor: colors.gray300,
-  },
-  taskStatusText: {
-    color: colors.white,
-    fontWeight: 'bold',
-  },
-  taskStatusTextPending: {
-    color: colors.gray400,
-    fontSize: 18,
-  },
   goalCard: {
     backgroundColor: colors.white,
     padding: spacing.lg,
@@ -329,17 +360,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.primary,
   },
-  goalProgressBarContainer: {
-    height: 6,
-    backgroundColor: colors.gray200,
-    borderRadius: borderRadius.full,
-    overflow: 'hidden',
-    marginBottom: spacing.sm,
-  },
   goalProgressBar: {
-    height: '100%',
-    backgroundColor: colors.primary,
-    borderRadius: borderRadius.full,
+    marginBottom: spacing.sm,
   },
   goalDescription: {
     fontSize: typography.fontSize.sm,
