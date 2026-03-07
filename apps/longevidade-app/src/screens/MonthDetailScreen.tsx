@@ -1,0 +1,669 @@
+import React, { useState } from 'react'
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ImageSourcePropType,
+} from 'react-native'
+import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import { PROTOCOLS } from '../protocols'
+import { ProtocolMonth, TaskCategory, ProtocolWeek } from '../types'
+
+import type { RouteProp } from '@react-navigation/native'
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
+
+type RootStackParamList = {
+  ProtocolList: undefined
+  MonthDetail: { month: number }
+}
+
+interface Props {
+  route: RouteProp<RootStackParamList, 'MonthDetail'>
+  navigation: NativeStackNavigationProp<RootStackParamList>
+}
+
+// Import pillar icons
+const pillarIcons: Record<string, ImageSourcePropType> = {
+  hydration: require('../../assets/images/icons/hidratacao.png'),
+  nutrition: require('../../assets/images/icons/nutricao.png'),
+  movement: require('../../assets/images/icons/movimento.png'),
+  sleep: require('../../assets/images/icons/sono.png'),
+  supplements: require('../../assets/images/icons/suplementos.png'),
+  mindfulness: require('../../assets/images/icons/mindfulness.png'),
+  social: require('../../assets/images/icons/social.png'),
+  cognitive: require('../../assets/images/icons/cognitivo.png'),
+}
+
+const categoryColors: Record<TaskCategory, string> = {
+  hydration: colors.hydration,
+  nutrition: colors.nutrition,
+  movement: colors.movement,
+  sleep: colors.sleep,
+  supplements: colors.supplements,
+  mindfulness: colors.mindfulness,
+  social: colors.social,
+  cognitive: colors.cognitive,
+}
+
+const categoryLabels: Record<TaskCategory, string> = {
+  hydration: 'Hidratacao',
+  nutrition: 'Nutricao',
+  movement: 'Movimento',
+  sleep: 'Sono',
+  supplements: 'Suplementos',
+  mindfulness: 'Mindfulness',
+  social: 'Social',
+  cognitive: 'Cognitivo',
+}
+
+type TabType = 'tasks' | 'goals' | 'milestones'
+
+export function MonthDetailScreen({ route }: Props) {
+  const { month } = route.params
+  const protocol = PROTOCOLS[month as ProtocolMonth]
+  const [activeTab, setActiveTab] = useState<TabType>('tasks')
+  const [selectedWeek, setSelectedWeek] = useState<ProtocolWeek>(1)
+
+  // Filter weekly goals by selected week
+  const weekGoals = protocol.weeklyGoals.filter(
+    (goal) => goal.week === selectedWeek
+  )
+
+  const renderTabs = () => (
+    <View style={styles.tabContainer}>
+      {[
+        { key: 'tasks' as TabType, label: 'Tarefas', count: protocol.dailyTasks.length },
+        { key: 'goals' as TabType, label: 'Metas', count: protocol.weeklyGoals.length },
+        { key: 'milestones' as TabType, label: 'Conquistas', count: protocol.milestones.length },
+      ].map((tab) => (
+        <TouchableOpacity
+          key={tab.key}
+          style={[styles.tab, activeTab === tab.key && styles.tabActive]}
+          onPress={() => setActiveTab(tab.key)}
+        >
+          <Text style={[styles.tabText, activeTab === tab.key && styles.tabTextActive]}>
+            {tab.label}
+          </Text>
+          <View style={[styles.tabBadge, activeTab === tab.key && styles.tabBadgeActive]}>
+            <Text style={[styles.tabBadgeText, activeTab === tab.key && styles.tabBadgeTextActive]}>
+              {tab.count}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      ))}
+    </View>
+  )
+
+  const renderTasks = () => (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>Tarefas Diarias</Text>
+      <Text style={styles.sectionSubtitle}>
+        Complete estas tarefas todos os dias para construir habitos saudaveis
+      </Text>
+
+      {protocol.dailyTasks.map((task, index) => (
+        <View key={index} style={styles.taskCard}>
+          <View
+            style={[
+              styles.taskIconContainer,
+              { backgroundColor: `${categoryColors[task.category]}15` },
+            ]}
+          >
+            <Image
+              source={pillarIcons[task.category]}
+              style={styles.taskIcon}
+            />
+          </View>
+
+          <View style={styles.taskContent}>
+            <View style={styles.taskHeader}>
+              <Text style={styles.taskTitle}>{task.title}</Text>
+              {task.targetTime && (
+                <Text style={styles.taskTime}>{task.targetTime}</Text>
+              )}
+            </View>
+            <Text style={styles.taskDescription}>{task.description}</Text>
+            <View style={styles.taskMeta}>
+              <View
+                style={[
+                  styles.categoryBadge,
+                  { backgroundColor: `${categoryColors[task.category]}20` },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.categoryBadgeText,
+                    { color: categoryColors[task.category] },
+                  ]}
+                >
+                  {categoryLabels[task.category]}
+                </Text>
+              </View>
+              {task.duration && (
+                <Text style={styles.taskDuration}>{task.duration} min</Text>
+              )}
+            </View>
+          </View>
+        </View>
+      ))}
+    </View>
+  )
+
+  const renderGoals = () => (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>Metas Semanais</Text>
+
+      {/* Week Selector */}
+      <View style={styles.weekSelector}>
+        {([1, 2, 3, 4] as ProtocolWeek[]).map((week) => (
+          <TouchableOpacity
+            key={week}
+            style={[
+              styles.weekButton,
+              selectedWeek === week && styles.weekButtonActive,
+            ]}
+            onPress={() => setSelectedWeek(week)}
+          >
+            <Text
+              style={[
+                styles.weekButtonText,
+                selectedWeek === week && styles.weekButtonTextActive,
+              ]}
+            >
+              Semana {week}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {weekGoals.length === 0 ? (
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyStateText}>
+            Nenhuma meta para esta semana
+          </Text>
+        </View>
+      ) : (
+        weekGoals.map((goal, index) => (
+          <View key={index} style={styles.goalCard}>
+            <View style={styles.goalHeader}>
+              <View
+                style={[
+                  styles.goalIconContainer,
+                  { backgroundColor: `${categoryColors[goal.category]}15` },
+                ]}
+              >
+                <Image
+                  source={pillarIcons[goal.category]}
+                  style={styles.goalIcon}
+                />
+              </View>
+              <View style={styles.goalInfo}>
+                <Text style={styles.goalTitle}>{goal.title}</Text>
+                <Text style={styles.goalDescription}>{goal.description}</Text>
+              </View>
+            </View>
+
+            <View style={styles.goalProgress}>
+              <View style={styles.goalProgressHeader}>
+                <Text style={styles.goalProgressLabel}>Progresso</Text>
+                <Text style={styles.goalProgressValue}>
+                  0/{goal.target} {goal.unit}
+                </Text>
+              </View>
+              <View style={styles.goalProgressBar}>
+                <View style={[styles.goalProgressFill, { width: '0%' }]} />
+              </View>
+            </View>
+          </View>
+        ))
+      )}
+    </View>
+  )
+
+  const renderMilestones = () => (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>Conquistas do Mes</Text>
+      <Text style={styles.sectionSubtitle}>
+        Complete os desafios para desbloquear estas conquistas
+      </Text>
+
+      {protocol.milestones.map((milestone, index) => (
+        <View key={index} style={styles.milestoneCard}>
+          <View style={styles.milestoneIconContainer}>
+            <Text style={styles.milestoneIcon}>🏆</Text>
+          </View>
+
+          <View style={styles.milestoneContent}>
+            <Text style={styles.milestoneTitle}>{milestone.title}</Text>
+            <Text style={styles.milestoneDescription}>
+              {milestone.description}
+            </Text>
+          </View>
+
+          <View style={styles.milestoneLock}>
+            <Text style={styles.milestoneLockIcon}>🔒</Text>
+          </View>
+        </View>
+      ))}
+    </View>
+  )
+
+  return (
+    <ScrollView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.monthBadge}>
+          <Text style={styles.monthBadgeText}>{month}</Text>
+        </View>
+        <View style={styles.headerContent}>
+          <Text style={styles.headerTitle}>Mes {month}: {protocol.title}</Text>
+          <Text style={styles.headerSubtitle}>{protocol.subtitle}</Text>
+        </View>
+      </View>
+
+      {/* Description */}
+      <View style={styles.descriptionCard}>
+        <Text style={styles.descriptionText}>
+          {protocol.description.trim()}
+        </Text>
+      </View>
+
+      {/* Stats */}
+      <View style={styles.statsRow}>
+        <View style={styles.statItem}>
+          <Text style={styles.statValue}>{protocol.dailyTasks.length}</Text>
+          <Text style={styles.statLabel}>Tarefas</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statItem}>
+          <Text style={styles.statValue}>{protocol.weeklyGoals.length}</Text>
+          <Text style={styles.statLabel}>Metas</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statItem}>
+          <Text style={styles.statValue}>{protocol.milestones.length}</Text>
+          <Text style={styles.statLabel}>Conquistas</Text>
+        </View>
+      </View>
+
+      {/* Tabs */}
+      {renderTabs()}
+
+      {/* Content */}
+      {activeTab === 'tasks' && renderTasks()}
+      {activeTab === 'goals' && renderGoals()}
+      {activeTab === 'milestones' && renderMilestones()}
+
+      <View style={{ height: 100 }} />
+    </ScrollView>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.gray50,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: spacing.lg,
+    paddingTop: spacing['2xl'],
+    backgroundColor: colors.secondary,
+  },
+  monthBadge: {
+    width: 56,
+    height: 56,
+    borderRadius: borderRadius.full,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  monthBadgeText: {
+    fontSize: typography.fontSize['2xl'],
+    fontWeight: 'bold',
+    color: colors.white,
+  },
+  headerContent: {
+    flex: 1,
+    marginLeft: spacing.md,
+  },
+  headerTitle: {
+    fontSize: typography.fontSize.xl,
+    fontWeight: 'bold',
+    color: colors.white,
+  },
+  headerSubtitle: {
+    fontSize: typography.fontSize.sm,
+    color: colors.gray300,
+    marginTop: spacing.xs,
+  },
+  descriptionCard: {
+    backgroundColor: colors.white,
+    margin: spacing.md,
+    padding: spacing.lg,
+    borderRadius: borderRadius.xl,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  descriptionText: {
+    fontSize: typography.fontSize.sm,
+    color: colors.gray600,
+    lineHeight: 22,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    backgroundColor: colors.white,
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.md,
+    padding: spacing.lg,
+    borderRadius: borderRadius.xl,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  statItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  statValue: {
+    fontSize: typography.fontSize['2xl'],
+    fontWeight: 'bold',
+    color: colors.primary,
+  },
+  statLabel: {
+    fontSize: typography.fontSize.xs,
+    color: colors.gray500,
+    marginTop: spacing.xs,
+  },
+  statDivider: {
+    width: 1,
+    backgroundColor: colors.gray200,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.md,
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.lg,
+    padding: spacing.xs,
+  },
+  tab: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.md,
+  },
+  tabActive: {
+    backgroundColor: colors.primary,
+  },
+  tabText: {
+    fontSize: typography.fontSize.sm,
+    fontWeight: '600',
+    color: colors.gray600,
+  },
+  tabTextActive: {
+    color: colors.white,
+  },
+  tabBadge: {
+    marginLeft: spacing.xs,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: 2,
+    borderRadius: borderRadius.full,
+    backgroundColor: colors.gray200,
+  },
+  tabBadgeActive: {
+    backgroundColor: colors.primaryDark,
+  },
+  tabBadgeText: {
+    fontSize: typography.fontSize.xs,
+    fontWeight: 'bold',
+    color: colors.gray600,
+  },
+  tabBadgeTextActive: {
+    color: colors.white,
+  },
+  section: {
+    paddingHorizontal: spacing.md,
+  },
+  sectionTitle: {
+    fontSize: typography.fontSize.lg,
+    fontWeight: 'bold',
+    color: colors.gray900,
+    marginBottom: spacing.xs,
+  },
+  sectionSubtitle: {
+    fontSize: typography.fontSize.sm,
+    color: colors.gray500,
+    marginBottom: spacing.md,
+  },
+  taskCard: {
+    flexDirection: 'row',
+    backgroundColor: colors.white,
+    padding: spacing.md,
+    borderRadius: borderRadius.lg,
+    marginBottom: spacing.sm,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  taskIconContainer: {
+    width: 52,
+    height: 52,
+    borderRadius: borderRadius.lg,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  taskIcon: {
+    width: 36,
+    height: 36,
+    resizeMode: 'contain',
+  },
+  taskContent: {
+    flex: 1,
+    marginLeft: spacing.md,
+  },
+  taskHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  taskTitle: {
+    fontSize: typography.fontSize.base,
+    fontWeight: '600',
+    color: colors.gray900,
+    flex: 1,
+  },
+  taskTime: {
+    fontSize: typography.fontSize.sm,
+    color: colors.primary,
+    fontWeight: '600',
+  },
+  taskDescription: {
+    fontSize: typography.fontSize.sm,
+    color: colors.gray500,
+    marginTop: spacing.xs,
+  },
+  taskMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: spacing.sm,
+  },
+  categoryBadge: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.sm,
+  },
+  categoryBadgeText: {
+    fontSize: typography.fontSize.xs,
+    fontWeight: '600',
+  },
+  taskDuration: {
+    fontSize: typography.fontSize.xs,
+    color: colors.gray500,
+    marginLeft: spacing.sm,
+  },
+  weekSelector: {
+    flexDirection: 'row',
+    marginBottom: spacing.md,
+  },
+  weekButton: {
+    flex: 1,
+    paddingVertical: spacing.sm,
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    marginRight: spacing.xs,
+    borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.gray200,
+  },
+  weekButtonActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  weekButtonText: {
+    fontSize: typography.fontSize.xs,
+    fontWeight: '600',
+    color: colors.gray600,
+  },
+  weekButtonTextActive: {
+    color: colors.white,
+  },
+  emptyState: {
+    padding: spacing.xl,
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    fontSize: typography.fontSize.sm,
+    color: colors.gray400,
+  },
+  goalCard: {
+    backgroundColor: colors.white,
+    padding: spacing.md,
+    borderRadius: borderRadius.lg,
+    marginBottom: spacing.sm,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  goalHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  goalIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: borderRadius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  goalIcon: {
+    width: 28,
+    height: 28,
+    resizeMode: 'contain',
+  },
+  goalInfo: {
+    flex: 1,
+    marginLeft: spacing.md,
+  },
+  goalTitle: {
+    fontSize: typography.fontSize.base,
+    fontWeight: '600',
+    color: colors.gray900,
+  },
+  goalDescription: {
+    fontSize: typography.fontSize.sm,
+    color: colors.gray500,
+    marginTop: spacing.xs,
+  },
+  goalProgress: {
+    marginTop: spacing.md,
+    paddingTop: spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: colors.gray100,
+  },
+  goalProgressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: spacing.xs,
+  },
+  goalProgressLabel: {
+    fontSize: typography.fontSize.xs,
+    color: colors.gray500,
+  },
+  goalProgressValue: {
+    fontSize: typography.fontSize.xs,
+    fontWeight: '600',
+    color: colors.primary,
+  },
+  goalProgressBar: {
+    height: 6,
+    backgroundColor: colors.gray200,
+    borderRadius: borderRadius.full,
+    overflow: 'hidden',
+  },
+  goalProgressFill: {
+    height: '100%',
+    backgroundColor: colors.primary,
+    borderRadius: borderRadius.full,
+  },
+  milestoneCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    padding: spacing.md,
+    borderRadius: borderRadius.lg,
+    marginBottom: spacing.sm,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  milestoneIconContainer: {
+    width: 52,
+    height: 52,
+    borderRadius: borderRadius.full,
+    backgroundColor: colors.gray100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  milestoneIcon: {
+    fontSize: 24,
+    opacity: 0.5,
+  },
+  milestoneContent: {
+    flex: 1,
+    marginLeft: spacing.md,
+  },
+  milestoneTitle: {
+    fontSize: typography.fontSize.base,
+    fontWeight: '600',
+    color: colors.gray600,
+  },
+  milestoneDescription: {
+    fontSize: typography.fontSize.sm,
+    color: colors.gray400,
+    marginTop: spacing.xs,
+  },
+  milestoneLock: {
+    padding: spacing.sm,
+  },
+  milestoneLockIcon: {
+    fontSize: 20,
+  },
+})

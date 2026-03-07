@@ -2,10 +2,19 @@ import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Text, View } from 'react-native'
 
-import { HomeScreen, ProtocolScreen } from './src/screens'
+import { HomeScreen, ProtocolScreen, MonthDetailScreen } from './src/screens'
 import { colors } from './src/constants/theme'
+
+// Stack navigator for Protocol tab
+type ProtocolStackParamList = {
+  ProtocolList: undefined
+  MonthDetail: { month: number }
+}
+
+const ProtocolStack = createNativeStackNavigator<ProtocolStackParamList>()
 
 const Tab = createBottomTabNavigator()
 
@@ -27,6 +36,36 @@ function ProfileScreen() {
       <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 16, color: colors.gray900 }}>Perfil</Text>
       <Text style={{ fontSize: 14, color: colors.gray500, marginTop: 8 }}>Em desenvolvimento</Text>
     </View>
+  )
+}
+
+function ProtocolStackScreen() {
+  return (
+    <ProtocolStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.secondary,
+        },
+        headerTintColor: colors.white,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      <ProtocolStack.Screen
+        name="ProtocolList"
+        component={ProtocolScreen}
+        options={{ headerShown: false }}
+      />
+      <ProtocolStack.Screen
+        name="MonthDetail"
+        component={MonthDetailScreen}
+        options={({ route }) => ({
+          title: `Mes ${route.params.month}`,
+          headerShown: true,
+        })}
+      />
+    </ProtocolStack.Navigator>
   )
 }
 
@@ -70,7 +109,7 @@ export default function App() {
         />
         <Tab.Screen
           name="Protocolo"
-          component={ProtocolScreen}
+          component={ProtocolStackScreen}
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
