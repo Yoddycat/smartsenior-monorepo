@@ -10,22 +10,21 @@ import {
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import {
+  loadNotificationSettings,
+  saveNotificationSettings,
+  sendTestNotification,
+  NotificationSettings,
+  defaultNotificationSettings,
+} from '../services/notifications'
 
 const PROFILE_STORAGE_KEY = '@longevidade:user_profile'
-const SETTINGS_STORAGE_KEY = '@longevidade:settings'
 
 interface UserProfile {
   name: string
   birthYear: number
   protocolStartDate: string
   healthConnected: boolean
-}
-
-interface Settings {
-  notifications: boolean
-  dailyReminders: boolean
-  weeklyReport: boolean
-  healthSync: boolean
 }
 
 const defaultProfile: UserProfile = {
@@ -35,16 +34,11 @@ const defaultProfile: UserProfile = {
   healthConnected: false,
 }
 
-const defaultSettings: Settings = {
-  notifications: true,
-  dailyReminders: true,
-  weeklyReport: true,
-  healthSync: false,
-}
-
 export function ProfileScreen() {
   const [profile, setProfile] = useState<UserProfile>(defaultProfile)
-  const [settings, setSettings] = useState<Settings>(defaultSettings)
+  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>(
+    defaultNotificationSettings
+  )
   const [isLoading, setIsLoading] = useState(true)
 
   // Calculate age and protocol days
@@ -54,23 +48,20 @@ export function ProfileScreen() {
     (new Date().getTime() - new Date(profile.protocolStartDate).getTime()) /
       (1000 * 60 * 60 * 24)
   )
-  // Calculate current month (1-3) based on protocol days
   const currentMonth = Math.min(3, Math.floor(protocolDays / 28) + 1)
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [profileData, settingsData] = await Promise.all([
+        const [profileData, notifSettings] = await Promise.all([
           AsyncStorage.getItem(PROFILE_STORAGE_KEY),
-          AsyncStorage.getItem(SETTINGS_STORAGE_KEY),
+          loadNotificationSettings(),
         ])
 
         if (profileData) {
           setProfile(JSON.parse(profileData))
         }
-        if (settingsData) {
-          setSettings(JSON.parse(settingsData))
-        }
+        setNotificationSettings(notifSettings)
       } catch (error) {
         console.error('Error loading profile data:', error)
       } finally {
@@ -81,18 +72,10 @@ export function ProfileScreen() {
     loadData()
   }, [])
 
-  const saveSettings = async (newSettings: Settings) => {
-    try {
-      await AsyncStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(newSettings))
-      setSettings(newSettings)
-    } catch (error) {
-      console.error('Error saving settings:', error)
-    }
-  }
-
-  const toggleSetting = (key: keyof Settings) => {
-    const newSettings = { ...settings, [key]: !settings[key] }
-    saveSettings(newSettings)
+  const updateNotificationSettings = async (updates: Partial<NotificationSettings>) => {
+    const newSettings = { ...notificationSettings, ...updates }
+    setNotificationSettings(newSettings)
+    await saveNotificationSettings(newSettings)
   }
 
   const handleConnectHealth = () => {
@@ -114,6 +97,43 @@ export function ProfileScreen() {
     )
   }
 
+  const handleTestNotification = async () => {
+    await sendTestNotification()
+    Alert.alert(
+      'Notificação Enviada',
+      'Uma notificação de teste foi enviada. Verifique a central de notificações.'
+    )
+  }
+
+  const handleChangeTime = (type: 'morning' | 'evening') => {
+    const currentTime =
+      type === 'morning'
+        ? notificationSettings.morningReminderTime
+        : notificationSettings.eveningReminderTime
+
+    Alert.prompt(
+      `Horário do Lembrete ${type === 'morning' ? 'Matinal' : 'Noturno'}`,
+      'Digite o horário no formato HH:MM (ex: 08:00)',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Salvar',
+          onPress: (value: string | undefined) => {
+            if (value && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(value)) {
+              const key =
+                type === 'morning' ? 'morningReminderTime' : 'eveningReminderTime'
+              updateNotificationSettings({ [key]: value })
+            } else {
+              Alert.alert('Formato inválido', 'Use o formato HH:MM (ex: 08:00)')
+            }
+          },
+        },
+      ],
+      'plain-text',
+      currentTime
+    )
+  }
+
   const handleResetProtocol = () => {
     Alert.alert(
       'Reiniciar Protocolo',
@@ -130,9 +150,10 @@ export function ProfileScreen() {
             }
             setProfile(newProfile)
             await AsyncStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(newProfile))
-            // Clear completed tasks
             const keys = await AsyncStorage.getAllKeys()
-            const taskKeys = keys.filter((k) => k.startsWith('@longevidade:completed_tasks'))
+            const taskKeys = keys.filter((k) =>
+              k.startsWith('@longevidade:completed_tasks')
+            )
             await AsyncStorage.multiRemove(taskKeys)
             Alert.alert('Protocolo Reiniciado', 'Seu progresso foi resetado.')
           },
@@ -161,7 +182,9 @@ export function ProfileScreen() {
       <View style={styles.profileCard}>
         <View style={styles.avatarContainer}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{profile.name.charAt(0).toUpperCase()}</Text>
+            <Text style={styles.avatarText}>
+              {profile.name.charAt(0).toUpperCase()}
+            </Text>
           </View>
         </View>
         <Text style={styles.profileName}>{profile.name}</Text>
@@ -231,79 +254,81 @@ export function ProfileScreen() {
           <View style={styles.settingRow}>
             <View style={styles.settingInfo}>
               <Text style={styles.settingTitle}>Notificações</Text>
-              <Text style={styles.settingDescription}>Receber alertas do app</Text>
+              <Text style={styles.settingDescription}>Receber lembretes do app</Text>
             </View>
             <Switch
-              value={settings.notifications}
-              onValueChange={() => toggleSetting('notifications')}
+              value={notificationSettings.enabled}
+              onValueChange={(value) => updateNotificationSettings({ enabled: value })}
               trackColor={{ false: colors.gray300, true: colors.primary }}
               thumbColor={colors.white}
               accessibilityRole="switch"
               accessibilityLabel="Ativar notificações"
-              accessibilityState={{ checked: settings.notifications }}
+              accessibilityState={{ checked: notificationSettings.enabled }}
             />
           </View>
 
-          <View style={styles.settingDivider} />
+          {notificationSettings.enabled && (
+            <>
+              <View style={styles.settingDivider} />
 
-          <View style={styles.settingRow}>
-            <View style={styles.settingInfo}>
-              <Text style={styles.settingTitle}>Lembretes Diários</Text>
-              <Text style={styles.settingDescription}>Lembrar das tarefas do dia</Text>
-            </View>
-            <Switch
-              value={settings.dailyReminders}
-              onValueChange={() => toggleSetting('dailyReminders')}
-              trackColor={{ false: colors.gray300, true: colors.primary }}
-              thumbColor={colors.white}
-              accessibilityRole="switch"
-              accessibilityLabel="Ativar lembretes diários"
-              accessibilityState={{ checked: settings.dailyReminders }}
-            />
-          </View>
+              <View style={styles.settingRow}>
+                <View style={styles.settingInfo}>
+                  <Text style={styles.settingTitle}>Lembrete Matinal</Text>
+                  <TouchableOpacity onPress={() => handleChangeTime('morning')}>
+                    <Text style={styles.settingTime}>
+                      {notificationSettings.morningReminderTime} ✏️
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <Switch
+                  value={notificationSettings.morningEnabled}
+                  onValueChange={(value) =>
+                    updateNotificationSettings({ morningEnabled: value })
+                  }
+                  trackColor={{ false: colors.gray300, true: colors.primary }}
+                  thumbColor={colors.white}
+                  accessibilityRole="switch"
+                  accessibilityLabel="Ativar lembrete matinal"
+                  accessibilityState={{ checked: notificationSettings.morningEnabled }}
+                />
+              </View>
 
-          <View style={styles.settingDivider} />
+              <View style={styles.settingDivider} />
 
-          <View style={styles.settingRow}>
-            <View style={styles.settingInfo}>
-              <Text style={styles.settingTitle}>Relatório Semanal</Text>
-              <Text style={styles.settingDescription}>Resumo de progresso semanal</Text>
-            </View>
-            <Switch
-              value={settings.weeklyReport}
-              onValueChange={() => toggleSetting('weeklyReport')}
-              trackColor={{ false: colors.gray300, true: colors.primary }}
-              thumbColor={colors.white}
-              accessibilityRole="switch"
-              accessibilityLabel="Ativar relatório semanal"
-              accessibilityState={{ checked: settings.weeklyReport }}
-            />
-          </View>
-        </View>
-      </View>
+              <View style={styles.settingRow}>
+                <View style={styles.settingInfo}>
+                  <Text style={styles.settingTitle}>Lembrete Noturno</Text>
+                  <TouchableOpacity onPress={() => handleChangeTime('evening')}>
+                    <Text style={styles.settingTime}>
+                      {notificationSettings.eveningReminderTime} ✏️
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <Switch
+                  value={notificationSettings.eveningEnabled}
+                  onValueChange={(value) =>
+                    updateNotificationSettings({ eveningEnabled: value })
+                  }
+                  trackColor={{ false: colors.gray300, true: colors.primary }}
+                  thumbColor={colors.white}
+                  accessibilityRole="switch"
+                  accessibilityLabel="Ativar lembrete noturno"
+                  accessibilityState={{ checked: notificationSettings.eveningEnabled }}
+                />
+              </View>
 
-      {/* Preferences */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Preferências</Text>
+              <View style={styles.settingDivider} />
 
-        <View style={styles.settingsCard}>
-          <View style={styles.settingRow}>
-            <View style={styles.settingInfo}>
-              <Text style={styles.settingTitle}>Sincronização de Saúde</Text>
-              <Text style={styles.settingDescription}>
-                Sincronizar dados automaticamente
-              </Text>
-            </View>
-            <Switch
-              value={settings.healthSync}
-              onValueChange={() => toggleSetting('healthSync')}
-              trackColor={{ false: colors.gray300, true: colors.primary }}
-              thumbColor={colors.white}
-              accessibilityRole="switch"
-              accessibilityLabel="Ativar sincronização de saúde"
-              accessibilityState={{ checked: settings.healthSync }}
-            />
-          </View>
+              <TouchableOpacity
+                style={styles.testButton}
+                onPress={handleTestNotification}
+                accessibilityRole="button"
+                accessibilityLabel="Testar notificação"
+              >
+                <Text style={styles.testButtonText}>🔔 Testar Notificação</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
       </View>
 
@@ -323,9 +348,7 @@ export function ProfileScreen() {
 
           <View style={styles.protocolInfo}>
             <Text style={styles.protocolLabel}>Progresso</Text>
-            <Text style={styles.protocolValue}>
-              Dia {protocolDays + 1} de 84
-            </Text>
+            <Text style={styles.protocolValue}>Dia {protocolDays + 1} de 84</Text>
           </View>
         </View>
 
@@ -367,7 +390,9 @@ export function ProfileScreen() {
 
         <TouchableOpacity
           style={styles.linkButton}
-          onPress={() => Alert.alert('Política de Privacidade', 'Em breve disponível.')}
+          onPress={() =>
+            Alert.alert('Política de Privacidade', 'Em breve disponível.')
+          }
           accessibilityRole="link"
           accessibilityLabel="Política de privacidade"
         >
@@ -572,10 +597,27 @@ const styles = StyleSheet.create({
     color: colors.gray500,
     marginTop: 2,
   },
+  settingTime: {
+    fontSize: typography.fontSize.sm,
+    color: colors.primary,
+    marginTop: 2,
+  },
   settingDivider: {
     height: 1,
     backgroundColor: colors.gray100,
     marginVertical: spacing.xs,
+  },
+  testButton: {
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+    alignItems: 'center',
+    backgroundColor: colors.gray50,
+    borderRadius: borderRadius.md,
+  },
+  testButtonText: {
+    fontSize: typography.fontSize.sm,
+    color: colors.primary,
+    fontWeight: '500',
   },
   protocolCard: {
     backgroundColor: colors.white,

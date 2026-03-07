@@ -15,6 +15,7 @@ import {
   OnboardingScreen,
 } from './src/screens'
 import { colors } from './src/constants/theme'
+import { initializeNotifications } from './src/services/notifications'
 
 const ONBOARDING_COMPLETE_KEY = '@longevidade:onboarding_complete'
 
@@ -136,6 +137,7 @@ export default function App() {
 
   useEffect(() => {
     checkOnboardingStatus()
+    initializeNotifications()
   }, [])
 
   const checkOnboardingStatus = async () => {
