@@ -124,6 +124,11 @@ export async function getLastNightSleep(): Promise<number | null> {
  * Calculate trend based on recent vs older data
  */
 function calculateTrend(recent: number, older: number): 'up' | 'down' | 'stable' {
+  // Guard against division by zero
+  if (older === 0) {
+    return recent > 0 ? 'up' : 'stable'
+  }
+
   const threshold = 0.05 // 5% change threshold
   const change = (recent - older) / older
 

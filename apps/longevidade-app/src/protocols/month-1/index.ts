@@ -1,7 +1,7 @@
 // Mês 1: Fundação - Construindo os Alicerces da Longevidade
 // Foco: Hidratação, Sono e Movimento Básico
 
-import { ProtocolTask, WeeklyGoal, MonthlyMilestone, TaskCategory } from '../../types'
+import { ProtocolTask, WeeklyGoal, MonthlyMilestone } from '../../types'
 
 export const MONTH_1_TITLE = 'Fundação'
 export const MONTH_1_SUBTITLE = 'Construindo os Alicerces da Longevidade'

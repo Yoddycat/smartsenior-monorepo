@@ -17,11 +17,7 @@ const taskIcons: Record<string, ImageSourcePropType> = {
   sleep: require('../../assets/images/icons/sono.png'),
 }
 
-interface Props {
-  navigation: any
-}
-
-export function HomeScreen({ navigation }: Props) {
+export function HomeScreen() {
   // Mock data - will be replaced with actual state
   const currentMonth = 1
   const currentWeek = 1

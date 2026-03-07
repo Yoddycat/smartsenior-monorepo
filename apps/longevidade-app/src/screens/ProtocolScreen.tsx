@@ -24,8 +24,14 @@ const pillarIcons: Record<string, ImageSourcePropType> = {
   cognitive: require('../../assets/images/icons/cognitivo.png'),
 }
 
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
+
+type RootStackParamList = {
+  MonthDetail: { month: number }
+}
+
 interface Props {
-  navigation: any
+  navigation: NativeStackNavigationProp<RootStackParamList>
 }
 
 export function ProtocolScreen({ navigation }: Props) {
