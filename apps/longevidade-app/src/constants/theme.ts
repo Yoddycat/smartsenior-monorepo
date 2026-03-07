@@ -14,6 +14,7 @@ export const colors = {
   success: '#22C55E',
   warning: '#F59E0B',
   danger: '#EF4444',
+  error: '#EF4444',   // Alias for danger
   info: '#3B82F6',
 
   // Neutral Colors

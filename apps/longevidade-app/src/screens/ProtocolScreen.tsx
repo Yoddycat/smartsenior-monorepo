@@ -5,10 +5,24 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Image,
+  ImageSourcePropType,
 } from 'react-native'
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
 import { PROTOCOLS } from '../protocols'
 import { ProtocolMonth } from '../types'
+
+// Import pillar icons
+const pillarIcons: Record<string, ImageSourcePropType> = {
+  hydration: require('../../assets/images/icons/hidratacao.png'),
+  nutrition: require('../../assets/images/icons/nutricao.png'),
+  movement: require('../../assets/images/icons/movimento.png'),
+  sleep: require('../../assets/images/icons/sono.png'),
+  supplements: require('../../assets/images/icons/suplementos.png'),
+  mindfulness: require('../../assets/images/icons/mindfulness.png'),
+  social: require('../../assets/images/icons/social.png'),
+  cognitive: require('../../assets/images/icons/cognitivo.png'),
+}
 
 interface Props {
   navigation: any
@@ -143,18 +157,21 @@ export function ProtocolScreen({ navigation }: Props) {
 
         <View style={styles.pillarsGrid}>
           {[
-            { icon: '💧', label: 'Hidratação', color: colors.hydration },
-            { icon: '🥗', label: 'Nutrição', color: colors.nutrition },
-            { icon: '🏃', label: 'Movimento', color: colors.movement },
-            { icon: '🌙', label: 'Sono', color: colors.sleep },
-            { icon: '💊', label: 'Suplementos', color: colors.supplements },
-            { icon: '🧘', label: 'Mindfulness', color: colors.mindfulness },
-            { icon: '👥', label: 'Social', color: colors.social },
-            { icon: '🧠', label: 'Cognitivo', color: colors.cognitive },
+            { key: 'hydration', label: 'Hidratação', color: colors.hydration },
+            { key: 'nutrition', label: 'Nutrição', color: colors.nutrition },
+            { key: 'movement', label: 'Movimento', color: colors.movement },
+            { key: 'sleep', label: 'Sono', color: colors.sleep },
+            { key: 'supplements', label: 'Suplementos', color: colors.supplements },
+            { key: 'mindfulness', label: 'Mindfulness', color: colors.mindfulness },
+            { key: 'social', label: 'Social', color: colors.social },
+            { key: 'cognitive', label: 'Cognitivo', color: colors.cognitive },
           ].map((pillar, index) => (
             <View key={index} style={styles.pillarItem}>
-              <View style={[styles.pillarIcon, { backgroundColor: pillar.color }]}>
-                <Text style={styles.pillarIconText}>{pillar.icon}</Text>
+              <View style={styles.pillarIconContainer}>
+                <Image
+                  source={pillarIcons[pillar.key]}
+                  style={styles.pillarImage}
+                />
               </View>
               <Text style={styles.pillarLabel}>{pillar.label}</Text>
             </View>
@@ -341,16 +358,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: spacing.sm,
   },
-  pillarIcon: {
-    width: 40,
-    height: 40,
+  pillarIconContainer: {
+    width: 52,
+    height: 52,
     borderRadius: borderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.xs,
+    backgroundColor: colors.gray50,
   },
-  pillarIconText: {
-    fontSize: 18,
+  pillarImage: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
   },
   pillarLabel: {
     fontSize: typography.fontSize.xs,

@@ -5,8 +5,17 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Image,
+  ImageSourcePropType,
 } from 'react-native'
 import { colors, spacing, borderRadius, typography } from '../constants/theme'
+
+// Import task icons
+const taskIcons: Record<string, ImageSourcePropType> = {
+  hydration: require('../../assets/images/icons/hidratacao.png'),
+  movement: require('../../assets/images/icons/movimento.png'),
+  sleep: require('../../assets/images/icons/sono.png'),
+}
 
 interface Props {
   navigation: any
@@ -62,8 +71,8 @@ export function HomeScreen({ navigation }: Props) {
         <Text style={styles.sectionTitle}>Tarefas de Hoje</Text>
 
         <TouchableOpacity style={styles.taskCard}>
-          <View style={[styles.taskIcon, { backgroundColor: colors.hydration }]}>
-            <Text style={styles.taskIconText}>💧</Text>
+          <View style={styles.taskIconContainer}>
+            <Image source={taskIcons.hydration} style={styles.taskImage} />
           </View>
           <View style={styles.taskContent}>
             <Text style={styles.taskTitle}>Água ao acordar</Text>
@@ -75,8 +84,8 @@ export function HomeScreen({ navigation }: Props) {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.taskCard}>
-          <View style={[styles.taskIcon, { backgroundColor: colors.movement }]}>
-            <Text style={styles.taskIconText}>🚶</Text>
+          <View style={styles.taskIconContainer}>
+            <Image source={taskIcons.movement} style={styles.taskImage} />
           </View>
           <View style={styles.taskContent}>
             <Text style={styles.taskTitle}>Caminhada matinal</Text>
@@ -88,8 +97,8 @@ export function HomeScreen({ navigation }: Props) {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.taskCard}>
-          <View style={[styles.taskIcon, { backgroundColor: colors.sleep }]}>
-            <Text style={styles.taskIconText}>🌙</Text>
+          <View style={styles.taskIconContainer}>
+            <Image source={taskIcons.sleep} style={styles.taskImage} />
           </View>
           <View style={styles.taskContent}>
             <Text style={styles.taskTitle}>Rotina de desconexão</Text>
@@ -101,8 +110,8 @@ export function HomeScreen({ navigation }: Props) {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.taskCard}>
-          <View style={[styles.taskIcon, { backgroundColor: colors.hydration }]}>
-            <Text style={styles.taskIconText}>💧</Text>
+          <View style={styles.taskIconContainer}>
+            <Image source={taskIcons.hydration} style={styles.taskImage} />
           </View>
           <View style={styles.taskContent}>
             <Text style={styles.taskTitle}>Meta de hidratação</Text>
@@ -236,15 +245,18 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 1,
   },
-  taskIcon: {
-    width: 44,
-    height: 44,
+  taskIconContainer: {
+    width: 48,
+    height: 48,
     borderRadius: borderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: colors.gray50,
   },
-  taskIconText: {
-    fontSize: 20,
+  taskImage: {
+    width: 36,
+    height: 36,
+    resizeMode: 'contain',
   },
   taskContent: {
     flex: 1,
