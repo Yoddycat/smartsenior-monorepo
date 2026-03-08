@@ -206,3 +206,63 @@ export type {
 // ============================================
 export { Logo, LogoIcon, LogoVertical, LogoHorizontal, LogoFavicon } from './logo'
 export type { LogoProps } from './logo'
+
+// ============================================
+// ICONOGRAPHY
+// ============================================
+export {
+  Icon,
+  iconVariants,
+  SmartSeniorIcons,
+  // Convenience exports - Health
+  IconHeart,
+  IconHeartPulse,
+  IconActivity,
+  IconPill,
+  IconThermometer,
+  // Convenience exports - Hydration
+  IconDroplets,
+  IconGlassWater,
+  // Convenience exports - Movement
+  IconFootprints,
+  // Convenience exports - Time
+  IconClock,
+  IconCalendar,
+  IconAlarm,
+  // Convenience exports - Communication
+  IconBell,
+  IconPhone,
+  IconMessage,
+  // Convenience exports - Care
+  IconUsers,
+  IconUser,
+  IconCare,
+  IconHome,
+  // Convenience exports - Safety
+  IconWarning,
+  IconAlert,
+  IconSuccess,
+  IconError,
+  IconInfo,
+  IconHelp,
+  IconShield,
+  // Convenience exports - Navigation
+  IconChevronLeft,
+  IconChevronRight,
+  IconChevronUp,
+  IconChevronDown,
+  IconMenu,
+  IconClose,
+  // Convenience exports - Actions
+  IconPlus,
+  IconMinus,
+  IconEdit,
+  IconTrash,
+  IconSearch,
+  IconSettings,
+  IconRefresh,
+  // Convenience exports - Status
+  IconLoader,
+  IconCheck,
+} from './icon'
+export type { IconProps, IconSize, IconColor, LucideIcon } from './icon'
