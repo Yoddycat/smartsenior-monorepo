@@ -680,15 +680,15 @@ export const UseCaseAgentCards: Story = {
         width: '200px',
         padding: '1.5rem',
         borderRadius: '16px',
-        background: 'linear-gradient(135deg, var(--accent), var(--accent-hover))',
-        color: 'var(--accent-foreground)',
+        background: '#FF6A13',
+        color: '#FFFFFF',
         textAlign: 'center',
       }}>
         <div style={{
           width: '64px',
           height: '64px',
           borderRadius: '50%',
-          background: 'rgba(255,255,255,0.2)',
+          background: '#FFAA4D',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
