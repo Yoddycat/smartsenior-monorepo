@@ -129,6 +129,22 @@ export const AspectRatios: StoryObj = {
         />
         <p style={{ fontSize: '12px', textAlign: 'center', marginTop: '8px', color: '#666' }}>Wide (16:9)</p>
       </div>
+      <div>
+        <Image
+          src={stockImages.idosaAtiva}
+          alt="Ultrawide"
+          aspectRatio="ultrawide"
+        />
+        <p style={{ fontSize: '12px', textAlign: 'center', marginTop: '8px', color: '#666' }}>Ultrawide (21:9)</p>
+      </div>
+      <div>
+        <Image
+          src={stockImages.cuidadoCasa}
+          alt="Story"
+          aspectRatio="story"
+        />
+        <p style={{ fontSize: '12px', textAlign: 'center', marginTop: '8px', color: '#666' }}>Story (9:16)</p>
+      </div>
     </div>
   ),
   parameters: {

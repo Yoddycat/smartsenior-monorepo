@@ -83,7 +83,7 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
         <img
           ref={ref}
           className={cn(
-            imageVariants({ rounded, aspectRatio: aspectRatio ? undefined : aspectRatio }),
+            imageVariants({ rounded }),
             isLoading && "opacity-0",
             !isLoading && "opacity-100",
             className
