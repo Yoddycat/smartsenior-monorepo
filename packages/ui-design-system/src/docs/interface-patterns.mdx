@@ -1,0 +1,429 @@
+{/* SmartSenior Design System - Interface Patterns */}
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Foundation/Interface Patterns" />
+
+# Padroes de Interface SmartSenior
+
+Diretrizes visuais para componentes de UI, baseadas na análise do moodboard oficial.
+
+---
+
+## Filosofia de Design
+
+A interface SmartSenior é **acolhedora, clara e acessível**. Utilizamos formas arredondadas, sombras suaves e espaçamentos generosos para criar uma experiência confortável para usuários seniores.
+
+> **Princípio central:** Cada elemento deve ser fácil de ver, entender e interagir.
+
+---
+
+## Border Radius
+
+### Sistema de Arredondamento
+
+O moodboard revela uma preferência por **cantos bem arredondados**, transmitindo suavidade e acessibilidade.
+
+| Token | Valor | Uso |
+|-------|-------|-----|
+| `--radius-xs` | 4px | Elementos mínimos (tags inline) |
+| `--radius-sm` | 6px | Inputs pequenos, chips |
+| `--radius-md` | 10px | Botões, inputs padrão |
+| `--radius-lg` | 14px | Cards pequenos, dropdowns |
+| `--radius-xl` | 18px | Cards médios, modais |
+| `--radius-2xl` | 24px | Cards grandes, seções |
+| `--radius-3xl` | 32px | Hero cards, banners |
+| `--radius-full` | 9999px | Avatares, badges, pills |
+
+### Tokens Semânticos
+
+```css
+--radius-card: 20px;     /* Cards padrão */
+--radius-button: 12px;   /* Botões */
+--radius-input: 10px;    /* Campos de entrada */
+--radius-badge: 9999px;  /* Badges (pill) */
+--radius-avatar: 9999px; /* Avatares (circular) */
+--radius-image: 16px;    /* Imagens em cards */
+```
+
+### Demonstração Visual
+
+<div style={{display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '20px', marginBottom: '20px'}}>
+  <div style={{textAlign: 'center'}}>
+    <div style={{width: '80px', height: '80px', background: '#003057', borderRadius: '4px'}}></div>
+    <div style={{fontSize: '12px', marginTop: '8px', color: '#666'}}>xs (4px)</div>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <div style={{width: '80px', height: '80px', background: '#003057', borderRadius: '10px'}}></div>
+    <div style={{fontSize: '12px', marginTop: '8px', color: '#666'}}>md (10px)</div>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <div style={{width: '80px', height: '80px', background: '#003057', borderRadius: '20px'}}></div>
+    <div style={{fontSize: '12px', marginTop: '8px', color: '#666'}}>card (20px)</div>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <div style={{width: '80px', height: '80px', background: '#003057', borderRadius: '32px'}}></div>
+    <div style={{fontSize: '12px', marginTop: '8px', color: '#666'}}>3xl (32px)</div>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <div style={{width: '80px', height: '80px', background: '#003057', borderRadius: '9999px'}}></div>
+    <div style={{fontSize: '12px', marginTop: '8px', color: '#666'}}>full (pill)</div>
+  </div>
+</div>
+
+---
+
+## Sombras
+
+### Sistema de Elevação
+
+Sombras no SmartSenior são **suaves e difusas**, evitando contraste agressivo.
+
+| Token | Valor | Uso |
+|-------|-------|-----|
+| `--shadow-xs` | Quase imperceptível | Elementos sutis |
+| `--shadow-sm` | Leve elevação | Botões, inputs |
+| `--shadow-md` | Elevação média | Cards em repouso |
+| `--shadow-lg` | Elevação alta | Cards em hover |
+| `--shadow-xl` | Elevação máxima | Modais, drawers |
+
+### Tokens Semânticos
+
+```css
+--shadow-card: 0 4px 20px -4px oklch(0 0 0 / 0.08);
+--shadow-card-hover: 0 8px 30px -6px oklch(0 0 0 / 0.12);
+--shadow-button: 0 2px 8px -2px oklch(0 0 0 / 0.10);
+--shadow-dropdown: 0 10px 30px -5px oklch(0 0 0 / 0.15);
+```
+
+### Demonstração Visual
+
+<div style={{display: 'flex', gap: '24px', flexWrap: 'wrap', marginTop: '20px', marginBottom: '20px', padding: '20px', background: '#f5f5f5', borderRadius: '16px'}}>
+  <div style={{textAlign: 'center'}}>
+    <div style={{width: '100px', height: '100px', background: 'white', borderRadius: '16px', boxShadow: '0 2px 4px 0 rgba(0,0,0,0.04)'}}></div>
+    <div style={{fontSize: '12px', marginTop: '8px', color: '#666'}}>shadow-sm</div>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <div style={{width: '100px', height: '100px', background: 'white', borderRadius: '16px', boxShadow: '0 4px 20px -4px rgba(0,0,0,0.08)'}}></div>
+    <div style={{fontSize: '12px', marginTop: '8px', color: '#666'}}>shadow-card</div>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <div style={{width: '100px', height: '100px', background: 'white', borderRadius: '16px', boxShadow: '0 8px 30px -6px rgba(0,0,0,0.12)'}}></div>
+    <div style={{fontSize: '12px', marginTop: '8px', color: '#666'}}>shadow-card-hover</div>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <div style={{width: '100px', height: '100px', background: 'white', borderRadius: '16px', boxShadow: '0 16px 40px -8px rgba(0,0,0,0.15)'}}></div>
+    <div style={{fontSize: '12px', marginTop: '8px', color: '#666'}}>shadow-xl</div>
+  </div>
+</div>
+
+---
+
+## Glassmorphism
+
+### Efeito Glass
+
+Inspirado no moodboard de dashboard, oferecemos tokens para efeitos de vidro fosco.
+
+```css
+--glass-blur: 12px;
+--glass-bg: oklch(1 0 0 / 0.7);
+--glass-border: oklch(1 0 0 / 0.2);
+--glass-shadow: 0 8px 32px -8px oklch(0 0 0 / 0.1);
+```
+
+### Demonstração
+
+<div style={{padding: '40px', background: 'linear-gradient(135deg, #003057, #004B87)', borderRadius: '20px', marginTop: '20px', marginBottom: '20px'}}>
+  <div style={{
+    padding: '24px',
+    background: 'rgba(255,255,255,0.7)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    borderRadius: '16px',
+    border: '1px solid rgba(255,255,255,0.2)',
+    boxShadow: '0 8px 32px -8px rgba(0,0,0,0.1)',
+    maxWidth: '300px'
+  }}>
+    <div style={{fontWeight: 700, fontSize: '18px', color: '#003057', marginBottom: '8px'}}>Card Glass</div>
+    <div style={{fontSize: '14px', color: '#333'}}>Exemplo de glassmorphism aplicado sobre fundo colorido.</div>
+  </div>
+</div>
+
+---
+
+## Espacamentos
+
+### Sistema de Spacing
+
+Baseado em unidade de 4px, com espaçamentos generosos para melhor legibilidade.
+
+| Contexto | Valor Recomendado |
+|----------|------------------|
+| Gap entre ícone e texto | 8px (`--spacing-2`) |
+| Padding de botão | 12px 24px |
+| Padding de input | 12px 16px |
+| Padding de card | 20-24px |
+| Gap entre cards | 16-24px |
+| Margem entre seções | 32-48px |
+
+### Áreas de Toque (Acessibilidade)
+
+Para usuários seniores, áreas de toque devem ter **mínimo 44x44px** (WCAG 2.2).
+
+```css
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+```
+
+---
+
+## Cards
+
+### Anatomia do Card
+
+<div style={{
+  width: '100%',
+  maxWidth: '350px',
+  background: 'white',
+  borderRadius: '20px',
+  border: '1px solid rgba(0,0,0,0.05)',
+  boxShadow: '0 4px 20px -4px rgba(0,0,0,0.08)',
+  overflow: 'hidden',
+  marginTop: '20px',
+  marginBottom: '20px',
+  fontFamily: 'system-ui'
+}}>
+  <div style={{
+    height: '160px',
+    background: 'linear-gradient(135deg, #FF6A13, #FFAA4D)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'white',
+    fontSize: '14px'
+  }}>
+    Imagem (radius-image: 16px interno)
+  </div>
+  <div style={{padding: '20px'}}>
+    <div style={{fontSize: '12px', color: '#279989', fontWeight: 600, marginBottom: '4px'}}>CATEGORIA</div>
+    <div style={{fontSize: '18px', fontWeight: 700, color: '#003057', marginBottom: '8px'}}>Titulo do Card</div>
+    <div style={{fontSize: '14px', color: '#666', lineHeight: 1.5}}>
+      Descricao breve do conteudo do card com texto secundario.
+    </div>
+  </div>
+  <div style={{padding: '0 20px 20px', display: 'flex', gap: '12px'}}>
+    <div style={{
+      flex: 1,
+      padding: '12px',
+      background: '#FF6A13',
+      color: 'white',
+      borderRadius: '12px',
+      textAlign: 'center',
+      fontWeight: 600,
+      fontSize: '14px'
+    }}>
+      Acao Principal
+    </div>
+    <div style={{
+      padding: '12px 16px',
+      border: '1px solid #ddd',
+      borderRadius: '12px',
+      fontWeight: 500,
+      fontSize: '14px',
+      color: '#333'
+    }}>
+      Secundaria
+    </div>
+  </div>
+</div>
+
+### Variantes
+
+| Variante | Uso |
+|----------|-----|
+| **Card Padrao** | Conteúdo geral, listagens |
+| **Card Glass** | Sobre backgrounds coloridos/imagens |
+| **Card Stat** | Métricas e KPIs do dashboard |
+| **Card Image** | Posts, artigos, galeria |
+
+---
+
+## Botoes
+
+### Estilos
+
+<div style={{display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '20px', marginBottom: '20px'}}>
+  <button style={{
+    padding: '14px 28px',
+    background: '#FF6A13',
+    color: 'white',
+    border: 'none',
+    borderRadius: '12px',
+    fontWeight: 600,
+    fontSize: '16px',
+    cursor: 'pointer',
+    boxShadow: '0 2px 8px -2px rgba(0,0,0,0.15)'
+  }}>
+    Primary
+  </button>
+  <button style={{
+    padding: '14px 28px',
+    background: '#003057',
+    color: 'white',
+    border: 'none',
+    borderRadius: '12px',
+    fontWeight: 600,
+    fontSize: '16px',
+    cursor: 'pointer'
+  }}>
+    Secondary
+  </button>
+  <button style={{
+    padding: '14px 28px',
+    background: 'transparent',
+    color: '#003057',
+    border: '2px solid #003057',
+    borderRadius: '12px',
+    fontWeight: 600,
+    fontSize: '16px',
+    cursor: 'pointer'
+  }}>
+    Outline
+  </button>
+  <button style={{
+    padding: '14px 28px',
+    background: 'transparent',
+    color: '#003057',
+    border: 'none',
+    borderRadius: '12px',
+    fontWeight: 500,
+    fontSize: '16px',
+    cursor: 'pointer'
+  }}>
+    Ghost
+  </button>
+</div>
+
+### Tamanhos (Senior-Friendly)
+
+| Tamanho | Altura | Padding | Font |
+|---------|--------|---------|------|
+| **sm** | 40px | 16px | 16px |
+| **md** | 48px | 24px | 18px |
+| **lg** | 56px | 32px | 20px |
+
+---
+
+## Navigation Tabs
+
+### Estilo Pill
+
+Tabs no estilo "pill" com fundo no item ativo.
+
+<div style={{
+  display: 'inline-flex',
+  background: '#f5f5f5',
+  padding: '4px',
+  borderRadius: '12px',
+  gap: '4px',
+  marginTop: '20px',
+  marginBottom: '20px'
+}}>
+  <div style={{
+    padding: '10px 20px',
+    background: '#003057',
+    color: 'white',
+    borderRadius: '8px',
+    fontWeight: 600,
+    fontSize: '14px'
+  }}>
+    Dashboard
+  </div>
+  <div style={{
+    padding: '10px 20px',
+    color: '#666',
+    borderRadius: '8px',
+    fontWeight: 500,
+    fontSize: '14px'
+  }}>
+    Calendario
+  </div>
+  <div style={{
+    padding: '10px 20px',
+    color: '#666',
+    borderRadius: '8px',
+    fontWeight: 500,
+    fontSize: '14px'
+  }}>
+    Relatorios
+  </div>
+</div>
+
+---
+
+## Status e Badges
+
+### Estados
+
+<div style={{display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '20px', marginBottom: '20px'}}>
+  <span style={{
+    padding: '6px 14px',
+    background: '#279989',
+    color: 'white',
+    borderRadius: '9999px',
+    fontSize: '13px',
+    fontWeight: 600
+  }}>
+    Concluido
+  </span>
+  <span style={{
+    padding: '6px 14px',
+    background: '#FFAA4D',
+    color: '#333',
+    borderRadius: '9999px',
+    fontSize: '13px',
+    fontWeight: 600
+  }}>
+    Em Andamento
+  </span>
+  <span style={{
+    padding: '6px 14px',
+    background: '#00AEC7',
+    color: 'white',
+    borderRadius: '9999px',
+    fontSize: '13px',
+    fontWeight: 600
+  }}>
+    Informacao
+  </span>
+  <span style={{
+    padding: '6px 14px',
+    background: '#DC3545',
+    color: 'white',
+    borderRadius: '9999px',
+    fontSize: '13px',
+    fontWeight: 600
+  }}>
+    Urgente
+  </span>
+</div>
+
+---
+
+## Checklist de Implementacao
+
+Ao criar novos componentes, verifique:
+
+- [ ] Border radius segue o sistema de tokens?
+- [ ] Sombras sao suaves e difusas?
+- [ ] Espacamentos sao generosos (acessibilidade)?
+- [ ] Areas de toque tem minimo 44x44px?
+- [ ] Cores seguem a paleta SmartSenior?
+- [ ] Transicoes sao suaves (200-300ms)?
+- [ ] Hover states estao definidos?
+
+---
+
+*Guia desenvolvido por Uma (UX Design Expert) baseado na análise do moodboard SmartSenior.*
