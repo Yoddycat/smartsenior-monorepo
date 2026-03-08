@@ -38,3 +38,9 @@ coverage/
 # Misc
 *.local
 .state.yaml
+
+# Large design files (use Git LFS if needed)
+*.psd
+*.ai
+*.sketch
+*.fig
