@@ -12,19 +12,19 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
     :root {
-      /* Brand Colors */
-      --ss-orange: #FF7A00;
-      --ss-orange-light: #FF9A3C;
-      --ss-orange-dark: #E66A00;
-      --ss-navy: #1A365D;
-      --ss-navy-light: #2D4A73;
-      --ss-navy-dark: #0F1F35;
+      /* Brand Colors - SmartSenior Design System */
+      --ss-orange: #FF6A13;
+      --ss-orange-light: #FF8200;
+      --ss-orange-dark: #FE5000;
+      --ss-navy: #003057;
+      --ss-navy-light: #004B87;
+      --ss-navy-dark: #001A2E;
 
-      /* Semantic Colors */
-      --ss-success: #22C55E;
-      --ss-warning: #F59E0B;
-      --ss-danger: #EF4444;
-      --ss-info: #3B82F6;
+      /* Semantic Colors - SmartSenior Design System */
+      --ss-success: #279989;
+      --ss-warning: #FFAA4D;
+      --ss-danger: #FE5000;
+      --ss-info: #00AEC7;
 
       /* Neutral Colors */
       --ss-white: #FFFFFF;
@@ -167,7 +167,7 @@
     }
 
     .cover-tagline {
-      font-size: 12px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-gray-300);
       margin-top: 2px;
     }
@@ -193,9 +193,9 @@
       height: auto;
       max-height: 180px;
       object-fit: cover;
+      object-position: center;
       border-radius: 12px;
       margin-bottom: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       border: 2px solid var(--ss-orange);
     }
 
@@ -226,7 +226,7 @@
     }
 
     .stat-label {
-      font-size: 9px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       opacity: 0.9;
       line-height: 1.2;
     }
@@ -245,7 +245,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 10px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-gray-200);
     }
 
@@ -273,7 +273,7 @@
       right: 0;
       background: var(--ss-orange);
       padding: 12px 40px;
-      font-size: 11px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       text-align: center;
     }
 
@@ -295,7 +295,7 @@
     }
 
     .page-header-title {
-      font-size: 11px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-gray-500);
     }
 
@@ -309,7 +309,7 @@
       padding: 10px 40px;
       display: flex;
       justify-content: space-between;
-      font-size: 10px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
     }
 
     /* ============================================
@@ -384,7 +384,7 @@
       color: var(--ss-white);
       padding: 6px 16px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       font-weight: 600;
       margin-bottom: 12px;
     }
@@ -446,7 +446,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 11px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       background: var(--ss-white);
       border-radius: 8px;
       overflow: hidden;
@@ -462,7 +462,7 @@
       padding: 12px 16px;
       text-align: left;
       font-weight: 600;
-      font-size: 11px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
     }
 
     td {
@@ -530,7 +530,7 @@
     }
 
     .info-box-content {
-      font-size: 13px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       line-height: 1.5;
     }
 
@@ -573,7 +573,7 @@
     }
 
     .checklist-text {
-      font-size: 12px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-gray-700);
     }
 
@@ -612,13 +612,13 @@
     }
 
     .nutrient-desc {
-      font-size: 12px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-gray-600);
       margin-bottom: 8px;
     }
 
     .nutrient-stat {
-      font-size: 11px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-navy);
       font-weight: 600;
       background: var(--ss-white);
@@ -698,7 +698,7 @@
     .week-4 .week-task-bullet { background: var(--ss-danger); }
 
     .week-task-text {
-      font-size: 13px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-gray-700);
     }
 
@@ -729,7 +729,7 @@
     }
 
     .toc-chapter {
-      font-size: 12px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       font-weight: 600;
       color: var(--ss-orange);
       min-width: 80px;
@@ -737,7 +737,7 @@
 
     .toc-name {
       flex: 1;
-      font-size: 13px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-gray-700);
     }
 
@@ -759,7 +759,7 @@
     .arrow-list li {
       padding: 8px 0 8px 24px;
       position: relative;
-      font-size: 13px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
     }
 
     .arrow-list li::before {
@@ -778,7 +778,7 @@
     .bullet-list li {
       padding: 6px 0 6px 20px;
       position: relative;
-      font-size: 12px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
     }
 
     .bullet-list li::before {
@@ -824,14 +824,14 @@
     }
 
     .protocol-time {
-      font-size: 12px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       font-weight: 700;
       color: var(--ss-orange);
       min-width: 80px;
     }
 
     .protocol-action {
-      font-size: 13px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-white);
     }
 
@@ -843,7 +843,7 @@
       width: 100%;
       border-collapse: collapse;
       margin: 24px 0;
-      font-size: 11px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
     }
 
     .calendar-table th {
@@ -944,19 +944,19 @@
     }
 
     .feature-name {
-      font-size: 12px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       font-weight: 600;
       color: var(--ss-navy);
       margin-bottom: 4px;
     }
 
     .feature-desc {
-      font-size: 10px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-gray-500);
     }
 
     .disclaimer {
-      font-size: 10px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-gray-500);
       margin-top: 32px;
       padding-top: 16px;
@@ -965,7 +965,7 @@
 
     /* Source/Citation */
     .source {
-      font-size: 9px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-gray-400);
       font-style: italic;
       margin-top: 8px;
@@ -1019,7 +1019,7 @@
     }
 
     .summary-content p {
-      font-size: 12px;
+      font-size: 14px; /* SmartSenior DS: mínimo 14px */
       color: var(--ss-gray-600);
       margin: 0;
     }
@@ -1032,7 +1032,7 @@
        ============================================ -->
   <div class="cover">
     <div class="cover-header">
-      <img src="assets/logo/AF.png" alt="SmartSenior" class="cover-logo">
+      <img src="./assets/logo.png" alt="SmartSenior" class="cover-logo">
       <div class="cover-brand">
         <div class="cover-brand-name">
           <span>Smart</span><span>Senior</span>
@@ -1044,7 +1044,7 @@
     <h1 class="cover-title">Outono<br>seguro</h1>
     <p class="cover-subtitle">O guia preventivo do personal senior para proteger o seu familiar idoso antes do inverno chegar</p>
 
-    <img src="pMaxQuad-1200x628.jpg" alt="SmartSenior - Cuidado com idosos" class="cover-hero">
+    <img src="./pMaxQuad-1200x628.jpg" alt="SmartSenior - Cuidado com idosos" class="cover-hero">
 
     <div class="cover-stats">
       <div class="stat-card orange">
@@ -1137,7 +1137,7 @@
        ============================================ -->
   <div class="page chapter-start">
     <div class="chapter-header">
-      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <img src="./assets/logo.png" alt="" class="chapter-header-logo">
       <span class="chapter-badge">Introdução</span>
       <h1 class="chapter-title">A janela de oportunidade</h1>
       <p class="chapter-subtitle">que a maioria das famílias ignora</p>
@@ -1193,7 +1193,7 @@
        ============================================ -->
   <div class="page chapter-start">
     <div class="chapter-header">
-      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <img src="./assets/logo.png" alt="" class="chapter-header-logo">
       <span class="chapter-badge">Capítulo 1</span>
       <h1 class="chapter-title">O que muda no corpo do familiar idoso</h1>
       <p class="chapter-subtitle">com a chegada do frio</p>
@@ -1313,7 +1313,7 @@
        ============================================ -->
   <div class="page chapter-start">
     <div class="chapter-header">
-      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <img src="./assets/logo.png" alt="" class="chapter-header-logo">
       <span class="chapter-badge">Capítulo 2</span>
       <h1 class="chapter-title">Hidratação no outono</h1>
       <p class="chapter-subtitle">o inimigo invisível</p>
@@ -1453,7 +1453,7 @@
        ============================================ -->
   <div class="page chapter-start">
     <div class="chapter-header">
-      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <img src="./assets/logo.png" alt="" class="chapter-header-logo">
       <span class="chapter-badge">Capítulo 3</span>
       <h1 class="chapter-title">Nutrição e imunidade</h1>
       <p class="chapter-subtitle">o que colocar no prato do seu familiar idoso agora</p>
@@ -1554,7 +1554,7 @@
        ============================================ -->
   <div class="page chapter-start">
     <div class="chapter-header">
-      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <img src="./assets/logo.png" alt="" class="chapter-header-logo">
       <span class="chapter-badge">Capítulo 4</span>
       <h1 class="chapter-title">Movimento é remédio</h1>
       <p class="chapter-subtitle">como manter o familiar idoso ativo com o frio chegando</p>
@@ -1651,7 +1651,7 @@
        ============================================ -->
   <div class="page chapter-start">
     <div class="chapter-header">
-      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <img src="./assets/logo.png" alt="" class="chapter-header-logo">
       <span class="chapter-badge">Capítulo 5</span>
       <h1 class="chapter-title">Vacinação e prevenção</h1>
       <p class="chapter-subtitle">de doenças respiratórias</p>
@@ -1776,7 +1776,7 @@
        ============================================ -->
   <div class="page chapter-start">
     <div class="chapter-header">
-      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <img src="./assets/logo.png" alt="" class="chapter-header-logo">
       <span class="chapter-badge">Capítulo 6</span>
       <h1 class="chapter-title">Medicação, rotina e segurança em casa</h1>
       <p class="chapter-subtitle">no outono e no inverno</p>
@@ -1880,7 +1880,7 @@
        ============================================ -->
   <div class="page chapter-start">
     <div class="chapter-header">
-      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <img src="./assets/logo.png" alt="" class="chapter-header-logo">
       <span class="chapter-badge">Capítulo 7</span>
       <h1 class="chapter-title">O plano de 30 dias</h1>
       <p class="chapter-subtitle">do personal senior</p>
@@ -2104,7 +2104,7 @@
       </table>
     </div>
 
-    <p style="text-align: center; font-size: 11px; color: var(--ss-gray-500); margin-top: 16px;">
+    <p style="text-align: center; font-size: 14px; color: var(--ss-gray-500); margin-top: 16px;">
       ✂ Recorte aqui e cole na geladeira ou no quarto do seu familiar idoso.
     </p>
   </div>
@@ -2114,7 +2114,7 @@
        ============================================ -->
   <div class="page chapter-start">
     <div class="chapter-header">
-      <img src="assets/logo/AF.png" alt="" class="chapter-header-logo">
+      <img src="./assets/logo.png" alt="" class="chapter-header-logo">
       <span class="chapter-badge">Conclusão</span>
       <h1 class="chapter-title">De cuidador reativo</h1>
       <p class="chapter-subtitle">para cuidador estratégico</p>
@@ -2182,7 +2182,7 @@
        FINAL PAGE - CTA
        ============================================ -->
   <div class="page final-page chapter-start">
-    <img src="assets/logo/AF_fenix_curvas_SS_logoH_degrade.png" alt="SmartSenior" class="final-logo-horizontal">
+    <img src="../../packages/ui-design-system/src/assets/logo/PNG_transparente/AF_fenix_curvas_SS_logoH_degrade.png" alt="SmartSenior" class="final-logo-horizontal">
     <p style="color: var(--ss-gray-500); margin-bottom: 24px; font-size: 14px;">Cuidado com ciência. Amor com protocolo.</p>
 
     <div class="cta-box">
