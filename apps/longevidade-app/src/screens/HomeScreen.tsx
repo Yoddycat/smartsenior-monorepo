@@ -37,7 +37,7 @@ export function HomeScreen() {
   } = useProtocolProgress()
 
   const protocol = PROTOCOLS[currentMonth as ProtocolMonth]
-  const { completedTasks, toggleTask } = useTaskCompletion(currentMonth as ProtocolMonth, totalTasksToday)
+  const { completedTasks, toggleTask } = useTaskCompletion(currentMonth as ProtocolMonth)
 
   // Success animation state
   const [showSuccess, setShowSuccess] = useState(false)

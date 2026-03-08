@@ -30,6 +30,39 @@ export function useRecovery(): UseRecoveryReturn {
     error: null,
   })
 
+  // Analyze on mount with proper cleanup
+  useEffect(() => {
+    let mounted = true
+
+    const fetchRecoveryStatus = async () => {
+      try {
+        const analysis = await analyzeRecoveryStatus()
+
+        if (mounted) {
+          setState({
+            analysis,
+            isLoading: false,
+            error: null,
+          })
+        }
+      } catch {
+        if (mounted) {
+          setState((prev) => ({
+            ...prev,
+            isLoading: false,
+            error: 'Falha ao analisar status de recuperação',
+          }))
+        }
+      }
+    }
+
+    fetchRecoveryStatus()
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
   const refresh = useCallback(async () => {
     setState((prev) => ({ ...prev, isLoading: true, error: null }))
 
@@ -49,11 +82,6 @@ export function useRecovery(): UseRecoveryReturn {
       }))
     }
   }, [])
-
-  // Analyze on mount
-  useEffect(() => {
-    refresh()
-  }, [refresh])
 
   // Computed values
   const isRecoveryMode = state.analysis?.status === 'recovery'

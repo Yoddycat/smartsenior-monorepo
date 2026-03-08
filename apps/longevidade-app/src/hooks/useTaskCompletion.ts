@@ -27,7 +27,7 @@ interface UseTaskCompletionReturn {
   isLoading: boolean
 }
 
-export function useTaskCompletion(month: ProtocolMonth, _totalTasks: number): UseTaskCompletionReturn {
+export function useTaskCompletion(month: ProtocolMonth): UseTaskCompletionReturn {
   const [completedTasks, setCompletedTasks] = useState<Set<number>>(new Set())
   const [isLoading, setIsLoading] = useState(true)
 

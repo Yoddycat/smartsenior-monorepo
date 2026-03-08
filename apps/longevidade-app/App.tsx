@@ -16,6 +16,8 @@ import {
 } from './src/screens'
 import { colors } from './src/constants/theme'
 import { initializeNotifications } from './src/services/notifications'
+import { networkService, syncQueueService } from './src/services'
+import { OfflineBanner } from './src/components'
 
 const ONBOARDING_COMPLETE_KEY = '@longevidade:onboarding_complete'
 
@@ -62,6 +64,7 @@ function MainApp() {
   return (
     <NavigationContainer>
       <StatusBar style="light" />
+      <OfflineBanner />
       <Tab.Navigator
         screenOptions={{
           tabBarActiveTintColor: colors.primary,
@@ -138,6 +141,15 @@ export default function App() {
   useEffect(() => {
     checkOnboardingStatus()
     initializeNotifications()
+
+    // Initialize offline support services
+    networkService.initialize()
+    syncQueueService.initialize()
+
+    return () => {
+      networkService.destroy()
+      syncQueueService.destroy()
+    }
   }, [])
 
   const checkOnboardingStatus = async () => {

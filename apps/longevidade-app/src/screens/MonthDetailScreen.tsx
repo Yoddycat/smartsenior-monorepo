@@ -42,7 +42,7 @@ export function MonthDetailScreen({ route }: Props) {
     toggleTask,
     completedCount,
     isLoading: isLoadingTasks,
-  } = useTaskCompletion(month as ProtocolMonth, totalTasks)
+  } = useTaskCompletion(month as ProtocolMonth)
 
   // Calculate completion percentage
   const completionPercentage = totalTasks > 0

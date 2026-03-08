@@ -20,6 +20,7 @@ import {
   defaultNotificationSettings,
 } from '../services/notifications'
 import { useHealth } from '../hooks'
+import { TimeInputModal } from '../components'
 
 const PROFILE_STORAGE_KEY = '@longevidade:user_profile'
 
@@ -44,6 +45,10 @@ export function ProfileScreen() {
   )
   const [isLoading, setIsLoading] = useState(true)
   const [isConnecting, setIsConnecting] = useState(false)
+
+  // Time input modal state
+  const [timeModalVisible, setTimeModalVisible] = useState(false)
+  const [timeModalType, setTimeModalType] = useState<'morning' | 'evening'>('morning')
 
   // Health integration
   const {
@@ -199,32 +204,14 @@ export function ProfileScreen() {
   }
 
   const handleChangeTime = (type: 'morning' | 'evening') => {
-    const currentTime =
-      type === 'morning'
-        ? notificationSettings.morningReminderTime
-        : notificationSettings.eveningReminderTime
+    setTimeModalType(type)
+    setTimeModalVisible(true)
+  }
 
-    Alert.prompt(
-      `Horário do Lembrete ${type === 'morning' ? 'Matinal' : 'Noturno'}`,
-      'Digite o horário no formato HH:MM (ex: 08:00)',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Salvar',
-          onPress: (value: string | undefined) => {
-            if (value && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(value)) {
-              const key =
-                type === 'morning' ? 'morningReminderTime' : 'eveningReminderTime'
-              updateNotificationSettings({ [key]: value })
-            } else {
-              Alert.alert('Formato inválido', 'Use o formato HH:MM (ex: 08:00)')
-            }
-          },
-        },
-      ],
-      'plain-text',
-      currentTime
-    )
+  const handleTimeModalSave = (value: string) => {
+    const key = timeModalType === 'morning' ? 'morningReminderTime' : 'eveningReminderTime'
+    updateNotificationSettings({ [key]: value })
+    setTimeModalVisible(false)
   }
 
   const handleResetProtocol = () => {
@@ -530,6 +517,19 @@ export function ProfileScreen() {
       </View>
 
       <View style={{ height: 100 }} />
+
+      {/* Time Input Modal */}
+      <TimeInputModal
+        visible={timeModalVisible}
+        title={`Horário do Lembrete ${timeModalType === 'morning' ? 'Matinal' : 'Noturno'}`}
+        initialValue={
+          timeModalType === 'morning'
+            ? notificationSettings.morningReminderTime
+            : notificationSettings.eveningReminderTime
+        }
+        onCancel={() => setTimeModalVisible(false)}
+        onSave={handleTimeModalSave}
+      />
     </ScrollView>
   )
 }
