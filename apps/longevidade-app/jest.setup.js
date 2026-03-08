@@ -1,7 +1,28 @@
-/* global global, setTimeout, clearTimeout */
+/* global global, setTimeout, clearTimeout, window */
 // Mock requestAnimationFrame for animated components
 global.requestAnimationFrame = (callback) => setTimeout(callback, 0)
 global.cancelAnimationFrame = (id) => clearTimeout(id)
+
+// Mock window.Image for react-native-web image loading
+if (typeof window !== 'undefined') {
+  window.Image = class MockImage {
+    constructor() {
+      this.onload = null
+      this.onerror = null
+      this.src = ''
+    }
+    set src(value) {
+      this._src = value
+      // Simulate async load
+      setTimeout(() => {
+        if (this.onload) this.onload()
+      }, 0)
+    }
+    get src() {
+      return this._src
+    }
+  }
+}
 
 // Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () =>
