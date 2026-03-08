@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import { Logo } from "./logo"
 
 function cn(...classes: (string | undefined | null | false)[]) {
   return classes.filter(Boolean).join(' ')
@@ -186,7 +187,7 @@ const ImageCard = React.forwardRef<HTMLDivElement, ImageCardProps>(
             className="w-full h-full"
           />
           {layout === "overlay" && (
-            <div className="absolute inset-0 bg-gradient-to-t from-[#003057]/80 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#003057] via-[#003057]/60 to-transparent" />
           )}
         </div>
 
@@ -196,24 +197,33 @@ const ImageCard = React.forwardRef<HTMLDivElement, ImageCardProps>(
           layout === "overlay" && "absolute bottom-0 left-0 right-0 text-white"
         )}>
           {category && (
-            <span className={cn(
-              "text-xs font-semibold uppercase tracking-wide mb-1 block",
-              layout === "overlay" ? "text-[#FFAA4D]" : "text-[var(--success)]"
-            )}>
+            <span
+              className={cn(
+                "text-xs font-semibold uppercase tracking-wide mb-1 block",
+                layout === "overlay" ? "text-[#FFAA4D]" : "text-[var(--success)]"
+              )}
+              style={layout === "overlay" ? { textShadow: "0 1px 3px rgba(0,0,0,0.5)" } : undefined}
+            >
               {category}
             </span>
           )}
-          <h3 className={cn(
-            "text-lg font-bold mb-2",
-            layout === "overlay" ? "text-white" : "text-[var(--foreground)]"
-          )}>
+          <h3
+            className={cn(
+              "text-lg font-bold mb-2",
+              layout === "overlay" ? "text-white" : "text-[var(--foreground)]"
+            )}
+            style={layout === "overlay" ? { textShadow: "0 2px 4px rgba(0,0,0,0.6)" } : undefined}
+          >
             {title}
           </h3>
           {description && (
-            <p className={cn(
-              "text-sm leading-relaxed mb-4",
-              layout === "overlay" ? "text-white/90" : "text-[var(--foreground-muted)]"
-            )}>
+            <p
+              className={cn(
+                "text-sm leading-relaxed mb-4",
+                layout === "overlay" ? "text-white/90" : "text-[var(--foreground-muted)]"
+              )}
+              style={layout === "overlay" ? { textShadow: "0 1px 3px rgba(0,0,0,0.5)" } : undefined}
+            >
               {description}
             </p>
           )}
@@ -329,12 +339,18 @@ const HeroImage = React.forwardRef<HTMLDivElement, HeroImageProps>(
         style={{ minHeight }}
         >
           {headline && (
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 max-w-2xl">
+            <h1
+              className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 max-w-2xl"
+              style={{ textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}
+            >
               {headline}
             </h1>
           )}
           {subheadline && (
-            <p className="text-lg text-white/90 mb-6 max-w-xl">
+            <p
+              className="text-lg text-white/90 mb-6 max-w-xl"
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}
+            >
               {subheadline}
             </p>
           )}
@@ -350,13 +366,8 @@ const HeroImage = React.forwardRef<HTMLDivElement, HeroImageProps>(
         </div>
 
         {/* Logo Badge */}
-        <div className="absolute bottom-4 right-4 z-20">
-          <div className="flex items-center gap-2 text-white">
-            <svg width="32" height="32" viewBox="0 0 100 100" fill="currentColor" className="text-[#FF6A13]">
-              <path d="M50 10 L20 40 L30 40 L30 70 L45 55 L50 60 L55 55 L70 70 L70 40 L80 40 Z" />
-            </svg>
-            <span className="font-bold">SmartSenior</span>
-          </div>
+        <div className="absolute bottom-6 right-6 z-20">
+          <Logo variant="horizontal" color="gradient" size="md" />
         </div>
       </div>
     )

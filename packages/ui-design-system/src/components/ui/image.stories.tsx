@@ -1,6 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { Image, ImageCard, HeroImage, AvatarImage } from './image'
 
+// Stock images - Cuidado intergeracional (filha adulta cuidando da mae idosa, ambas felizes)
+// Fonte: Pexels (uso gratuito, sem atribuicao necessaria)
+const stockImages = {
+  // Filha cumprimentando mae idosa no jardim - Andrea Piacquadio
+  filhaMaeJardim: 'https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  // Filha abraçando mae idosa sorrindo
+  filhaMaeAbraco: 'https://images.pexels.com/photos/3768146/pexels-photo-3768146.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  // Cuidadora ajudando idosa a caminhar em casa
+  cuidadoraIdosa: 'https://images.pexels.com/photos/7551442/pexels-photo-7551442.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  // Mae e filha conversando felizes
+  conversaFeliz: 'https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  // Idosa feliz com familia
+  familiaReunida: 'https://images.pexels.com/photos/3768140/pexels-photo-3768140.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  // Atividade juntas
+  atividadeJuntas: 'https://images.pexels.com/photos/3768152/pexels-photo-3768152.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  // Idosa ativa e saudavel
+  idosaAtiva: 'https://images.pexels.com/photos/3822864/pexels-photo-3822864.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  // Cuidado em casa
+  cuidadoCasa: 'https://images.pexels.com/photos/7551617/pexels-photo-7551617.jpeg?auto=compress&cs=tinysrgb&w=1200',
+}
+
 // ============================================
 // META
 // ============================================
@@ -44,8 +65,8 @@ type ImageStory = StoryObj<typeof Image>
 
 export const Default: ImageStory = {
   args: {
-    src: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop',
-    alt: 'Idosos felizes praticando jardinagem',
+    src: stockImages.filhaMaeJardim,
+    alt: 'Filha e mae idosa felizes no jardim',
     rounded: 'image',
     aspectRatio: 'landscape',
   },
@@ -62,7 +83,7 @@ export const AspectRatios: StoryObj = {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', maxWidth: '800px' }}>
       <div>
         <Image
-          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=300&fit=crop"
+          src={stockImages.filhaMaeAbraco}
           alt="Square"
           aspectRatio="square"
         />
@@ -70,7 +91,7 @@ export const AspectRatios: StoryObj = {
       </div>
       <div>
         <Image
-          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop"
+          src={stockImages.filhaMaeJardim}
           alt="Landscape"
           aspectRatio="landscape"
         />
@@ -78,7 +99,7 @@ export const AspectRatios: StoryObj = {
       </div>
       <div>
         <Image
-          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=400&fit=crop"
+          src={stockImages.cuidadoraIdosa}
           alt="Portrait"
           aspectRatio="portrait"
         />
@@ -86,7 +107,7 @@ export const AspectRatios: StoryObj = {
       </div>
       <div>
         <Image
-          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=480&h=270&fit=crop"
+          src={stockImages.familiaReunida}
           alt="Video"
           aspectRatio="video"
         />
@@ -94,7 +115,7 @@ export const AspectRatios: StoryObj = {
       </div>
       <div>
         <Image
-          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=500&fit=crop"
+          src={stockImages.conversaFeliz}
           alt="Feed"
           aspectRatio="feed"
         />
@@ -102,7 +123,7 @@ export const AspectRatios: StoryObj = {
       </div>
       <div>
         <Image
-          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=250&fit=crop"
+          src={stockImages.atividadeJuntas}
           alt="Wide"
           aspectRatio="wide"
         />
@@ -127,7 +148,7 @@ export const BorderRadius: StoryObj = {
         <div key={radius} style={{ textAlign: 'center' }}>
           <div style={{ width: '100px', height: '100px' }}>
             <Image
-              src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&h=200&fit=crop"
+              src={stockImages.idosaAtiva}
               alt={`Radius ${radius}`}
               rounded={radius}
               aspectRatio="square"
@@ -151,11 +172,11 @@ export const CardVertical: ImageCardStory = {
   render: () => (
     <div style={{ width: '350px' }}>
       <ImageCard
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop"
-        alt="Idosos praticando jardinagem"
+        src={stockImages.filhaMaeJardim}
+        alt="Filha cumprimentando mae idosa no jardim"
         category="Bem-estar"
-        title="Jardinagem melhora a saude mental"
-        description="Atividades ao ar livre promovem bem-estar e conexao com a natureza para idosos."
+        title="Momentos de conexao no jardim"
+        description="Atividades ao ar livre promovem bem-estar e fortalecem os lacos familiares."
         primaryAction={{ label: 'Saiba mais', onClick: () => alert('Clicou!') }}
         secondaryAction={{ label: 'Salvar' }}
       />
@@ -169,11 +190,11 @@ export const CardHorizontal: ImageCardStory = {
     <div style={{ width: '600px' }}>
       <ImageCard
         layout="horizontal"
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=400&fit=crop"
-        alt="Idosos felizes"
-        category="Saude"
-        title="Exercicios leves para terceira idade"
-        description="Mantenha-se ativo com rotinas simples e seguras."
+        src={stockImages.atividadeJuntas}
+        alt="Filha e mae idosa fazendo atividade juntas"
+        category="Saude Mental"
+        title="Atividades em familia"
+        description="Momentos compartilhados que fortalecem o bem-estar emocional."
         imageAspect="square"
       />
     </div>
@@ -186,13 +207,13 @@ export const CardOverlay: ImageCardStory = {
     <div style={{ width: '400px' }}>
       <ImageCard
         layout="overlay"
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=500&fit=crop"
-        alt="Familia reunida"
+        src={stockImages.filhaMaeAbraco}
+        alt="Filha abraçando mae idosa"
         category="Familia"
-        title="Momentos que importam"
-        description="Conexoes familiares fortalecem a saude emocional."
+        title="Que tipo de ajuda seus pais precisam?"
+        description="Descubra o nivel real de dependencia do seu familiar."
         imageAspect="feed"
-        primaryAction={{ label: 'Agendar visita' }}
+        primaryAction={{ label: 'Avaliacao gratuita' }}
       />
     </div>
   ),
@@ -203,25 +224,25 @@ export const CardGrid: StoryObj = {
   render: () => (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', maxWidth: '1000px' }}>
       <ImageCard
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop"
-        alt="Jardinagem"
+        src={stockImages.filhaMaeJardim}
+        alt="Mae e filha no jardim"
         category="Atividades"
-        title="Jardinagem terapeutica"
+        title="Atividades ao ar livre"
         description="Beneficios comprovados para mente e corpo."
       />
       <ImageCard
-        src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=400&h=300&fit=crop"
-        alt="Culinaria"
-        category="Nutricao"
-        title="Receitas saudaveis"
-        description="Alimentacao balanceada para longevidade."
+        src={stockImages.atividadeJuntas}
+        alt="Atividade em familia"
+        category="Criatividade"
+        title="Momentos em familia"
+        description="Conexao e bem-estar compartilhados."
       />
       <ImageCard
-        src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop"
-        alt="Exercicios"
-        category="Movimento"
-        title="Yoga para seniores"
-        description="Flexibilidade e equilibrio em qualquer idade."
+        src={stockImages.idosaAtiva}
+        alt="Idosa ativa"
+        category="Independencia"
+        title="Autonomia com seguranca"
+        description="Envelhecimento ativo e saudavel."
       />
     </div>
   ),
@@ -238,10 +259,10 @@ export const HeroGradient: HeroImageStory = {
   render: () => (
     <div style={{ width: '100%', maxWidth: '900px' }}>
       <HeroImage
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop"
-        alt="Familia feliz"
-        headline="Que tipo de ajuda seus pais precisam?"
-        subheadline="Descubra o nivel real de dependencia do seu familiar com nossa avaliacao gratuita."
+        src={stockImages.cuidadoraIdosa}
+        alt="Cuidadora ajudando mae idosa a caminhar"
+        headline="Sera que estou fazendo o suficiente?"
+        subheadline="A ciencia mostra que 90% dos filhos erram nos cuidados por falta de orientacao, nao de amor."
         cta={{ label: 'AVALIACAO GRATUITA EM 5 MINUTOS', onClick: () => alert('CTA clicked!') }}
         overlay="gradient"
       />
@@ -254,8 +275,8 @@ export const HeroNavy: HeroImageStory = {
   render: () => (
     <div style={{ width: '100%', maxWidth: '900px' }}>
       <HeroImage
-        src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=1200&h=600&fit=crop"
-        alt="Idosos ativos"
+        src={stockImages.idosaAtiva}
+        alt="Idosa ativa e saudavel"
         headline="Independencia com seguranca"
         subheadline="Diagnosticos precisos. Protocolos cientificos."
         cta={{ label: 'Conheca nossos servicos' }}
@@ -271,9 +292,9 @@ export const HeroCentered: HeroImageStory = {
   render: () => (
     <div style={{ width: '100%', maxWidth: '900px' }}>
       <HeroImage
-        src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1200&h=500&fit=crop"
-        alt="Bem-estar"
-        headline="Viva mais. Viva melhor."
+        src={stockImages.conversaFeliz}
+        alt="Mae e filha conversando felizes"
+        headline="Avaliacao do nivel de dependencia senior"
         subheadline="Plataforma completa para cuidado e monitoramento de idosos."
         cta={{ label: 'Comece agora' }}
         overlay="dark"
@@ -295,27 +316,27 @@ export const AvatarSizes: AvatarImageStory = {
   render: () => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
       <AvatarImage
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100&h=100&fit=crop&faces"
+        src="https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
         alt="Maria"
         size="sm"
       />
       <AvatarImage
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100&h=100&fit=crop&faces"
+        src="https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
         alt="Maria"
         size="md"
       />
       <AvatarImage
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100&h=100&fit=crop&faces"
+        src="https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
         alt="Maria"
         size="lg"
       />
       <AvatarImage
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100&h=100&fit=crop&faces"
+        src="https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
         alt="Maria"
         size="xl"
       />
       <AvatarImage
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100&h=100&fit=crop&faces"
+        src="https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
         alt="Maria"
         size="2xl"
       />
@@ -352,20 +373,20 @@ export const AvatarWithBorder: AvatarImageStory = {
   render: () => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
       <AvatarImage
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100&h=100&fit=crop&faces"
-        alt="Usuario"
+        src="https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
+        alt="Cuidadora"
         size="xl"
         borderColor="#FF6A13"
       />
       <AvatarImage
-        src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=100&h=100&fit=crop&faces"
-        alt="Usuario"
+        src="https://images.pexels.com/photos/3822864/pexels-photo-3822864.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
+        alt="Idosa"
         size="xl"
         borderColor="#003057"
       />
       <AvatarImage
-        src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=100&h=100&fit=crop&faces"
-        alt="Usuario"
+        src="https://images.pexels.com/photos/3768146/pexels-photo-3768146.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
+        alt="Familiar"
         size="xl"
         borderColor="#279989"
       />
@@ -388,8 +409,8 @@ export const UseCaseFeedPost: StoryObj = {
         overflow: 'hidden',
       }}>
         <img
-          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&h=875&fit=crop"
-          alt="Familia feliz"
+          src={stockImages.filhaMaeAbraco}
+          alt="Filha abraçando mae idosa feliz"
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
         <div style={{
@@ -405,10 +426,10 @@ export const UseCaseFeedPost: StoryObj = {
           padding: '24px',
           color: 'white',
         }}>
-          <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '8px' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '8px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
             Que tipo de ajuda seus pais precisam?
           </h2>
-          <p style={{ fontSize: '14px', opacity: 0.9, marginBottom: '16px' }}>
+          <p style={{ fontSize: '14px', opacity: 0.9, marginBottom: '16px', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
             Descubra o nivel real de dependencia do seu familiar.
           </p>
           <button style={{
@@ -449,7 +470,7 @@ export const UseCaseFeedPost: StoryObj = {
   parameters: {
     docs: {
       description: {
-        story: 'Exemplo de post para Instagram Feed seguindo as diretrizes do moodboard SmartSenior.',
+        story: 'Exemplo de post para Instagram Feed com imagem de cuidado intergeracional.',
       },
     },
   },
@@ -460,8 +481,8 @@ export const UseCaseWebsiteHero: StoryObj = {
   render: () => (
     <div style={{ width: '100%', maxWidth: '1200px' }}>
       <HeroImage
-        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1400&h=600&fit=crop"
-        alt="Familia multigeracional"
+        src={stockImages.familiaReunida}
+        alt="Familia reunida com idosa feliz"
         headline="Cuidado inteligente para quem voce ama"
         subheadline="Plataforma completa com IA para monitoramento, orientacao e suporte a idosos e suas familias."
         cta={{ label: 'Comece sua avaliacao gratuita' }}
@@ -481,22 +502,22 @@ export const UseCaseArticleGrid: StoryObj = {
       </h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
         <ImageCard
-          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop"
-          alt="Jardinagem"
+          src={stockImages.filhaMaeJardim}
+          alt="Mae e filha no jardim"
           category="Saude Mental"
-          title="Jardinagem melhora a saude mental da pessoa idosa"
+          title="Momentos ao ar livre fortalecem a saude mental"
           primaryAction={{ label: 'Ler artigo' }}
         />
         <ImageCard
-          src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=400&h=300&fit=crop"
-          alt="Arte"
+          src={stockImages.atividadeJuntas}
+          alt="Atividade em familia"
           category="Criatividade"
-          title="Arteterapia na 3a idade: pinceladas de bem-estar"
+          title="Atividades em familia: conexao e bem-estar"
           primaryAction={{ label: 'Ler artigo' }}
         />
         <ImageCard
-          src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop"
-          alt="Exercicios"
+          src={stockImages.cuidadoCasa}
+          alt="Cuidado em casa"
           category="Movimento"
           title="Exercicios leves para manter a mobilidade"
           primaryAction={{ label: 'Ler artigo' }}
