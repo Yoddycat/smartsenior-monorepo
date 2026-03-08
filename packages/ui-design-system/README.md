@@ -45,16 +45,20 @@ npm install
 ## Cores da Marca (OKLCH)
 
 ### Azuis Institucionais
-- `--color-blue-900`: oklch(0.25 0.065 245) — #003057
-- `--color-blue-700`: oklch(0.38 0.11 245) — #004b87
+- `--color-blue-900`: oklch(0.28 0.08 245) — #003057 (Navy)
+- `--color-blue-700`: oklch(0.40 0.13 250) — #004B87 (Primary Blue)
 
 ### Cianos e Verdes (Apoio/Sucesso)
-- `--color-cyan-500`: oklch(0.68 0.12 200) — #00AEC7
-- `--color-teal-500`: oklch(0.58 0.10 175) — #279989
+- `--color-cyan-500`: oklch(0.70 0.13 195) — #00AEC7 (Info)
+- `--color-teal-800`: oklch(0.42 0.08 190) — #115E67 (Teal Dark)
+- `--color-teal-500`: oklch(0.60 0.10 175) — #279989 (Success)
 
 ### Laranjas e Amarelos (Destaque/CTA)
-- `--color-orange-600`: oklch(0.62 0.21 35) — #FE5000
-- `--color-amber-400`: oklch(0.80 0.14 65) — #FFAA4D
+- `--color-orange-600`: oklch(0.65 0.23 35) — #FE5000 (Orange Dark)
+- `--color-orange-500`: oklch(0.70 0.21 40) — #FF6A13 (Orange Primary)
+- `--color-orange-400`: oklch(0.73 0.20 50) — #FF8200 (Orange Light)
+- `--color-amber-400`: oklch(0.82 0.15 70) — #FFAA4D (Warning)
+- `--color-yellow-400`: oklch(0.86 0.17 85) — #FFC600 (Yellow)
 
 ## Tipografia
 

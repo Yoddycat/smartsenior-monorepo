@@ -21,16 +21,16 @@
 
 @theme {
   /* === COLORS: Primitives === */
-  --color-blue-900: oklch(0.25 0.065 245);
-  --color-blue-700: oklch(0.38 0.11 245);
-  --color-cyan-500: oklch(0.68 0.12 200);
-  --color-teal-800: oklch(0.40 0.08 185);
-  --color-teal-500: oklch(0.58 0.10 175);
-  --color-orange-600: oklch(0.62 0.21 35);
-  --color-orange-500: oklch(0.68 0.19 42);
-  --color-orange-400: oklch(0.72 0.17 50);
-  --color-amber-400: oklch(0.80 0.14 65);
-  --color-yellow-400: oklch(0.88 0.16 90);
+  --color-blue-900: oklch(0.28 0.08 245); /* #003057 - Navy SmartSenior */
+  --color-blue-700: oklch(0.40 0.13 250); /* #004B87 - Primary Blue SmartSenior */
+  --color-cyan-500: oklch(0.70 0.13 195); /* #00AEC7 - Info Cyan SmartSenior */
+  --color-teal-800: oklch(0.42 0.08 190); /* #115E67 - Teal Dark SmartSenior */
+  --color-teal-500: oklch(0.60 0.10 175); /* #279989 - Success Teal SmartSenior */
+  --color-orange-600: oklch(0.65 0.23 35); /* #FE5000 - Orange Dark SmartSenior */
+  --color-orange-500: oklch(0.70 0.21 40); /* #FF6A13 - Orange Primary SmartSenior */
+  --color-orange-400: oklch(0.73 0.20 50); /* #FF8200 - Orange Light SmartSenior */
+  --color-amber-400: oklch(0.82 0.15 70); /* #FFAA4D - Warning Amber SmartSenior */
+  --color-yellow-400: oklch(0.86 0.17 85); /* #FFC600 - Yellow SmartSenior */
 
   /* Neutrals */
   --color-white: oklch(1.0 0 0);
@@ -201,7 +201,7 @@
 
   /* Accent (CTA) */
   --accent: var(--color-orange-600);
-  --accent-hover: oklch(0.55 0.22 35);
+  --accent-hover: oklch(0.58 0.24 32); /* Darker than #FE5000 for hover */
   --accent-foreground: var(--color-white);
 
   /* Semantic States */
@@ -257,15 +257,15 @@
   --primary-hover: oklch(0.72 0.12 245);
   --primary-foreground: var(--color-gray-900);
 
-  --accent: oklch(0.72 0.18 40);
-  --accent-hover: oklch(0.78 0.16 45);
+  --accent: oklch(0.73 0.20 50); /* #FF8200 for dark mode */
+  --accent-hover: oklch(0.78 0.18 52); /* Lighter orange for dark hover */
   --accent-foreground: var(--color-gray-900);
 
   --border: oklch(0.35 0.03 245);
   --border-muted: oklch(0.28 0.03 245);
   --border-emphasis: oklch(0.45 0.03 245);
 
-  --focus-ring: oklch(0.75 0.18 45);
+  --focus-ring: oklch(0.75 0.20 48); /* Orange focus for dark mode */
   --focus-ring-offset: oklch(0.18 0.04 245);
 
   --card-background: var(--background-subtle);
@@ -290,15 +290,15 @@
     --primary-hover: oklch(0.72 0.12 245);
     --primary-foreground: var(--color-gray-900);
 
-    --accent: oklch(0.72 0.18 40);
-    --accent-hover: oklch(0.78 0.16 45);
+    --accent: oklch(0.73 0.20 50); /* #FF8200 for dark mode */
+    --accent-hover: oklch(0.78 0.18 52); /* Lighter orange for dark hover */
     --accent-foreground: var(--color-gray-900);
 
     --border: oklch(0.35 0.03 245);
     --border-muted: oklch(0.28 0.03 245);
     --border-emphasis: oklch(0.45 0.03 245);
 
-    --focus-ring: oklch(0.75 0.18 45);
+    --focus-ring: oklch(0.75 0.20 48); /* Orange focus for dark mode */
     --focus-ring-offset: oklch(0.18 0.04 245);
 
     --card-background: var(--background-subtle);

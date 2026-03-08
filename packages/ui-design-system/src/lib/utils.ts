@@ -20,7 +20,7 @@ export function cn(...inputs: ClassValue[]): string {
  * Get CSS custom property value at runtime
  *
  * @example
- * getCssVar("--primary") // "oklch(0.38 0.11 245)"
+ * getCssVar("--primary") // "oklch(0.40 0.13 250)" - #004B87
  */
 export function getCssVar(name: string, element?: HTMLElement): string {
   const target = element ?? document.documentElement;

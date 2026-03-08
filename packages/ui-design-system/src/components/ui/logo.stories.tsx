@@ -222,7 +222,7 @@ export const BlackColor: Story = {
 
 export const WhiteOnDark: Story = {
   render: () => (
-    <div className="bg-[#1a365d] p-8 rounded-xl">
+    <div className="bg-[#003057] p-8 rounded-xl">
       <Logo variant="horizontal" color="white" size="xl" />
     </div>
   ),
@@ -243,7 +243,7 @@ export const AllColors: Story = {
         <p className="text-sm text-gray-600 mb-3">Black (P&B)</p>
         <Logo variant="horizontal" color="black" size="lg" />
       </div>
-      <div className="p-6 bg-[#1a365d] rounded-lg">
+      <div className="p-6 bg-[#003057] rounded-lg">
         <p className="text-sm text-white/70 mb-3">White (Negativo - para fundos escuros)</p>
         <Logo variant="horizontal" color="white" size="lg" />
       </div>
@@ -266,7 +266,7 @@ export const VerticalColors: Story = {
         <LogoVertical color="black" size="lg" />
         <p className="text-xs text-gray-600 mt-2">Black</p>
       </div>
-      <div className="p-6 bg-[#1a365d] rounded-lg text-center">
+      <div className="p-6 bg-[#003057] rounded-lg text-center">
         <LogoVertical color="white" size="lg" />
         <p className="text-xs text-white/70 mt-2">White</p>
       </div>
@@ -299,7 +299,7 @@ export const Header: Story = {
 
 export const Footer: Story = {
   render: () => (
-    <footer className="w-full max-w-4xl p-8 bg-[#1a365d] rounded-xl text-white">
+    <footer className="w-full max-w-4xl p-8 bg-[#003057] rounded-xl text-white">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         <Logo variant="horizontal" color="white" size="md" />
         <p className="text-sm opacity-80">
@@ -322,24 +322,24 @@ export const LoadingScreen: Story = {
 export const AppIcon: Story = {
   render: () => (
     <div className="flex items-end gap-4">
-      {/* App icon - Navy background with white logo */}
+      {/* App icon - Orange background with white logo */}
       <div className="text-center">
-        <div className="w-20 h-20 rounded-2xl bg-[#1a365d] flex items-center justify-center shadow-lg">
+        <div className="w-20 h-20 rounded-2xl bg-[#FF6A13] flex items-center justify-center shadow-lg">
           <LogoFavicon size="xl" color="white" />
         </div>
         <p className="text-xs text-[var(--foreground-muted)] mt-2">App Icon</p>
       </div>
-      {/* Medium icon - White background */}
+      {/* Medium icon */}
       <div className="text-center">
-        <div className="w-14 h-14 rounded-xl bg-white border border-[var(--border)] flex items-center justify-center shadow-md">
-          <LogoFavicon size="lg" color="gradient" />
+        <div className="w-14 h-14 rounded-xl bg-[#FF6A13] flex items-center justify-center shadow-md">
+          <LogoFavicon size="lg" color="white" />
         </div>
         <p className="text-xs text-[var(--foreground-muted)] mt-2">Médio</p>
       </div>
-      {/* Small icon - Subtle background */}
+      {/* Small icon */}
       <div className="text-center">
-        <div className="w-10 h-10 rounded-lg bg-[var(--background-subtle)] border border-[var(--border)] flex items-center justify-center shadow-sm">
-          <LogoFavicon size="md" color="orange" />
+        <div className="w-10 h-10 rounded-lg bg-[#FF6A13] flex items-center justify-center shadow-sm">
+          <LogoFavicon size="md" color="white" />
         </div>
         <p className="text-xs text-[var(--foreground-muted)] mt-2">Pequeno</p>
       </div>
@@ -425,8 +425,8 @@ export const BrandGuidelines: Story = {
             <p className="text-xs text-[var(--foreground-muted)] mt-2">Laranja<br/>#FF7A00</p>
           </div>
           <div className="text-center">
-            <div className="w-16 h-16 rounded-lg bg-[#1a365d]"></div>
-            <p className="text-xs text-[var(--foreground-muted)] mt-2">Azul Marinho<br/>#1A365D</p>
+            <div className="w-16 h-16 rounded-lg bg-[#003057]"></div>
+            <p className="text-xs text-[var(--foreground-muted)] mt-2">Azul Marinho<br/>#003057</p>
           </div>
         </div>
       </div>
@@ -450,7 +450,7 @@ export const BrandGuidelines: Story = {
             <Logo variant="horizontal" color="gradient" size="md" />
             <p className="text-xs text-gray-600 mt-3">Fundo claro: usar gradient ou orange</p>
           </div>
-          <div className="p-6 bg-[#1a365d] rounded-lg">
+          <div className="p-6 bg-[#003057] rounded-lg">
             <Logo variant="horizontal" color="white" size="md" />
             <p className="text-xs text-white/70 mt-3">Fundo escuro: usar white</p>
           </div>
