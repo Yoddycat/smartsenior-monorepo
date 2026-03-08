@@ -351,11 +351,11 @@ export const SocialMedia: Story = {
   render: () => (
     <div className="flex gap-4">
       {/* Profile Picture */}
-      <div className="w-24 h-24 rounded-full bg-[var(--background)] border-4 border-orange-500 flex items-center justify-center overflow-hidden">
+      <div className="w-24 h-24 rounded-full bg-[var(--background)] border-4 border-[#FF6A13] flex items-center justify-center overflow-hidden">
         <LogoIcon size="xl" />
       </div>
       {/* Cover Image Corner */}
-      <div className="w-40 h-24 rounded-lg bg-gradient-to-r from-orange-500 to-orange-400 flex items-end justify-start p-3">
+      <div className="w-40 h-24 rounded-lg bg-gradient-to-r from-[#FF6A13] to-[#FF8200] flex items-end justify-start p-3">
         <Logo variant="horizontal" color="white" size="sm" />
       </div>
     </div>
@@ -417,12 +417,12 @@ export const BrandGuidelines: Story = {
         <h3 className="text-lg font-medium text-[var(--foreground)] mb-4">Cores da Marca</h3>
         <div className="flex gap-4">
           <div className="text-center">
-            <div className="w-16 h-16 rounded-lg bg-gradient-to-b from-[#ff9a3c] to-[#ff6b00]"></div>
+            <div className="w-16 h-16 rounded-lg bg-gradient-to-b from-[#FF8200] to-[#FE5000]"></div>
             <p className="text-xs text-[var(--foreground-muted)] mt-2">Laranja<br/>Gradient</p>
           </div>
           <div className="text-center">
-            <div className="w-16 h-16 rounded-lg bg-[#ff7a00]"></div>
-            <p className="text-xs text-[var(--foreground-muted)] mt-2">Laranja<br/>#FF7A00</p>
+            <div className="w-16 h-16 rounded-lg bg-[#FF6A13]"></div>
+            <p className="text-xs text-[var(--foreground-muted)] mt-2">Laranja<br/>#FF6A13</p>
           </div>
           <div className="text-center">
             <div className="w-16 h-16 rounded-lg bg-[#003057]"></div>
@@ -434,7 +434,7 @@ export const BrandGuidelines: Story = {
       <div>
         <h3 className="text-lg font-medium text-[var(--foreground)] mb-4">Área de Proteção</h3>
         <div className="p-8 bg-[var(--background-subtle)] rounded-lg inline-block">
-          <div className="border-2 border-dashed border-orange-300 p-6">
+          <div className="border-2 border-dashed border-[#FFAA4D] p-6">
             <Logo variant="horizontal" size="lg" />
           </div>
         </div>
