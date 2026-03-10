@@ -272,3 +272,9 @@ export type { IconProps, IconSize, IconColor, LucideIcon } from './icon'
 // ============================================
 export { Image, ImageCard, HeroImage, imageVariants, imageCardVariants } from './image'
 export type { ImageProps, ImageCardProps, HeroImageProps } from './image'
+
+// ============================================
+// ANIMATION
+// ============================================
+export { AnimatedCounter, AnimatedPercentage, AnimatedCurrency } from './animated-counter'
+export type { AnimatedCounterProps } from './animated-counter'
