@@ -329,7 +329,6 @@ describe('HealthPermissionsCard Integration', () => {
 
       states.forEach((stateOverride) => {
         mockUseHealth.mockReturnValue({
-          isAvailable: true,
           isLoading: false,
           permissions: { steps: false, heartRate: false, hrv: false, sleep: false },
           hasAllPermissions: false,

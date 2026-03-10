@@ -24,7 +24,8 @@ describe('RecoveryCard Integration', () => {
         isLoading: true,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -39,7 +40,8 @@ describe('RecoveryCard Integration', () => {
         isLoading: true,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { UNSAFE_getByType } = render(<RecoveryCard />)
@@ -55,7 +57,8 @@ describe('RecoveryCard Integration', () => {
         isLoading: false,
         error: 'Falha ao carregar dados',
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -70,7 +73,8 @@ describe('RecoveryCard Integration', () => {
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -92,13 +96,16 @@ describe('RecoveryCard Integration', () => {
             icon: '🏃',
             title: 'Dia de Treino Intenso',
             description: 'Seu corpo está pronto para desafios maiores.',
+            activityType: 'intense',
             duration: '60-90 min',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -122,12 +129,15 @@ describe('RecoveryCard Integration', () => {
             icon: '🚶',
             title: 'Treino Moderado',
             description: 'Bom dia para atividades moderadas.',
+            activityType: 'moderate',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -148,12 +158,15 @@ describe('RecoveryCard Integration', () => {
             icon: '🧘',
             title: 'Atividade Leve',
             description: 'Prefira atividades de baixa intensidade.',
+            activityType: 'light',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: true,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -174,12 +187,15 @@ describe('RecoveryCard Integration', () => {
             icon: '😴',
             title: 'Descanso Necessário',
             description: 'Priorize o repouso e recuperação.',
+            activityType: 'rest',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: true,
-        refreshAnalysis: jest.fn(),
+        needsAttention: true,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -202,12 +218,15 @@ describe('RecoveryCard Integration', () => {
             icon: '😴',
             title: 'Descanso',
             description: 'Descanse.',
+            activityType: 'rest',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: true,
-        refreshAnalysis: jest.fn(),
+        needsAttention: true,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -228,12 +247,15 @@ describe('RecoveryCard Integration', () => {
             icon: '🚶',
             title: 'Treino',
             description: 'Treinar.',
+            activityType: 'moderate',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -255,12 +277,15 @@ describe('RecoveryCard Integration', () => {
             icon: '🏃',
             title: 'Treino',
             description: 'Treinar forte.',
+            activityType: 'intense',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -281,12 +306,15 @@ describe('RecoveryCard Integration', () => {
             icon: '🧘',
             title: 'Leve',
             description: 'Atividade leve.',
+            activityType: 'light',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: true,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -306,12 +334,15 @@ describe('RecoveryCard Integration', () => {
             icon: '🚶',
             title: 'Normal',
             description: 'Dia normal.',
+            activityType: 'moderate',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -334,13 +365,16 @@ describe('RecoveryCard Integration', () => {
             icon: '🏋️',
             title: 'Treino Pesado',
             description: 'Dia ideal para treino de força.',
+            activityType: 'intense',
             duration: '45-60 min',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -361,12 +395,15 @@ describe('RecoveryCard Integration', () => {
             icon: '😴',
             title: 'Descanso',
             description: 'Foque em descansar.',
+            activityType: 'rest',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: true,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -387,12 +424,15 @@ describe('RecoveryCard Integration', () => {
             icon: '🚴',
             title: 'Ciclismo',
             description: 'Bom dia para pedalar.',
+            activityType: 'moderate',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -415,12 +455,15 @@ describe('RecoveryCard Integration', () => {
             icon: '🚶',
             title: 'Treino',
             description: 'OK.',
+            activityType: 'moderate',
           },
+          analyzedAt: new Date(),
         },
         isLoading: false,
         error: null,
         isRecoveryMode: false,
-        refreshAnalysis: jest.fn(),
+        needsAttention: false,
+        refresh: jest.fn(),
       })
 
       const { toJSON } = render(<RecoveryCard />)
@@ -435,15 +478,15 @@ describe('RecoveryCard Integration', () => {
   describe('Component Renders Without Crashing', () => {
     it('renders in all states without throwing', () => {
       const states = [
-        { isLoading: true, analysis: null, error: null, isRecoveryMode: false },
-        { isLoading: false, analysis: null, error: 'Error', isRecoveryMode: false },
-        { isLoading: false, analysis: null, error: null, isRecoveryMode: false },
+        { isLoading: true, analysis: null, error: null, isRecoveryMode: false, needsAttention: false },
+        { isLoading: false, analysis: null, error: 'Error', isRecoveryMode: false, needsAttention: false },
+        { isLoading: false, analysis: null, error: null, isRecoveryMode: false, needsAttention: false },
       ]
 
       states.forEach((state) => {
         mockUseRecovery.mockReturnValue({
           ...state,
-          refreshAnalysis: jest.fn(),
+          refresh: jest.fn(),
         })
 
         expect(() => render(<RecoveryCard />)).not.toThrow()
