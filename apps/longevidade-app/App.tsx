@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import { Text, View, ActivityIndicator } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import {
@@ -27,7 +28,7 @@ type ProtocolStackParamList = {
   MonthDetail: { month: number }
 }
 
-const ProtocolStack = createNativeStackNavigator<ProtocolStackParamList>()
+const ProtocolStack = createStackNavigator<ProtocolStackParamList>()
 const Tab = createBottomTabNavigator()
 
 function ProtocolStackScreen() {
@@ -170,20 +171,26 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.secondary }}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
+      <SafeAreaProvider>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.secondary }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </SafeAreaProvider>
     )
   }
 
   if (showOnboarding) {
     return (
-      <>
+      <SafeAreaProvider>
         <StatusBar style="light" />
         <OnboardingScreen onComplete={handleOnboardingComplete} />
-      </>
+      </SafeAreaProvider>
     )
   }
 
-  return <MainApp />
+  return (
+    <SafeAreaProvider>
+      <MainApp />
+    </SafeAreaProvider>
+  )
 }

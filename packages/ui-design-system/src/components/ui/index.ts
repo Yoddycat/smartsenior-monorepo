@@ -270,5 +270,5 @@ export type { IconProps, IconSize, IconColor, LucideIcon } from './icon'
 // ============================================
 // IMAGE COMPONENTS
 // ============================================
-export { Image, ImageCard, HeroImage, AvatarImage, imageVariants, imageCardVariants } from './image'
-export type { ImageProps, ImageCardProps, HeroImageProps, AvatarImageProps } from './image'
+export { Image, ImageCard, HeroImage, imageVariants, imageCardVariants } from './image'
+export type { ImageProps, ImageCardProps, HeroImageProps } from './image'

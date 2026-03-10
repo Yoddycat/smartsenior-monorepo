@@ -21,8 +21,7 @@ import {
   WORKFLOW_TYPES,
 } from '@smartsenior/aios-core'
 
-// Import styles from design system
-import '@smartsenior/design-system/styles'
+// Styles are imported in main.tsx
 
 export function App() {
   const handleSendMessage = (content: string) => {

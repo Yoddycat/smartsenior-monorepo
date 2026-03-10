@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Notifications from 'expo-notifications'
+import { Platform } from 'react-native'
 import {
   loadNotificationSettings,
   saveNotificationSettings,
@@ -8,6 +9,19 @@ import {
   requestNotificationPermissions,
   defaultNotificationSettings,
 } from '../services/notifications'
+
+// Ensure Platform.OS is 'ios' for notification tests (not 'web')
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  return {
+    ...RN,
+    Platform: {
+      ...RN.Platform,
+      OS: 'ios',
+      select: (obj: Record<string, unknown>) => obj.ios ?? obj.default,
+    },
+  }
+})
 
 describe('Notification Service', () => {
   beforeEach(async () => {

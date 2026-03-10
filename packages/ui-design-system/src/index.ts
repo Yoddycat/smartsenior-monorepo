@@ -49,3 +49,6 @@ export type {
 // Re-export commonly used dependencies
 export { cva, type VariantProps } from "class-variance-authority";
 export { Slot } from "@radix-ui/react-slot";
+
+// UI Components
+export * from "./components/ui";

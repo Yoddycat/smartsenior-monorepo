@@ -111,6 +111,11 @@ function parseTime(timeString: string): { hour: number; minute: number } {
  * Schedule daily notifications based on settings
  */
 export async function scheduleNotifications(settings: NotificationSettings): Promise<void> {
+  // Notifications are not available on web
+  if (Platform.OS === 'web') {
+    return
+  }
+
   // Cancel all existing notifications first
   await Notifications.cancelAllScheduledNotificationsAsync()
 
@@ -198,6 +203,11 @@ export async function cancelAllNotifications(): Promise<void> {
  * Initialize notifications on app start
  */
 export async function initializeNotifications(): Promise<void> {
+  // Notifications are not available on web
+  if (Platform.OS === 'web') {
+    return
+  }
+
   const settings = await loadNotificationSettings()
   if (settings.enabled) {
     await scheduleNotifications(settings)
