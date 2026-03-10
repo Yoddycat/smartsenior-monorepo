@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import { colors, spacing, borderRadius, typography, shadowStyles } from '../constants/theme'
 import { useRecovery } from '../hooks/useRecovery'
-import { StatRow } from './common'
+import { StatRow, Badge } from './common'
 import type { RecoveryStatus } from '../types/recovery'
 
 const STATUS_COLORS: Record<RecoveryStatus, string> = {
@@ -75,12 +75,7 @@ export function RecoveryCard() {
           <Text style={styles.icon}>{analysis.suggestion?.icon}</Text>
           <Text style={styles.title}>{analysis.suggestion?.title}</Text>
         </View>
-        <View style={[styles.statusBadge, { backgroundColor: statusColor + '20' }]}>
-          <View style={[styles.statusDot, { backgroundColor: statusColor }]} />
-          <Text style={[styles.statusText, { color: statusColor }]}>
-            {statusLabel}
-          </Text>
-        </View>
+        <Badge variant="status" color={statusColor} label={statusLabel} />
       </View>
 
       {/* HRV Stats */}
@@ -144,23 +139,6 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.lg,
     fontWeight: 'bold',
     color: colors.gray900,
-  },
-  statusBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: borderRadius.full,
-  },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: spacing.xs,
-  },
-  statusText: {
-    fontSize: typography.fontSize.sm,
-    fontWeight: '600',
   },
   statValue: {
     fontSize: typography.fontSize.xl,
