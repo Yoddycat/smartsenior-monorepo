@@ -61,6 +61,72 @@ export const borderRadius = {
   full: 9999,
 }
 
+// Dimension constants for consistent sizing
+export const dimensions = {
+  // Icon sizes
+  icon: {
+    xs: 16,
+    sm: 24,
+    md: 32,
+    lg: 40,
+    xl: 48,
+  },
+
+  // Avatar/Badge circle sizes
+  avatar: {
+    xs: 28,
+    sm: 36,
+    md: 44,
+    lg: 56,
+    xl: 80,
+  },
+
+  // Touch target minimum (accessibility)
+  touchTarget: 44,
+
+  // Progress bar heights
+  progressBar: {
+    sm: 4,
+    md: 6,
+    lg: 8,
+    xl: 12,
+  },
+
+  // Divider
+  divider: 1,
+
+  // Dot indicators
+  dot: {
+    sm: 6,
+    md: 8,
+    lg: 10,
+  },
+
+  // Checkbox sizes
+  checkbox: {
+    sm: 20,
+    md: 24,
+    lg: 28,
+  },
+
+  // Bottom spacer (for scroll views)
+  bottomSpacer: 100,
+
+  // Chart heights
+  chart: {
+    sm: 100,
+    md: 150,
+    lg: 200,
+  },
+
+  // Icon container sizes (icon + padding)
+  iconContainer: {
+    sm: 32,
+    md: 44,
+    lg: 52,
+  },
+}
+
 export const typography = {
   fontFamily: {
     regular: 'System',
@@ -170,6 +236,7 @@ export const theme = {
   colors,
   spacing,
   borderRadius,
+  dimensions,
   typography,
   shadows,
   shadowStyles,
