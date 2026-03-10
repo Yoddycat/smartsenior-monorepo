@@ -5,7 +5,7 @@
  * Shows suggestions for activity based on current recovery level.
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import {
 } from 'react-native'
 import { colors, spacing, borderRadius, typography, shadowStyles } from '../constants/theme'
 import { useRecovery } from '../hooks/useRecovery'
+import { StatRow } from './common'
 import type { RecoveryStatus } from '../types/recovery'
 
 const STATUS_COLORS: Record<RecoveryStatus, string> = {
@@ -55,6 +56,17 @@ export function RecoveryCard() {
   const statusColor = STATUS_COLORS[analysis.status]
   const statusLabel = STATUS_LABELS[analysis.status]
 
+  // Stats data for StatRow
+  const hrvStats = useMemo(() => [
+    { value: analysis.todayHRV, label: 'HRV Hoje' },
+    { value: analysis.weekAverageHRV, label: 'Média 7 dias' },
+    {
+      value: `${analysis.percentageChange > 0 ? '+' : ''}${analysis.percentageChange}%`,
+      label: 'Variação',
+      valueColor: analysis.percentageChange < 0 ? colors.danger : colors.success,
+    },
+  ], [analysis.todayHRV, analysis.weekAverageHRV, analysis.percentageChange])
+
   return (
     <View style={[styles.container, isRecoveryMode && styles.containerAlert]}>
       {/* Header */}
@@ -72,27 +84,7 @@ export function RecoveryCard() {
       </View>
 
       {/* HRV Stats */}
-      <View style={styles.statsRow}>
-        <View style={styles.statItem}>
-          <Text style={styles.statValue}>{analysis.todayHRV}</Text>
-          <Text style={styles.statLabel}>HRV Hoje</Text>
-        </View>
-        <View style={styles.statDivider} />
-        <View style={styles.statItem}>
-          <Text style={styles.statValue}>{analysis.weekAverageHRV}</Text>
-          <Text style={styles.statLabel}>Média 7 dias</Text>
-        </View>
-        <View style={styles.statDivider} />
-        <View style={styles.statItem}>
-          <Text style={[
-            styles.statValue,
-            { color: analysis.percentageChange < 0 ? colors.danger : colors.success }
-          ]}>
-            {analysis.percentageChange > 0 ? '+' : ''}{analysis.percentageChange}%
-          </Text>
-          <Text style={styles.statLabel}>Variação</Text>
-        </View>
-      </View>
+      <StatRow stats={hrvStats} variant="bordered" valueStyle={styles.statValue} />
 
       {/* Suggestion */}
       {analysis.suggestion && (
@@ -170,32 +162,10 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.sm,
     fontWeight: '600',
   },
-  statsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: spacing.md,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: colors.gray100,
-    marginBottom: spacing.md,
-  },
-  statItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
   statValue: {
     fontSize: typography.fontSize.xl,
     fontWeight: 'bold',
     color: colors.gray900,
-  },
-  statLabel: {
-    fontSize: typography.fontSize.xs,
-    color: colors.gray500,
-    marginTop: 2,
-  },
-  statDivider: {
-    width: 1,
-    backgroundColor: colors.gray200,
   },
   suggestionBox: {
     backgroundColor: colors.gray50,

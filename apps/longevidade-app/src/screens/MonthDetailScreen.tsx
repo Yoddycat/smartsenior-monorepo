@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import {
   GoalsSection,
   MilestonesSection,
 } from '../components/month-detail'
+import { StatRow } from '../components/common'
 
 import type { RouteProp } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -62,6 +63,13 @@ export function MonthDetailScreen({ route }: Props) {
     { key: 'milestones' as TabType, label: 'Conquistas', count: protocol.milestones.length },
   ]
 
+  // Stats data
+  const stats = useMemo(() => [
+    { value: `${completedCount}/${totalTasks}`, label: 'Tarefas Hoje' },
+    { value: `${completionPercentage}%`, label: 'Concluido' },
+    { value: protocol.milestones.length, label: 'Conquistas' },
+  ], [completedCount, totalTasks, completionPercentage, protocol.milestones.length])
+
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
@@ -83,22 +91,7 @@ export function MonthDetailScreen({ route }: Props) {
       </View>
 
       {/* Stats */}
-      <View style={styles.statsRow}>
-        <View style={styles.statItem}>
-          <Text style={styles.statValue}>{completedCount}/{totalTasks}</Text>
-          <Text style={styles.statLabel}>Tarefas Hoje</Text>
-        </View>
-        <View style={styles.statDivider} />
-        <View style={styles.statItem}>
-          <Text style={styles.statValue}>{completionPercentage}%</Text>
-          <Text style={styles.statLabel}>Concluido</Text>
-        </View>
-        <View style={styles.statDivider} />
-        <View style={styles.statItem}>
-          <Text style={styles.statValue}>{protocol.milestones.length}</Text>
-          <Text style={styles.statLabel}>Conquistas</Text>
-        </View>
-      </View>
+      <StatRow stats={stats} variant="card" />
 
       {/* Tabs */}
       <TabBar tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
@@ -178,29 +171,5 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.sm,
     color: colors.gray600,
     lineHeight: 22,
-  },
-  statsRow: {
-    ...cardStyles.base,
-    flexDirection: 'row',
-    marginHorizontal: spacing.md,
-    marginBottom: spacing.md,
-  },
-  statItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  statValue: {
-    fontSize: typography.fontSize['2xl'],
-    fontWeight: 'bold',
-    color: colors.primary,
-  },
-  statLabel: {
-    fontSize: typography.fontSize.xs,
-    color: colors.gray500,
-    marginTop: spacing.xs,
-  },
-  statDivider: {
-    width: 1,
-    backgroundColor: colors.gray200,
   },
 })

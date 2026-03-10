@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import {
   View,
   Text,
@@ -21,6 +21,7 @@ import {
 } from '../services/notifications'
 import { useHealth } from '../hooks'
 import { TimeInputModal } from '../components'
+import { StatRow } from '../components/common'
 
 const PROFILE_STORAGE_KEY = '@longevidade:user_profile'
 
@@ -67,6 +68,12 @@ export function ProfileScreen() {
       (1000 * 60 * 60 * 24)
   )
   const currentMonth = Math.min(3, Math.floor(protocolDays / 28) + 1)
+
+  // Profile stats
+  const profileStats = useMemo(() => [
+    { value: protocolDays, label: 'Dias no protocolo' },
+    { value: currentMonth, label: 'Mês atual' },
+  ], [protocolDays, currentMonth])
 
   // Determine health connection status
   const isHealthConnected = profile.healthConnected && hasAnyPermission
@@ -270,17 +277,7 @@ export function ProfileScreen() {
         <Text style={styles.profileName}>{profile.name}</Text>
         <Text style={styles.profileAge}>{age} anos</Text>
 
-        <View style={styles.statsRow}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{protocolDays}</Text>
-            <Text style={styles.statLabel}>Dias no protocolo</Text>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{currentMonth}</Text>
-            <Text style={styles.statLabel}>Mês atual</Text>
-          </View>
-        </View>
+        <StatRow stats={profileStats} style={styles.statsRow} />
       </View>
 
       {/* Health Connection */}
@@ -596,30 +593,10 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   statsRow: {
-    flexDirection: 'row',
     marginTop: spacing.lg,
     paddingTop: spacing.md,
     borderTopWidth: 1,
     borderTopColor: colors.gray100,
-  },
-  statItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  statValue: {
-    fontSize: typography.fontSize['2xl'],
-    fontWeight: 'bold',
-    color: colors.primary,
-  },
-  statLabel: {
-    fontSize: typography.fontSize.xs,
-    color: colors.gray500,
-    marginTop: spacing.xs,
-  },
-  statDivider: {
-    width: 1,
-    backgroundColor: colors.gray200,
-    marginHorizontal: spacing.md,
   },
   section: {
     padding: spacing.md,

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import {
   AnimatedCounter,
   SuccessAnimation,
 } from '../components'
+import { StatRow } from '../components/common'
 import { useProtocolProgress, getGreeting, useTaskCompletion } from '../hooks'
 import { PROTOCOLS } from '../protocols'
 import { ProtocolMonth } from '../types'
@@ -38,6 +39,39 @@ export function HomeScreen() {
 
   const protocol = PROTOCOLS[currentMonth as ProtocolMonth]
   const { completedTasks, toggleTask } = useTaskCompletion(currentMonth as ProtocolMonth)
+
+  // Stats data for StatRow
+  const stats = useMemo(() => [
+    {
+      value: completionRate,
+      label: 'Hoje',
+      renderValue: () => (
+        <AnimatedCounter
+          value={completionRate}
+          suffix="%"
+          style={styles.statValue}
+          duration={800}
+          delay={200}
+        />
+      ),
+    },
+    {
+      value: streakDays,
+      label: 'Dias seguidos',
+      renderValue: () => (
+        <AnimatedCounter
+          value={streakDays}
+          style={styles.statValue}
+          duration={800}
+          delay={300}
+        />
+      ),
+    },
+    {
+      value: `${completedToday}/${totalTasksToday}`,
+      label: 'Tarefas',
+    },
+  ], [completionRate, streakDays, completedToday, totalTasksToday])
 
   // Success animation state
   const [showSuccess, setShowSuccess] = useState(false)
@@ -92,33 +126,7 @@ export function HomeScreen() {
             <Text style={styles.progressSubtitle}>{protocolSubtitle}</Text>
           </View>
 
-          <View style={styles.statsRow}>
-            <View style={styles.statItem}>
-              <AnimatedCounter
-                value={completionRate}
-                suffix="%"
-                style={styles.statValue}
-                duration={800}
-                delay={200}
-              />
-              <Text style={styles.statLabel}>Hoje</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <AnimatedCounter
-                value={streakDays}
-                style={styles.statValue}
-                duration={800}
-                delay={300}
-              />
-              <Text style={styles.statLabel}>Dias seguidos</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{completedToday}/{totalTasksToday}</Text>
-              <Text style={styles.statLabel}>Tarefas</Text>
-            </View>
-          </View>
+          <StatRow stats={stats} style={styles.statsRow} />
 
           <AnimatedProgressBar
             progress={completionRate}
@@ -252,26 +260,12 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   statsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
     marginBottom: spacing.md,
-  },
-  statItem: {
-    alignItems: 'center',
   },
   statValue: {
     fontSize: typography.fontSize['2xl'],
     fontWeight: 'bold',
     color: colors.primary,
-  },
-  statLabel: {
-    fontSize: typography.fontSize.xs,
-    color: colors.gray500,
-    marginTop: spacing.xs,
-  },
-  statDivider: {
-    width: 1,
-    backgroundColor: colors.gray200,
   },
   section: {
     padding: spacing.md,
