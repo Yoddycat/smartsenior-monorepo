@@ -7,7 +7,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native'
-import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import { colors, spacing, borderRadius, typography, shadowStyles } from '../constants/theme'
 import { pillarIcons } from '../constants/icons'
 import { getHealthSummary, HealthDataSummary } from '../services/health'
 import { useProtocolProgress, getCompletionHistory } from '../hooks'
@@ -459,11 +459,7 @@ const styles = StyleSheet.create({
     margin: spacing.md,
     borderRadius: borderRadius.xl,
     padding: spacing.lg,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    ...shadowStyles.md,
   },
   progressHeader: {
     flexDirection: 'row',
@@ -565,11 +561,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    ...shadowStyles.sm,
   },
   metricHeader: {
     flexDirection: 'row',
@@ -618,11 +610,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: borderRadius.xl,
     padding: spacing.lg,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    ...shadowStyles.sm,
   },
   chartContainer: {
     flexDirection: 'row',
@@ -678,11 +666,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: borderRadius.xl,
     padding: spacing.lg,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    ...shadowStyles.sm,
   },
   categoryItem: {
     marginBottom: spacing.md,
@@ -731,11 +715,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: borderRadius.xl,
     padding: spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    ...shadowStyles.sm,
   },
   achievementItem: {
     flexDirection: 'row',

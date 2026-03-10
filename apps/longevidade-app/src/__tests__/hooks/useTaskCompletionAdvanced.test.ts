@@ -3,6 +3,11 @@
  * Detailed tests for task completion functionality
  */
 
+interface CompletionHistoryEntry {
+  date: string
+  completed: number
+}
+
 // Mock AsyncStorage
 const mockGetItem = jest.fn()
 const mockSetItem = jest.fn()
@@ -177,7 +182,7 @@ describe('getCompletionHistory', () => {
     const { getCompletionHistory } = require('../../hooks/useTaskCompletion')
     const history = await getCompletionHistory(1, 3)
 
-    const dates = history.map((h: any) => h.date)
+    const dates = history.map((h: CompletionHistoryEntry) => h.date)
     // Should be in chronological order (oldest first)
     for (let i = 1; i < dates.length; i++) {
       expect(new Date(dates[i]).getTime()).toBeGreaterThan(new Date(dates[i - 1]).getTime())

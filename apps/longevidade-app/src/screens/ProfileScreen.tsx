@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import { colors, spacing, borderRadius, typography, shadowStyles } from '../constants/theme'
 import {
   loadNotificationSettings,
   saveNotificationSettings,
@@ -570,11 +570,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.xl,
     padding: spacing.lg,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    ...shadowStyles.md,
   },
   avatarContainer: {
     marginBottom: spacing.md,
@@ -644,11 +640,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     padding: spacing.md,
     borderRadius: borderRadius.lg,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    ...shadowStyles.sm,
   },
   healthIconContainer: {
     width: 48,
@@ -721,11 +713,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    ...shadowStyles.sm,
   },
   settingRow: {
     flexDirection: 'row',
@@ -774,11 +762,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.lg,
     padding: spacing.md,
     flexDirection: 'row',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    ...shadowStyles.sm,
   },
   protocolInfo: {
     flex: 1,
@@ -815,11 +799,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    ...shadowStyles.sm,
   },
   infoRow: {
     flexDirection: 'row',

@@ -17,7 +17,13 @@ jest.mock('@react-native-community/netinfo', () => ({
 }))
 
 describe('NetworkService', () => {
-  let networkService: any
+  let networkService: {
+    initialize: () => void
+    destroy: () => void
+    isOnline: () => boolean
+    getState: () => { status: string; isConnected: boolean }
+    addListener: (listener: () => void) => () => void
+  }
 
   beforeEach(() => {
     jest.clearAllMocks()

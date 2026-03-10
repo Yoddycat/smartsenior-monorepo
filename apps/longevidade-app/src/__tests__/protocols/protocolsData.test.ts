@@ -3,6 +3,15 @@
  * Tests for protocol data structure and content
  */
 
+import type { TaskCategory } from '../../types'
+
+interface MockTask {
+  id: string
+  title: string
+  category: TaskCategory
+  description: string
+}
+
 // Mock protocols
 jest.mock('../../protocols', () => ({
   PROTOCOLS: {
@@ -160,22 +169,22 @@ describe('Task categories', () => {
   })
 
   it('month 1 has hydration tasks', () => {
-    const hydrationTasks = PROTOCOLS[1].dailyTasks.filter((t: any) => t.category === 'hydration')
+    const hydrationTasks = PROTOCOLS[1].dailyTasks.filter((t: MockTask) => t.category === 'hydration')
     expect(hydrationTasks.length).toBeGreaterThan(0)
   })
 
   it('month 1 has movement tasks', () => {
-    const movementTasks = PROTOCOLS[1].dailyTasks.filter((t: any) => t.category === 'movement')
+    const movementTasks = PROTOCOLS[1].dailyTasks.filter((t: MockTask) => t.category === 'movement')
     expect(movementTasks.length).toBeGreaterThan(0)
   })
 
   it('month 1 has sleep tasks', () => {
-    const sleepTasks = PROTOCOLS[1].dailyTasks.filter((t: any) => t.category === 'sleep')
+    const sleepTasks = PROTOCOLS[1].dailyTasks.filter((t: MockTask) => t.category === 'sleep')
     expect(sleepTasks.length).toBeGreaterThan(0)
   })
 
   it('month 2 has nutrition tasks', () => {
-    const nutritionTasks = PROTOCOLS[2].dailyTasks.filter((t: any) => t.category === 'nutrition')
+    const nutritionTasks = PROTOCOLS[2].dailyTasks.filter((t: MockTask) => t.category === 'nutrition')
     expect(nutritionTasks.length).toBeGreaterThan(0)
   })
 })

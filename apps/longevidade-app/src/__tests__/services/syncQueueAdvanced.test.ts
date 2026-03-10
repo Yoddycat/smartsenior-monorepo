@@ -24,8 +24,27 @@ jest.mock('../../services/network', () => ({
   },
 }))
 
+interface SyncStatus {
+  pendingCount: number
+  isSyncing: boolean
+  lastSyncTime: number | null
+  lastError: string | null
+}
+
+interface SyncQueueServiceInterface {
+  initialize: () => Promise<void>
+  destroy: () => void
+  addAction: (type: string, payload: Record<string, unknown>) => Promise<string>
+  enqueue: (type: string, payload: Record<string, unknown>) => Promise<string>
+  getStatus: () => SyncStatus
+  processQueue: () => Promise<void>
+  forceSync: () => Promise<boolean>
+  clearQueue: () => Promise<void>
+  addListener: (listener: (status: SyncStatus) => void) => () => void
+}
+
 describe('SyncQueueService advanced', () => {
-  let syncQueueService: any
+  let syncQueueService: SyncQueueServiceInterface
 
   beforeEach(() => {
     jest.clearAllMocks()

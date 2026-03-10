@@ -17,8 +17,24 @@ jest.mock('@react-native-community/netinfo', () => ({
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+interface SyncStatus {
+  pendingCount: number
+  isSyncing: boolean
+  lastSyncTime: number | null
+  lastError: string | null
+}
+
 describe('SyncQueueService', () => {
-  let syncQueueService: any
+  let syncQueueService: {
+    initialize: () => Promise<void>
+    destroy: () => void
+    addAction: (type: string, payload: Record<string, unknown>) => Promise<string>
+    enqueue: (type: string, payload: Record<string, unknown>) => Promise<string>
+    getStatus: () => SyncStatus
+    processQueue: () => Promise<void>
+    clearQueue: () => Promise<void>
+    addListener: (listener: (status: SyncStatus) => void) => () => void
+  }
 
   beforeEach(() => {
     jest.clearAllMocks()

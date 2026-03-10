@@ -213,7 +213,7 @@ describe('SyncQueue action serialization', () => {
 
 describe('SyncQueue queue management', () => {
   it('adds action to queue', () => {
-    const queue: any[] = []
+    const queue: Array<{ id: string; type: string }> = []
     const action = { id: '1', type: 'complete_task' }
 
     queue.push(action)

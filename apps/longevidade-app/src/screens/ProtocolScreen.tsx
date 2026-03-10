@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native'
-import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import { colors, spacing, borderRadius, typography, shadowStyles } from '../constants/theme'
 import { pillarIcons } from '../constants/icons'
 import { PROTOCOLS } from '../protocols'
 import { ProtocolMonth } from '../types'
@@ -204,11 +204,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     borderRadius: borderRadius.xl,
     padding: spacing.lg,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    ...shadowStyles.md,
   },
   monthCardActive: {
     borderWidth: 2,

@@ -12,7 +12,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native'
-import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import { colors, spacing, borderRadius, typography, shadowStyles } from '../constants/theme'
 import { useRecovery } from '../hooks/useRecovery'
 import type { RecoveryStatus } from '../types/recovery'
 
@@ -127,11 +127,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.xl,
     padding: spacing.lg,
     margin: spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    ...shadowStyles.md,
   },
   containerAlert: {
     borderWidth: 2,

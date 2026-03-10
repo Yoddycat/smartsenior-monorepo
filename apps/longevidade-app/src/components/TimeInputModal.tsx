@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native'
-import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import { colors, spacing, borderRadius, typography, shadowStyles } from '../constants/theme'
 
 interface TimeInputModalProps {
   visible: boolean
@@ -139,11 +139,7 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     width: '100%',
     maxWidth: 320,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 8,
+    ...shadowStyles.lg,
   },
   title: {
     fontSize: typography.fontSize.lg,

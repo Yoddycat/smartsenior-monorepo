@@ -1,5 +1,7 @@
 // SmartSenior Design System - Cores e Tema
 
+import { Platform, ViewStyle } from 'react-native'
+
 export const colors = {
   // Brand Colors
   primary: '#FF7A00',      // Laranja SmartSenior
@@ -78,6 +80,7 @@ export const typography = {
   },
 }
 
+// Legacy shadows (deprecated - use createShadow instead)
 export const shadows = {
   sm: {
     shadowColor: '#000',
@@ -102,12 +105,41 @@ export const shadows = {
   },
 }
 
+// Cross-platform shadow helper
+// Uses boxShadow for web, native shadow props for iOS/Android
+export type ShadowLevel = 'sm' | 'md' | 'lg'
+
+const webShadows: Record<ShadowLevel, string> = {
+  sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
+  md: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  lg: '0 4px 8px rgba(0, 0, 0, 0.15)',
+}
+
+export const createShadow = (level: ShadowLevel): ViewStyle => {
+  if (Platform.OS === 'web') {
+    return {
+      boxShadow: webShadows[level],
+    } as ViewStyle
+  }
+
+  return shadows[level]
+}
+
+// Pre-created shadow styles for convenience
+export const shadowStyles = {
+  sm: createShadow('sm'),
+  md: createShadow('md'),
+  lg: createShadow('lg'),
+}
+
 export const theme = {
   colors,
   spacing,
   borderRadius,
   typography,
   shadows,
+  shadowStyles,
+  createShadow,
 }
 
 export type Theme = typeof theme

@@ -18,8 +18,23 @@ jest.mock('@react-native-community/netinfo', () => ({
   fetch: mockFetch,
 }))
 
+interface NetworkState {
+  status: string
+  isConnected: boolean
+  type: string | null
+  isInternetReachable: boolean | null
+}
+
+interface NetworkServiceInterface {
+  initialize: () => Promise<void>
+  destroy: () => void
+  isOnline: () => boolean
+  getState: () => NetworkState
+  addListener: (listener: (state: NetworkState) => void) => () => void
+}
+
 describe('NetworkService advanced', () => {
-  let networkService: any
+  let networkService: NetworkServiceInterface
 
   beforeEach(() => {
     jest.clearAllMocks()

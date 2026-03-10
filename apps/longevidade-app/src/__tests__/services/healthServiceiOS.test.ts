@@ -266,7 +266,7 @@ describe('IOSHealthService Logic', () => {
 
   describe('Error handling patterns', () => {
     it('returns empty array on steps read error', () => {
-      const handleError = (error: Error | null, results: any[] | null) => {
+      const handleError = (error: Error | null, results: Array<{ value: number }> | null) => {
         if (error || !results) {
           return []
         }

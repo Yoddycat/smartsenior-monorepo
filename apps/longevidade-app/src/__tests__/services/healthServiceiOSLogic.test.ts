@@ -3,6 +3,25 @@
  * Tests for helper functions and data transformations
  */
 
+interface SleepStageEntry {
+  stage: string
+  startDate: Date
+  endDate: Date
+}
+
+interface SleepSession {
+  startDate: Date
+  endDate: Date
+  stages: SleepStageEntry[]
+}
+
+interface SleepSessionOutput {
+  startDate: Date
+  endDate: Date
+  durationMinutes: number
+  stages: SleepStageEntry[]
+}
+
 // Mock react-native-health before any imports
 const mockHealthKit = {
   Constants: {
@@ -204,8 +223,8 @@ describe('iOS HealthKit Service Logic', () => {
         (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
       )
 
-      const sessions: any[] = []
-      let currentSession: any = null
+      const sessions: SleepSessionOutput[] = []
+      let currentSession: SleepSession | null = null
 
       for (const sample of sorted) {
         const sampleStart = new Date(sample.startDate)

@@ -139,7 +139,7 @@ describe('Recovery analysis state', () => {
     todayHRV: number
     weekAverageHRV: number
     percentageChange: number
-    suggestion: any
+    suggestion: { title: string; description: string; activityType: string } | null
   }
 
   it('has all required fields', () => {
@@ -148,7 +148,7 @@ describe('Recovery analysis state', () => {
       todayHRV: 45,
       weekAverageHRV: 42,
       percentageChange: 7,
-      suggestion: { title: 'Test' },
+      suggestion: { title: 'Test', description: 'Test description', activityType: 'light' },
     }
 
     expect(analysis.status).toBeDefined()

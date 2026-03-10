@@ -8,7 +8,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native'
-import { colors, spacing, borderRadius, typography } from '../constants/theme'
+import { colors, spacing, borderRadius, typography, shadowStyles } from '../constants/theme'
 import { pillarIcons } from '../constants/icons'
 import {
   RecoveryCard,
@@ -239,11 +239,7 @@ const styles = StyleSheet.create({
     margin: spacing.md,
     borderRadius: borderRadius.xl,
     padding: spacing.lg,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    ...shadowStyles.md,
   },
   progressHeader: {
     marginBottom: spacing.md,
@@ -296,11 +292,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     borderRadius: borderRadius.lg,
     marginBottom: spacing.sm,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    ...shadowStyles.sm,
   },
   taskIconContainer: {
     width: 48,
@@ -337,11 +329,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     padding: spacing.lg,
     borderRadius: borderRadius.xl,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    ...shadowStyles.md,
   },
   goalHeader: {
     flexDirection: 'row',

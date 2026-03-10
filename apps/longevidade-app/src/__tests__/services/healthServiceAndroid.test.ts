@@ -330,7 +330,7 @@ describe('AndroidHealthService Logic', () => {
 
   describe('Error handling patterns', () => {
     it('returns empty array on read error', () => {
-      const handleError = (error: Error | null, records: any[]) => {
+      const handleError = (error: Error | null, records: Array<{ value: number }>) => {
         if (error) {
           return []
         }

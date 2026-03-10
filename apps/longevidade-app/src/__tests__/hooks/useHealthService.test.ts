@@ -3,6 +3,8 @@
  * Tests that import and execute the actual health service
  */
 
+import type { HealthServiceInterface } from '../../types/health'
+
 // Mock platform to use mock service
 jest.mock('react-native', () => ({
   Platform: { OS: 'web' },
@@ -54,7 +56,7 @@ jest.mock('../../services/health/healthService.android', () => ({
 }))
 
 describe('Health Service Web', () => {
-  let healthService: any
+  let healthService: HealthServiceInterface
 
   beforeEach(() => {
     jest.resetModules()
@@ -119,7 +121,7 @@ describe('Health Service Web', () => {
 })
 
 describe('Health Service Mock', () => {
-  let healthService: any
+  let healthService: HealthServiceInterface
 
   beforeEach(() => {
     jest.resetModules()

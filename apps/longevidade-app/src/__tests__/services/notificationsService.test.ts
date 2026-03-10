@@ -3,6 +3,8 @@
  * Tests for notification settings and constants
  */
 
+import type { NotificationSettings } from '../../services/notifications'
+
 // Mock expo-notifications
 jest.mock('expo-notifications', () => ({
   setNotificationHandler: jest.fn(),
@@ -26,7 +28,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 }))
 
 describe('Notifications defaultSettings', () => {
-  let defaultNotificationSettings: any
+  let defaultNotificationSettings: NotificationSettings
 
   beforeEach(() => {
     jest.resetModules()
@@ -60,7 +62,7 @@ describe('Notifications defaultSettings', () => {
 })
 
 describe('loadNotificationSettings', () => {
-  let loadNotificationSettings: any
+  let loadNotificationSettings: () => Promise<NotificationSettings>
 
   beforeEach(() => {
     jest.resetModules()
@@ -82,7 +84,7 @@ describe('loadNotificationSettings', () => {
 })
 
 describe('saveNotificationSettings', () => {
-  let saveNotificationSettings: any
+  let saveNotificationSettings: (settings: NotificationSettings) => Promise<void>
 
   beforeEach(() => {
     jest.resetModules()

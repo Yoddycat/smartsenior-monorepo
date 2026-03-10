@@ -4,6 +4,7 @@
 
 import React, { useEffect, useRef } from 'react'
 import { Animated, View, StyleSheet, Text } from 'react-native'
+import { shadowStyles } from '../../constants/theme'
 
 interface SuccessAnimationProps {
   visible: boolean
@@ -108,11 +109,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     paddingVertical: 24,
     borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    elevation: 8,
+    ...shadowStyles.lg,
   },
   emoji: {
     fontSize: 64,
