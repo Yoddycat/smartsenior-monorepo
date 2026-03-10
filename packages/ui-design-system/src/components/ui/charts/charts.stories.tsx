@@ -1,8 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { BarChart } from './bar-chart'
-import { LineChart } from './line-chart'
-import { PieChart, DonutChart } from './pie-chart'
-import { Sparkline } from './sparkline'
 
 // ============================================
 // BAR CHART STORIES

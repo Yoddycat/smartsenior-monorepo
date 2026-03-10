@@ -275,7 +275,7 @@ Icon.displayName = "Icon"
  * Categorized icons for the SmartSenior domain.
  * Use these for consistent iconography across the app.
  */
-export const SmartSeniorIcons = {
+export const SmartSeniorIcons: Record<string, Record<string, LucideIcon>> = {
   // Health & Wellness
   health: {
     heart: Heart,
@@ -459,7 +459,7 @@ export const SmartSeniorIcons = {
     unfavorite: StarOff,
     flash: Zap,
   },
-} as const
+}
 
 // ============================================
 // CONVENIENCE EXPORTS

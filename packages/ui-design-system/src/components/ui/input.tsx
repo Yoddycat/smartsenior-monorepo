@@ -52,8 +52,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               ...baseClasses,
               borderClasses,
-              leftElement && "pl-10",
-              rightElement && "pr-10",
+              leftElement ? "pl-10" : undefined,
+              rightElement ? "pr-10" : undefined,
               className
             )}
             ref={ref}

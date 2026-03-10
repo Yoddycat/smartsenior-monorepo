@@ -151,7 +151,7 @@ export interface ImageCardProps
     onClick?: () => void
   }
   /** Image aspect ratio */
-  imageAspect?: "square" | "video" | "portrait" | "landscape" | "wide"
+  imageAspect?: "square" | "video" | "portrait" | "landscape" | "wide" | "feed"
 }
 
 const ImageCard = React.forwardRef<HTMLDivElement, ImageCardProps>(

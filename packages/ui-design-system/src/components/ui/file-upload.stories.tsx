@@ -6,19 +6,25 @@ const meta: Meta<typeof FileUpload> = {
   component: FileUpload,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
+  decorators: [
+    (Story) => (
+      <div style={{ width: '400px' }}>
+        <Story />
+      </div>
+    ),
+  ],
 }
 
 export default meta
 type Story = StoryObj<typeof FileUpload>
 
 export const Default: Story = {
-  args: { style: { width: '400px' } },
+  args: {},
 }
 
 export const ImagesOnly: Story = {
   args: {
     accept: 'image/*',
-    style: { width: '400px' },
   },
 }
 
@@ -26,28 +32,24 @@ export const Multiple: Story = {
   args: {
     multiple: true,
     maxFiles: 5,
-    style: { width: '400px' },
   },
 }
 
 export const PDFOnly: Story = {
   args: {
     accept: '.pdf',
-    style: { width: '400px' },
   },
 }
 
 export const SmallSize: Story = {
   args: {
     maxSize: 1 * 1024 * 1024, // 1MB
-    style: { width: '400px' },
   },
 }
 
 export const Disabled: Story = {
   args: {
     disabled: true,
-    style: { width: '400px' },
   },
 }
 
@@ -55,6 +57,5 @@ export const WithCallbacks: Story = {
   args: {
     onFilesSelected: (files) => console.log('Arquivos selecionados:', files),
     onError: (error) => console.log('Erro:', error),
-    style: { width: '400px' },
   },
 }

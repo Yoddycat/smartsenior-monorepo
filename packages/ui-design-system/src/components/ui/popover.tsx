@@ -102,7 +102,7 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
     sideOffset = 8,
     children,
     ...props
-  }, ref) => {
+  }, _ref) => {
     const { isOpen, setIsOpen } = usePopover()
     const contentRef = React.useRef<HTMLDivElement>(null)
 

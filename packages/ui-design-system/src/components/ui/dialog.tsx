@@ -2,10 +2,6 @@ import * as React from "react"
 import { Modal, ModalHeader, ModalTitle, ModalDescription, ModalContent, ModalFooter, ModalClose } from "./modal"
 import { Button } from "./button"
 
-function cn(...classes: (string | undefined | null | false)[]) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export interface DialogProps {
   open: boolean
   onClose: () => void

@@ -88,15 +88,7 @@ export const ThickDonut: Story = {
   },
 }
 
-// DonutChart alias stories
-const donutMeta: Meta<typeof DonutChart> = {
-  title: 'Charts/DonutChart',
-  component: DonutChart,
-  parameters: {
-    layout: 'centered',
-  },
-  tags: ['autodocs'],
-}
+// DonutChart alias stories - using same meta as PieChart
 
 export const DonutChartDefault: StoryObj<typeof DonutChart> = {
   render: () => <DonutChart data={defaultData} />,

@@ -55,7 +55,6 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
         <ol className="flex items-center flex-wrap gap-2">
           {displayItems.map((item, index) => {
             const isLast = index === displayItems.length - 1
-            const isFirst = index === 0
 
             return (
               <React.Fragment key={index}>

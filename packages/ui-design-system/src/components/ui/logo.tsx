@@ -11,7 +11,6 @@ import logoHorizontalOrange from '../../assets/logo/PNG_transparente/AF_fenix_cu
 import logoHorizontalWhite from '../../assets/logo/PNG_transparente/AF_fenix_curvas_SS_logoH_negativo.png'
 import logoHorizontalBlack from '../../assets/logo/PNG_transparente/AF_fenix_curvas_SS_logoH_PB.png'
 
-import logoIconGradient from '../../assets/logo/PNG_transparente/logo.png'
 import logoIconGradientLarge from '../../assets/logo/PNG_transparente/AF.png'
 
 import faviconGradient from '../../assets/logo/FAVICON/SS_icone_degradefavicon.png'

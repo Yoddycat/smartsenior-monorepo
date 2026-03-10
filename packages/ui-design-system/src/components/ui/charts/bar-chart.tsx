@@ -35,7 +35,6 @@ const BarChart: React.FC<BarChartProps> = ({
   className,
 }) => {
   const maxValue = Math.max(...data.map((d) => d.value))
-  const barWidth = horizontal ? height : 100 / data.length
   const chartHeight = horizontal ? data.length * 40 : height
 
   const defaultColors = [

@@ -15,51 +15,55 @@ type Story = StoryObj<typeof Accordion>
 
 export const Default: Story = {
   render: () => (
-    <Accordion type="single" defaultValue="item-1" style={{ width: '400px' }}>
-      <AccordionItem value="item-1">
-        <AccordionTrigger>Primeiro item</AccordionTrigger>
-        <AccordionContent>
-          Este é o conteúdo do primeiro item do accordion. Pode conter qualquer tipo de informação.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-2">
-        <AccordionTrigger>Segundo item</AccordionTrigger>
-        <AccordionContent>
-          Este é o conteúdo do segundo item do accordion.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-3">
-        <AccordionTrigger>Terceiro item</AccordionTrigger>
-        <AccordionContent>
-          Este é o conteúdo do terceiro item do accordion.
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    <div style={{ width: '400px' }}>
+      <Accordion type="single" defaultValue="item-1">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Primeiro item</AccordionTrigger>
+          <AccordionContent>
+            Este é o conteúdo do primeiro item do accordion. Pode conter qualquer tipo de informação.
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionTrigger>Segundo item</AccordionTrigger>
+          <AccordionContent>
+            Este é o conteúdo do segundo item do accordion.
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-3">
+          <AccordionTrigger>Terceiro item</AccordionTrigger>
+          <AccordionContent>
+            Este é o conteúdo do terceiro item do accordion.
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
   ),
 }
 
 export const Multiple: Story = {
   render: () => (
-    <Accordion type="multiple" defaultValue={['item-1', 'item-3']} style={{ width: '400px' }}>
-      <AccordionItem value="item-1">
-        <AccordionTrigger>Seção 1</AccordionTrigger>
-        <AccordionContent>
-          Múltiplos itens podem ficar abertos ao mesmo tempo.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-2">
-        <AccordionTrigger>Seção 2</AccordionTrigger>
-        <AccordionContent>
-          Clique em qualquer cabeçalho para expandir ou recolher.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-3">
-        <AccordionTrigger>Seção 3</AccordionTrigger>
-        <AccordionContent>
-          Esta seção também começa aberta por padrão.
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    <div style={{ width: '400px' }}>
+      <Accordion type="multiple" defaultValue={['item-1', 'item-3']}>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Seção 1</AccordionTrigger>
+          <AccordionContent>
+            Múltiplos itens podem ficar abertos ao mesmo tempo.
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionTrigger>Seção 2</AccordionTrigger>
+          <AccordionContent>
+            Clique em qualquer cabeçalho para expandir ou recolher.
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-3">
+          <AccordionTrigger>Seção 3</AccordionTrigger>
+          <AccordionContent>
+            Esta seção também começa aberta por padrão.
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
   ),
 }
 

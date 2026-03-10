@@ -30,7 +30,7 @@ const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
     onError,
     disabled,
     className,
-  }, ref) => {
+  }, _ref) => {
     const [isDragging, setIsDragging] = React.useState(false)
     const [files, setFiles] = React.useState<File[]>([])
     const inputRef = React.useRef<HTMLInputElement>(null)

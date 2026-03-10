@@ -7,19 +7,25 @@ const meta: Meta<typeof TimePicker> = {
   component: TimePicker,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
+  decorators: [
+    (Story) => (
+      <div style={{ width: '200px' }}>
+        <Story />
+      </div>
+    ),
+  ],
 }
 
 export default meta
 type Story = StoryObj<typeof TimePicker>
 
 export const Default: Story = {
-  args: { style: { width: '200px' } },
+  args: {},
 }
 
 export const WithValue: Story = {
   args: {
     defaultValue: '14:30',
-    style: { width: '200px' },
   },
 }
 
@@ -27,7 +33,6 @@ export const MinuteStep15: Story = {
   args: {
     minuteStep: 15,
     placeholder: 'Intervalos de 15min',
-    style: { width: '200px' },
   },
 }
 
@@ -35,7 +40,6 @@ export const Error: Story = {
   args: {
     error: true,
     placeholder: 'Selecione um horário',
-    style: { width: '200px' },
   },
 }
 
@@ -43,7 +47,6 @@ export const Disabled: Story = {
   args: {
     disabled: true,
     defaultValue: '09:00',
-    style: { width: '200px' },
   },
 }
 
@@ -51,7 +54,7 @@ export const Controlled: Story = {
   render: () => {
     const [time, setTime] = useState('12:00')
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '200px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <TimePicker value={time} onChange={setTime} />
         <p>Horário selecionado: {time}</p>
       </div>
