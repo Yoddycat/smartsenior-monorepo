@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { colors, spacing, borderRadius, typography, shadowStyles } from '../constants/theme'
+import { colors, spacing, borderRadius, typography, cardStyles } from '../constants/theme'
 import {
   loadNotificationSettings,
   saveNotificationSettings,
@@ -565,12 +565,9 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   profileCard: {
-    backgroundColor: colors.white,
+    ...cardStyles.base,
     margin: spacing.md,
-    borderRadius: borderRadius.xl,
-    padding: spacing.lg,
     alignItems: 'center',
-    ...shadowStyles.md,
   },
   avatarContainer: {
     marginBottom: spacing.md,
@@ -635,12 +632,9 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   healthCard: {
+    ...cardStyles.compact,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.white,
-    padding: spacing.md,
-    borderRadius: borderRadius.lg,
-    ...shadowStyles.sm,
   },
   healthIconContainer: {
     width: 48,
@@ -710,10 +704,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   settingsCard: {
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.lg,
-    padding: spacing.md,
-    ...shadowStyles.sm,
+    ...cardStyles.compact,
   },
   settingRow: {
     flexDirection: 'row',
@@ -758,11 +749,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   protocolCard: {
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.lg,
-    padding: spacing.md,
+    ...cardStyles.compact,
     flexDirection: 'row',
-    ...shadowStyles.sm,
   },
   protocolInfo: {
     flex: 1,
@@ -796,10 +784,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   infoCard: {
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.lg,
-    padding: spacing.md,
-    ...shadowStyles.sm,
+    ...cardStyles.compact,
   },
   infoRow: {
     flexDirection: 'row',

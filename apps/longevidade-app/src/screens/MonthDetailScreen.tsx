@@ -8,7 +8,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native'
-import { colors, spacing, borderRadius, typography, shadowStyles } from '../constants/theme'
+import { colors, spacing, borderRadius, typography, cardStyles } from '../constants/theme'
 import { pillarIcons, categoryColors, categoryLabels } from '../constants/icons'
 import { PROTOCOLS } from '../protocols'
 import { ProtocolMonth, ProtocolWeek } from '../types'
@@ -405,11 +405,8 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   descriptionCard: {
-    backgroundColor: colors.white,
+    ...cardStyles.base,
     margin: spacing.md,
-    padding: spacing.lg,
-    borderRadius: borderRadius.xl,
-    ...shadowStyles.md,
   },
   descriptionText: {
     fontSize: typography.fontSize.sm,
@@ -417,13 +414,10 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   statsRow: {
+    ...cardStyles.base,
     flexDirection: 'row',
-    backgroundColor: colors.white,
     marginHorizontal: spacing.md,
     marginBottom: spacing.md,
-    padding: spacing.lg,
-    borderRadius: borderRadius.xl,
-    ...shadowStyles.md,
   },
   statItem: {
     flex: 1,
@@ -543,12 +537,9 @@ const styles = StyleSheet.create({
     minWidth: 80,
   },
   taskCard: {
+    ...cardStyles.compact,
     flexDirection: 'row',
-    backgroundColor: colors.white,
-    padding: spacing.md,
-    borderRadius: borderRadius.lg,
     marginBottom: spacing.sm,
-    ...shadowStyles.sm,
     borderWidth: 2,
     borderColor: 'transparent',
   },
@@ -701,11 +692,8 @@ const styles = StyleSheet.create({
     color: colors.gray400,
   },
   goalCard: {
-    backgroundColor: colors.white,
-    padding: spacing.md,
-    borderRadius: borderRadius.lg,
+    ...cardStyles.compact,
     marginBottom: spacing.sm,
-    ...shadowStyles.sm,
   },
   goalHeader: {
     flexDirection: 'row',
@@ -769,13 +757,10 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.full,
   },
   milestoneCard: {
+    ...cardStyles.compact,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.white,
-    padding: spacing.md,
-    borderRadius: borderRadius.lg,
     marginBottom: spacing.sm,
-    ...shadowStyles.sm,
   },
   milestoneIconContainer: {
     width: 52,

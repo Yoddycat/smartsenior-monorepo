@@ -7,7 +7,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native'
-import { colors, spacing, borderRadius, typography, shadowStyles } from '../constants/theme'
+import { colors, spacing, borderRadius, typography, cardStyles } from '../constants/theme'
 import { pillarIcons } from '../constants/icons'
 import { getHealthSummary, HealthDataSummary } from '../services/health'
 import { useProtocolProgress, getCompletionHistory } from '../hooks'
@@ -455,11 +455,8 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   progressCard: {
-    backgroundColor: colors.white,
+    ...cardStyles.base,
     margin: spacing.md,
-    borderRadius: borderRadius.xl,
-    padding: spacing.lg,
-    ...shadowStyles.md,
   },
   progressHeader: {
     flexDirection: 'row',
@@ -558,10 +555,7 @@ const styles = StyleSheet.create({
     padding: spacing.xs,
   },
   metricCardInner: {
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.lg,
-    padding: spacing.md,
-    ...shadowStyles.sm,
+    ...cardStyles.compact,
   },
   metricHeader: {
     flexDirection: 'row',
@@ -607,10 +601,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   chartCard: {
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.xl,
-    padding: spacing.lg,
-    ...shadowStyles.sm,
+    ...cardStyles.base,
   },
   chartContainer: {
     flexDirection: 'row',
@@ -663,10 +654,7 @@ const styles = StyleSheet.create({
     color: colors.gray500,
   },
   categoryCard: {
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.xl,
-    padding: spacing.lg,
-    ...shadowStyles.sm,
+    ...cardStyles.base,
   },
   categoryItem: {
     marginBottom: spacing.md,
@@ -712,10 +700,8 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.full,
   },
   achievementsCard: {
-    backgroundColor: colors.white,
+    ...cardStyles.compact,
     borderRadius: borderRadius.xl,
-    padding: spacing.md,
-    ...shadowStyles.sm,
   },
   achievementItem: {
     flexDirection: 'row',

@@ -132,6 +132,40 @@ export const shadowStyles = {
   lg: createShadow('lg'),
 }
 
+// Reusable card styles
+export const cardStyles = {
+  // Standard card - most common pattern
+  base: {
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.xl,
+    padding: spacing.lg,
+    ...createShadow('md'),
+  } as ViewStyle,
+
+  // Compact card - smaller padding, lighter shadow
+  compact: {
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.lg,
+    padding: spacing.md,
+    ...createShadow('sm'),
+  } as ViewStyle,
+
+  // Flat card - no shadow, for nested cards or list items
+  flat: {
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.lg,
+    padding: spacing.md,
+  } as ViewStyle,
+
+  // Elevated card - stronger shadow for emphasis
+  elevated: {
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.xl,
+    padding: spacing.lg,
+    ...createShadow('lg'),
+  } as ViewStyle,
+}
+
 export const theme = {
   colors,
   spacing,
@@ -139,6 +173,7 @@ export const theme = {
   typography,
   shadows,
   shadowStyles,
+  cardStyles,
   createShadow,
 }
 
