@@ -14,3 +14,6 @@ export type { UseOfflineReturn } from './useOffline'
 export { useAsyncData } from './useAsyncData'
 export { useAsyncStorage, useAsyncStorageItem } from './useAsyncStorage'
 export { useHealthMetrics } from './useHealthMetrics'
+
+// Animation hooks
+export { useAnimatedValue, useAnimatedLoop, useAnimatedSequence } from './useAnimatedValue'
