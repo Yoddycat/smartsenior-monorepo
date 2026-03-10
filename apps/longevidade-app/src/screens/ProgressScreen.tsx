@@ -1,20 +1,22 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
-  Image,
   ActivityIndicator,
 } from 'react-native'
 import { colors, spacing, borderRadius, typography, cardStyles } from '../constants/theme'
-import { pillarIcons } from '../constants/icons'
 import { getHealthSummary, HealthDataSummary } from '../services/health'
 import { useProtocolProgress, getCompletionHistory } from '../hooks'
 import { PROTOCOLS, PROTOCOL_DURATION_DAYS } from '../protocols'
 import { ProtocolMonth } from '../types'
-
-const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
+import {
+  HealthMetricsGrid,
+  WeeklyCompletionChart,
+  CategoryProgressCard,
+  AchievementsPreview,
+} from '../components/progress'
 
 // Get current weekday index (0 = Monday, 6 = Sunday)
 const getCurrentWeekdayIndex = (): number => {
@@ -86,34 +88,9 @@ export function ProgressScreen() {
 
   const progressPercentage = Math.round((currentDay / PROTOCOL_DURATION_DAYS) * 100)
 
-  const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
-    switch (trend) {
-      case 'up': return '↑'
-      case 'down': return '↓'
-      default: return '→'
-    }
-  }
-
-  const getTrendColor = (trend: 'up' | 'down' | 'stable', isPositiveGood = true) => {
-    if (trend === 'stable') return colors.gray500
-    const isPositive = trend === 'up'
-    return (isPositive === isPositiveGood) ? colors.success : colors.danger
-  }
-
   // Calculate category progress based on completed tasks
   const protocol = PROTOCOLS[currentMonth as ProtocolMonth]
-  const categoryProgress = React.useMemo(() => {
-    const categories: Record<string, { completed: number; total: number }> = {}
-
-    protocol.dailyTasks.forEach((task) => {
-      const category = task.category
-      if (!categories[category]) {
-        categories[category] = { completed: 0, total: 0 }
-      }
-      categories[category].total++
-    })
-
-    // For now, estimate based on overall completion rate
+  const categoryProgress = useMemo(() => {
     return [
       { key: 'hydration', label: 'Hidratacao', progress: completionRate, color: colors.hydration },
       { key: 'movement', label: 'Movimento', progress: Math.max(0, completionRate - 10), color: colors.movement },
@@ -122,7 +99,7 @@ export function ProgressScreen() {
       { key: 'mindfulness', label: 'Mindfulness', progress: Math.max(0, completionRate - 20), color: colors.mindfulness },
       { key: 'supplements', label: 'Suplementos', progress: Math.max(0, completionRate - 10), color: colors.supplements },
     ]
-  }, [completionRate, protocol.dailyTasks])
+  }, [completionRate])
 
   if (progressLoading) {
     return (
@@ -182,245 +159,25 @@ export function ProgressScreen() {
       {/* Health Metrics */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Dados de Saude</Text>
-
-        {loading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={colors.primary} />
-            <Text style={styles.loadingText}>Carregando dados...</Text>
-          </View>
-        ) : healthSummary ? (
-          <View style={styles.metricsGrid}>
-            {/* Steps */}
-            <View style={styles.metricCard}>
-              <View style={styles.metricCardInner}>
-                <View style={styles.metricHeader}>
-                  <Text style={styles.metricIcon}>👟</Text>
-                  <Text
-                    style={[
-                      styles.metricTrend,
-                      { color: getTrendColor(healthSummary.steps.trend) },
-                    ]}
-                  >
-                    {getTrendIcon(healthSummary.steps.trend)}
-                  </Text>
-                </View>
-                <Text style={styles.metricValue}>
-                  {healthSummary.steps.today.toLocaleString()}
-                </Text>
-                <Text style={styles.metricLabel}>Passos hoje</Text>
-                <Text style={styles.metricSubtext}>
-                  Media: {healthSummary.steps.weekAverage.toLocaleString()}
-                </Text>
-              </View>
-            </View>
-
-            {/* Heart Rate */}
-            <View style={styles.metricCard}>
-              <View style={styles.metricCardInner}>
-                <View style={styles.metricHeader}>
-                  <Text style={styles.metricIcon}>❤️</Text>
-                  <Text
-                    style={[
-                      styles.metricTrend,
-                      { color: getTrendColor(healthSummary.heartRate.trend, false) },
-                    ]}
-                  >
-                    {getTrendIcon(healthSummary.heartRate.trend)}
-                  </Text>
-                </View>
-                <Text style={styles.metricValue}>
-                  {healthSummary.heartRate.latest}
-                </Text>
-                <Text style={styles.metricLabel}>BPM atual</Text>
-                <Text style={styles.metricSubtext}>
-                  Repouso: {healthSummary.heartRate.restingAverage} bpm
-                </Text>
-              </View>
-            </View>
-
-            {/* HRV */}
-            <View style={styles.metricCard}>
-              <View style={styles.metricCardInner}>
-                <View style={styles.metricHeader}>
-                  <Text style={styles.metricIcon}>💓</Text>
-                  <Text
-                    style={[
-                      styles.metricTrend,
-                      { color: getTrendColor(healthSummary.hrv.trend) },
-                    ]}
-                  >
-                    {getTrendIcon(healthSummary.hrv.trend)}
-                  </Text>
-                </View>
-                <Text style={styles.metricValue}>
-                  {healthSummary.hrv.latest}
-                </Text>
-                <Text style={styles.metricLabel}>HRV (ms)</Text>
-                <Text style={styles.metricSubtext}>
-                  Media: {healthSummary.hrv.weekAverage} ms
-                </Text>
-              </View>
-            </View>
-
-            {/* Sleep */}
-            <View style={styles.metricCard}>
-              <View style={styles.metricCardInner}>
-                <View style={styles.metricHeader}>
-                  <Text style={styles.metricIcon}>😴</Text>
-                  <Text
-                    style={[
-                      styles.metricTrend,
-                      { color: getTrendColor(healthSummary.sleep.trend) },
-                    ]}
-                  >
-                    {getTrendIcon(healthSummary.sleep.trend)}
-                  </Text>
-                </View>
-                <Text style={styles.metricValue}>
-                  {healthSummary.sleep.lastNightHours}h
-                </Text>
-                <Text style={styles.metricLabel}>Sono ontem</Text>
-                <Text style={styles.metricSubtext}>
-                  Media: {healthSummary.sleep.weekAverage}h
-                </Text>
-              </View>
-            </View>
-          </View>
-        ) : (
-          <View style={styles.noDataContainer}>
-            <Text style={styles.noDataIcon}>📱</Text>
-            <Text style={styles.noDataText}>
-              Conecte um dispositivo de saude para ver seus dados
-            </Text>
-          </View>
-        )}
+        <HealthMetricsGrid loading={loading} healthSummary={healthSummary} />
       </View>
 
       {/* Weekly Chart */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Conclusao Semanal</Text>
-
-        <View style={styles.chartCard}>
-          <View style={styles.chartContainer}>
-            {weeklyCompletion.map((value, index) => (
-              <View key={index} style={styles.chartBarContainer}>
-                <View style={styles.chartBarWrapper}>
-                  <View
-                    style={[
-                      styles.chartBar,
-                      {
-                        height: `${Math.max(value, 4)}%`,
-                        backgroundColor: value > 0 ? colors.primary : colors.gray200,
-                      },
-                    ]}
-                  />
-                </View>
-                <Text
-                  style={[
-                    styles.chartLabel,
-                    index === getCurrentWeekdayIndex() && styles.chartLabelActive,
-                  ]}
-                >
-                  {WEEKDAYS[index]}
-                </Text>
-              </View>
-            ))}
-          </View>
-
-          <View style={styles.chartLegend}>
-            <View style={styles.chartLegendItem}>
-              <View style={[styles.chartLegendDot, { backgroundColor: colors.primary }]} />
-              <Text style={styles.chartLegendText}>Tarefas concluidas</Text>
-            </View>
-          </View>
-        </View>
+        <WeeklyCompletionChart weeklyCompletion={weeklyCompletion} />
       </View>
 
       {/* Category Progress */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Progresso por Categoria</Text>
-
-        <View style={styles.categoryCard}>
-          {categoryProgress.map((category, index) => (
-            <View key={index} style={styles.categoryItem}>
-              <View style={styles.categoryHeader}>
-                <View style={styles.categoryIconContainer}>
-                  <Image
-                    source={pillarIcons[category.key]}
-                    style={styles.categoryIcon}
-                  />
-                </View>
-                <Text style={styles.categoryLabel}>{category.label}</Text>
-                <Text style={styles.categoryValue}>{category.progress}%</Text>
-              </View>
-              <View style={styles.categoryProgressBar}>
-                <View
-                  style={[
-                    styles.categoryProgressFill,
-                    {
-                      width: `${category.progress}%`,
-                      backgroundColor: category.color,
-                    },
-                  ]}
-                />
-              </View>
-            </View>
-          ))}
-        </View>
+        <CategoryProgressCard categories={categoryProgress} />
       </View>
 
       {/* Achievements Preview */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Conquistas Recentes</Text>
-
-        <View style={styles.achievementsCard}>
-          {streakDays >= 7 && (
-            <View style={styles.achievementItem}>
-              <View style={[styles.achievementIcon, { backgroundColor: `${colors.success}20` }]}>
-                <Text style={styles.achievementEmoji}>💧</Text>
-              </View>
-              <View style={styles.achievementContent}>
-                <Text style={styles.achievementTitle}>Primeira Semana Completa</Text>
-                <Text style={styles.achievementDate}>Conquistado</Text>
-              </View>
-            </View>
-          )}
-
-          {streakDays >= 3 && (
-            <View style={styles.achievementItem}>
-              <View style={[styles.achievementIcon, { backgroundColor: `${colors.primary}20` }]}>
-                <Text style={styles.achievementEmoji}>🔥</Text>
-              </View>
-              <View style={styles.achievementContent}>
-                <Text style={styles.achievementTitle}>{streakDays} Dias Seguidos</Text>
-                <Text style={styles.achievementDate}>Ativo</Text>
-              </View>
-            </View>
-          )}
-
-          {streakDays < 3 && (
-            <View style={styles.achievementItem}>
-              <View style={[styles.achievementIcon, { backgroundColor: `${colors.primary}20` }]}>
-                <Text style={styles.achievementEmoji}>🌟</Text>
-              </View>
-              <View style={styles.achievementContent}>
-                <Text style={styles.achievementTitle}>Iniciante</Text>
-                <Text style={styles.achievementDate}>Dia {currentDay} do protocolo</Text>
-              </View>
-            </View>
-          )}
-
-          <View style={styles.achievementItemLocked}>
-            <View style={[styles.achievementIcon, { backgroundColor: colors.gray100 }]}>
-              <Text style={[styles.achievementEmoji, { opacity: 0.5 }]}>🏆</Text>
-            </View>
-            <View style={styles.achievementContent}>
-              <Text style={styles.achievementTitleLocked}>Mestre do Protocolo</Text>
-              <Text style={styles.achievementDate}>{PROTOCOL_DURATION_DAYS - currentDay} dias restantes</Text>
-            </View>
-            <Text style={styles.lockIcon}>🔒</Text>
-          </View>
-        </View>
+        <AchievementsPreview streakDays={streakDays} currentDay={currentDay} />
       </View>
 
       <View style={{ height: 100 }} />
@@ -533,219 +290,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.gray900,
     marginBottom: spacing.md,
-  },
-  loadingContainer: {
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.xl,
-    padding: spacing.xl,
-    alignItems: 'center',
-  },
-  loadingText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.gray500,
-    marginTop: spacing.md,
-  },
-  metricsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginHorizontal: -spacing.xs,
-  },
-  metricCard: {
-    width: '50%',
-    padding: spacing.xs,
-  },
-  metricCardInner: {
-    ...cardStyles.compact,
-  },
-  metricHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.xs,
-  },
-  metricIcon: {
-    fontSize: 24,
-  },
-  metricTrend: {
-    fontSize: typography.fontSize.lg,
-    fontWeight: 'bold',
-  },
-  metricValue: {
-    fontSize: typography.fontSize['2xl'],
-    fontWeight: 'bold',
-    color: colors.gray900,
-  },
-  metricLabel: {
-    fontSize: typography.fontSize.sm,
-    color: colors.gray500,
-    marginTop: 2,
-  },
-  metricSubtext: {
-    fontSize: typography.fontSize.xs,
-    color: colors.gray400,
-    marginTop: spacing.xs,
-  },
-  noDataContainer: {
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.xl,
-    padding: spacing.xl,
-    alignItems: 'center',
-  },
-  noDataIcon: {
-    fontSize: 48,
-    marginBottom: spacing.md,
-  },
-  noDataText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.gray500,
-    textAlign: 'center',
-  },
-  chartCard: {
-    ...cardStyles.base,
-  },
-  chartContainer: {
-    flexDirection: 'row',
-    height: 150,
-    alignItems: 'flex-end',
-  },
-  chartBarContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  chartBarWrapper: {
-    flex: 1,
-    width: '60%',
-    justifyContent: 'flex-end',
-  },
-  chartBar: {
-    width: '100%',
-    borderRadius: borderRadius.sm,
-    minHeight: 4,
-  },
-  chartLabel: {
-    fontSize: typography.fontSize.xs,
-    color: colors.gray500,
-    marginTop: spacing.sm,
-  },
-  chartLabelActive: {
-    color: colors.primary,
-    fontWeight: 'bold',
-  },
-  chartLegend: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: spacing.md,
-    paddingTop: spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: colors.gray100,
-  },
-  chartLegendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  chartLegendDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: spacing.xs,
-  },
-  chartLegendText: {
-    fontSize: typography.fontSize.xs,
-    color: colors.gray500,
-  },
-  categoryCard: {
-    ...cardStyles.base,
-  },
-  categoryItem: {
-    marginBottom: spacing.md,
-  },
-  categoryHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing.xs,
-  },
-  categoryIconContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: borderRadius.md,
-    backgroundColor: colors.gray50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  categoryIcon: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
-  },
-  categoryLabel: {
-    flex: 1,
-    fontSize: typography.fontSize.sm,
-    color: colors.gray700,
-    marginLeft: spacing.sm,
-  },
-  categoryValue: {
-    fontSize: typography.fontSize.sm,
-    fontWeight: 'bold',
-    color: colors.gray900,
-  },
-  categoryProgressBar: {
-    height: 6,
-    backgroundColor: colors.gray200,
-    borderRadius: borderRadius.full,
-    overflow: 'hidden',
-    marginLeft: 40,
-  },
-  categoryProgressFill: {
-    height: '100%',
-    borderRadius: borderRadius.full,
-  },
-  achievementsCard: {
-    ...cardStyles.compact,
-    borderRadius: borderRadius.xl,
-  },
-  achievementItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.gray100,
-  },
-  achievementItemLocked: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-    opacity: 0.6,
-  },
-  achievementIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: borderRadius.lg,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  achievementEmoji: {
-    fontSize: 22,
-  },
-  achievementContent: {
-    flex: 1,
-    marginLeft: spacing.md,
-  },
-  achievementTitle: {
-    fontSize: typography.fontSize.sm,
-    fontWeight: '600',
-    color: colors.gray900,
-  },
-  achievementTitleLocked: {
-    fontSize: typography.fontSize.sm,
-    fontWeight: '600',
-    color: colors.gray500,
-  },
-  achievementDate: {
-    fontSize: typography.fontSize.xs,
-    color: colors.gray500,
-    marginTop: 2,
-  },
-  lockIcon: {
-    fontSize: 16,
   },
 })
