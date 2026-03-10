@@ -284,3 +284,6 @@ export type { AnimatedProgressProps, AnimatedCircularProgressProps } from './ani
 
 export { AnimatedCheckbox, AnimatedCheckboxGroup } from './animated-checkbox'
 export type { AnimatedCheckboxProps, AnimatedCheckboxGroupProps } from './animated-checkbox'
+
+export { FadeInView, FadeInStagger } from './fade-in-view'
+export type { FadeInViewProps, FadeInStaggerProps } from './fade-in-view'
