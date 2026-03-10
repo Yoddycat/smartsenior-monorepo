@@ -281,3 +281,6 @@ export type { AnimatedCounterProps } from './animated-counter'
 
 export { AnimatedProgress, AnimatedCircularProgress } from './animated-progress'
 export type { AnimatedProgressProps, AnimatedCircularProgressProps } from './animated-progress'
+
+export { AnimatedCheckbox, AnimatedCheckboxGroup } from './animated-checkbox'
+export type { AnimatedCheckboxProps, AnimatedCheckboxGroupProps } from './animated-checkbox'
