@@ -278,3 +278,6 @@ export type { ImageProps, ImageCardProps, HeroImageProps } from './image'
 // ============================================
 export { AnimatedCounter, AnimatedPercentage, AnimatedCurrency } from './animated-counter'
 export type { AnimatedCounterProps } from './animated-counter'
+
+export { AnimatedProgress, AnimatedCircularProgress } from './animated-progress'
+export type { AnimatedProgressProps, AnimatedCircularProgressProps } from './animated-progress'
