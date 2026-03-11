@@ -290,3 +290,6 @@ export type { FadeInViewProps, FadeInStaggerProps } from './fade-in-view'
 
 export { PulseView, BreathingView, AttentionView } from './pulse-view'
 export type { PulseViewProps, BreathingViewProps, AttentionViewProps } from './pulse-view'
+
+export { SuccessAnimation, ErrorAnimation, LoadingToSuccess } from './success-animation'
+export type { SuccessAnimationProps, ErrorAnimationProps, LoadingToSuccessProps } from './success-animation'

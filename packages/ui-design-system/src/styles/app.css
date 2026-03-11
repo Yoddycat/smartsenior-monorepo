@@ -859,4 +859,34 @@
     42% { transform: scale(1.1); }
     70% { transform: scale(1); }
   }
+
+  /* Success animation effects */
+  @keyframes success-pop {
+    0% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+    50% {
+      opacity: 0.15;
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.2);
+    }
+  }
+
+  @keyframes confetti-burst {
+    0% {
+      transform: translate(-50%, -50%) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform:
+        translate(-50%, -50%)
+        rotate(var(--confetti-angle, 0deg))
+        translateY(calc(-1 * var(--confetti-distance, 50px)));
+      opacity: 0;
+    }
+  }
 }
