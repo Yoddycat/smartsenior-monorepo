@@ -884,7 +884,7 @@ export function OutotonoSeguroGuide({ className }: OutotonoSeguroGuideProps) {
       {/* Footer */}
       <FadeInView direction="up" delay={500}>
         <div className="text-center py-8 text-sm text-[var(--foreground-muted)]">
-          <p>SmartSenior • Cuidado com ciência. Amor com protocolo.</p>
+          <p>SmartSenior • Longevidade ativa, autonomia e bem-estar.</p>
           <p className="mt-2">
             Este material foi produzido com base em evidências científicas.
             Não substitui consulta médica.
