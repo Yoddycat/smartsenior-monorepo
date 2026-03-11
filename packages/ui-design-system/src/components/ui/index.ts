@@ -293,3 +293,22 @@ export type { PulseViewProps, BreathingViewProps, AttentionViewProps } from './p
 
 export { SuccessAnimation, ErrorAnimation, LoadingToSuccess } from './success-animation'
 export type { SuccessAnimationProps, ErrorAnimationProps, LoadingToSuccessProps } from './success-animation'
+
+// ============================================
+// GUIDES / COMPOSITE COMPONENTS
+// ============================================
+export {
+  OutotonoSeguroGuide,
+  HeroStat,
+  HeroStatsGrid,
+  HydrationTracker,
+  HydrationScheduleCard,
+  NutritionTracker,
+  ExerciseTracker,
+  VaccinationCard,
+  SafetyChecklist,
+  ThirtyDayPlan,
+  ProtocolSummary,
+  EmergencyAlert,
+} from './outono-seguro-guide'
+export type { OutotonoSeguroGuideProps, HeroStatProps, HydrationTrackerProps } from './outono-seguro-guide'
