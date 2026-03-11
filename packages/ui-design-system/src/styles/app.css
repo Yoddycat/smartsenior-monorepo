@@ -730,4 +730,133 @@
       transform: scale(1);
     }
   }
+
+  /* Pulse animations */
+  .animate-pulse-scale {
+    animation: pulse-scale var(--pulse-duration, 1500ms) ease-in-out infinite;
+  }
+
+  @keyframes pulse-scale {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(var(--pulse-scale, 1.08));
+    }
+  }
+
+  .animate-pulse-opacity {
+    animation: pulse-opacity var(--pulse-duration, 1500ms) ease-in-out infinite;
+  }
+
+  @keyframes pulse-opacity {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: var(--pulse-opacity-min, 0.5);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow var(--pulse-duration, 1500ms) ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 0 0 var(--pulse-glow-color, var(--primary));
+    }
+    50% {
+      box-shadow: 0 0 var(--pulse-glow-size, 20px) var(--pulse-glow-size, 20px) var(--pulse-glow-color, var(--primary));
+    }
+  }
+
+  .animate-pulse-ring {
+    animation: pulse-ring var(--pulse-duration, 1500ms) ease-out infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(1);
+      opacity: 0.8;
+      box-shadow: 0 0 0 0 var(--pulse-ring-color, var(--primary));
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+      box-shadow: 0 0 0 10px transparent;
+    }
+  }
+
+  .animate-pulse-bounce {
+    animation: pulse-bounce var(--pulse-duration, 1500ms) ease-in-out infinite;
+  }
+
+  @keyframes pulse-bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(calc(-1 * var(--pulse-bounce-height, 5px)));
+    }
+  }
+
+  /* Breathing animation */
+  .animate-breathing {
+    animation: breathing var(--breathing-duration, 4000ms) ease-in-out infinite;
+  }
+
+  @keyframes breathing {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(var(--breathing-scale, 1.03));
+    }
+  }
+
+  /* Attention animations */
+  .animate-attention-shake {
+    animation: attention-shake 500ms ease-in-out;
+  }
+
+  @keyframes attention-shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+  }
+
+  .animate-attention-wobble {
+    animation: attention-wobble 800ms ease-in-out;
+  }
+
+  @keyframes attention-wobble {
+    0%, 100% { transform: translateX(0) rotate(0); }
+    15% { transform: translateX(-10px) rotate(-5deg); }
+    30% { transform: translateX(8px) rotate(4deg); }
+    45% { transform: translateX(-6px) rotate(-3deg); }
+    60% { transform: translateX(4px) rotate(2deg); }
+    75% { transform: translateX(-2px) rotate(-1deg); }
+  }
+
+  .animate-attention-flash {
+    animation: attention-flash 500ms ease-in-out;
+  }
+
+  @keyframes attention-flash {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0.2; }
+  }
+
+  .animate-attention-heartbeat {
+    animation: attention-heartbeat 600ms ease-in-out;
+  }
+
+  @keyframes attention-heartbeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.1); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.1); }
+    70% { transform: scale(1); }
+  }
 }

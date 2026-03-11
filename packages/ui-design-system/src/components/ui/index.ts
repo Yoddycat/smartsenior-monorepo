@@ -287,3 +287,6 @@ export type { AnimatedCheckboxProps, AnimatedCheckboxGroupProps } from './animat
 
 export { FadeInView, FadeInStagger } from './fade-in-view'
 export type { FadeInViewProps, FadeInStaggerProps } from './fade-in-view'
+
+export { PulseView, BreathingView, AttentionView } from './pulse-view'
+export type { PulseViewProps, BreathingViewProps, AttentionViewProps } from './pulse-view'
