@@ -96,6 +96,27 @@ export {
   handleDelegate,
 } from './aios-master'
 
+// Data Engineer handlers
+export {
+  dataEngineerHandlers,
+  handleCreateSchema,
+  handleOptimizeQuery,
+  handleCreateMigration,
+  handleAuditDatabase,
+  handleImplementRls,
+} from './data-engineer'
+
+// UX Design Expert handlers
+export {
+  uxDesignExpertHandlers,
+  handleCreatePrototype,
+  handleReviewUx,
+  handleCreateWireframe,
+  handleAuditAccessibility,
+  handleCreateDesignSystem,
+  handleUserFlowAnalysis,
+} from './ux-design-expert'
+
 // SDC Result types
 export type {
   DraftResult,
@@ -145,11 +166,32 @@ export type {
   DelegateResult,
 } from './aios-master'
 
+// Data Engineer Result types
+export type {
+  SchemaResult,
+  QueryOptimizationResult,
+  MigrationResult,
+  DatabaseAuditResult,
+  RlsResult,
+} from './data-engineer'
+
+// UX Design Expert Result types
+export type {
+  PrototypeResult,
+  UxReviewResult,
+  WireframeResult,
+  AccessibilityAuditResult,
+  DesignSystemResult,
+  UserFlowResult,
+} from './ux-design-expert'
+
 import { sdcHandlers } from './sdc'
 import { pmHandlers } from './pm'
 import { architectHandlers } from './architect'
 import { analystHandlers } from './analyst'
 import { aiosMasterHandlers } from './aios-master'
+import { dataEngineerHandlers } from './data-engineer'
+import { uxDesignExpertHandlers } from './ux-design-expert'
 import type { ExtendedSkillHandler } from './types'
 
 /**
@@ -161,6 +203,8 @@ export const allHandlers: Record<string, ExtendedSkillHandler> = {
   ...architectHandlers,
   ...analystHandlers,
   ...aiosMasterHandlers,
+  ...dataEngineerHandlers,
+  ...uxDesignExpertHandlers,
 }
 
 /**
@@ -197,6 +241,8 @@ export function getHandlerCounts(): {
     architect: Object.keys(architectHandlers).length,
     analyst: Object.keys(analystHandlers).length,
     'aios-master': Object.keys(aiosMasterHandlers).length,
+    'data-engineer': Object.keys(dataEngineerHandlers).length,
+    'ux-design-expert': Object.keys(uxDesignExpertHandlers).length,
   }
 
   return {
