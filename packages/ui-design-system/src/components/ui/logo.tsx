@@ -31,6 +31,8 @@ export interface LogoProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   color?: 'gradient' | 'orange' | 'white' | 'black'
   /** Additional CSS classes */
   className?: string
+  /** Add clear space (protection area) around logo - 50% of icon height */
+  withClearSpace?: boolean
 }
 
 const sizeMap = {
@@ -120,6 +122,7 @@ const Logo = React.forwardRef<HTMLImageElement, LogoProps>(
       color = 'gradient',
       className,
       alt = 'SmartSenior',
+      withClearSpace = false,
       ...props
     },
     ref
@@ -127,14 +130,17 @@ const Logo = React.forwardRef<HTMLImageElement, LogoProps>(
     const dimensions = sizeMap[variant][size]
     const src = logoSources[variant][color]
 
-    return (
+    // Calculate clear space padding (50% of height)
+    const clearSpacePadding = withClearSpace ? dimensions.height * 0.5 : 0
+
+    const imgElement = (
       <img
         ref={ref}
         src={src}
         alt={alt}
         className={cn(
           "object-contain",
-          className
+          !withClearSpace && className
         )}
         style={{
           height: dimensions.height,
@@ -144,6 +150,19 @@ const Logo = React.forwardRef<HTMLImageElement, LogoProps>(
         {...props}
       />
     )
+
+    if (withClearSpace) {
+      return (
+        <div
+          className={cn("inline-block", className)}
+          style={{ padding: clearSpacePadding }}
+        >
+          {imgElement}
+        </div>
+      )
+    }
+
+    return imgElement
   }
 )
 

@@ -275,6 +275,43 @@ export const VerticalColors: Story = {
 }
 
 // ============================================
+// CLEAR SPACE (ÁREA DE PROTEÇÃO)
+// ============================================
+
+export const ClearSpace: Story = {
+  render: () => (
+    <div className="space-y-8">
+      <div>
+        <p className="text-sm text-[var(--foreground-muted)] mb-4">
+          A prop <code className="bg-[var(--background-subtle)] px-1 rounded">withClearSpace</code> adiciona
+          uma área de proteção equivalente a 50% da altura do logo.
+        </p>
+      </div>
+      <div className="flex gap-8 items-start">
+        <div className="text-center">
+          <div className="border-2 border-dashed border-[#FFAA4D] inline-block">
+            <Logo variant="horizontal" size="lg" withClearSpace />
+          </div>
+          <p className="text-xs text-[var(--foreground-muted)] mt-2">Horizontal</p>
+        </div>
+        <div className="text-center">
+          <div className="border-2 border-dashed border-[#FFAA4D] inline-block">
+            <LogoVertical size="lg" withClearSpace />
+          </div>
+          <p className="text-xs text-[var(--foreground-muted)] mt-2">Vertical</p>
+        </div>
+        <div className="text-center">
+          <div className="border-2 border-dashed border-[#FFAA4D] inline-block">
+            <LogoIcon size="xl" withClearSpace />
+          </div>
+          <p className="text-xs text-[var(--foreground-muted)] mt-2">Icon</p>
+        </div>
+      </div>
+    </div>
+  ),
+}
+
+// ============================================
 // USE CASES
 // ============================================
 
@@ -322,10 +359,10 @@ export const LoadingScreen: Story = {
 export const AppIcon: Story = {
   render: () => (
     <div className="flex items-end gap-4">
-      {/* App icon - Orange background with white logo */}
+      {/* App icon - Orange background with gradient logo */}
       <div className="text-center">
         <div className="w-20 h-20 rounded-2xl bg-[#FF6A13] flex items-center justify-center shadow-lg">
-          <LogoFavicon size="xl" color="white" />
+          <LogoFavicon size="xl" color="gradient" />
         </div>
         <p className="text-xs text-[var(--foreground-muted)] mt-2">App Icon</p>
       </div>
@@ -433,13 +470,26 @@ export const BrandGuidelines: Story = {
 
       <div>
         <h3 className="text-lg font-medium text-[var(--foreground)] mb-4">Área de Proteção</h3>
-        <div className="p-8 bg-[var(--background-subtle)] rounded-lg inline-block">
-          <div className="border-2 border-dashed border-[#FFAA4D] p-6">
-            <Logo variant="horizontal" size="lg" />
+        <div className="flex gap-8 items-start">
+          <div>
+            <p className="text-xs text-[var(--foreground-muted)] mb-2">Com área de proteção (50% da altura)</p>
+            <div className="bg-[var(--background-subtle)] rounded-lg inline-block">
+              <div className="border-2 border-dashed border-[#FFAA4D]">
+                <Logo variant="horizontal" size="lg" withClearSpace />
+              </div>
+            </div>
+          </div>
+          <div>
+            <p className="text-xs text-[var(--foreground-muted)] mb-2">Sem área de proteção</p>
+            <div className="bg-[var(--background-subtle)] rounded-lg inline-block">
+              <div className="border-2 border-dashed border-gray-300">
+                <Logo variant="horizontal" size="lg" />
+              </div>
+            </div>
           </div>
         </div>
         <p className="text-xs text-[var(--foreground-muted)] mt-3">
-          Mantenha uma área de respiro ao redor do logo equivalente à altura do ícone.
+          Use <code className="bg-[var(--background-subtle)] px-1 rounded">withClearSpace</code> para manter uma área de respiro ao redor do logo equivalente a 50% da altura do ícone.
         </p>
       </div>
 
