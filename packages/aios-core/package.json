@@ -9,7 +9,8 @@
     ".": "./src/index.ts",
     "./agents": "./src/agents/index.ts",
     "./tasks": "./src/tasks/index.ts",
-    "./workflows": "./src/workflows/index.ts"
+    "./workflows": "./src/workflows/index.ts",
+    "./skills": "./src/skills/index.ts"
   },
   "scripts": {
     "dev": "tsc --watch",
