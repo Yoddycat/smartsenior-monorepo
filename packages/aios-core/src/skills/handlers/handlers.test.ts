@@ -26,6 +26,22 @@ import {
   getHandler,
   hasHandler,
   listHandledSkills,
+  getHandlerCounts,
+  // Data Engineer handlers
+  handleCreateSchema,
+  handleOptimizeQuery,
+  handleCreateMigration,
+  handleAuditDatabase,
+  handleImplementRls,
+  dataEngineerHandlers,
+  // UX Design Expert handlers
+  handleCreatePrototype,
+  handleReviewUx,
+  handleCreateWireframe,
+  handleAuditAccessibility,
+  handleCreateDesignSystem,
+  handleUserFlowAnalysis,
+  uxDesignExpertHandlers,
 } from './index'
 
 // Helper to create test context
@@ -350,5 +366,274 @@ describe('Handler Registry', () => {
   it('allHandlers should include SDC handlers', () => {
     expect(allHandlers['sm:draft']).toBe(sdcHandlers['sm:draft'])
     expect(allHandlers['dev:develop']).toBe(sdcHandlers['dev:develop'])
+  })
+
+  it('should include Data Engineer handlers', () => {
+    expect(allHandlers['data-engineer:create-schema']).toBeDefined()
+    expect(allHandlers['data-engineer:optimize-query']).toBeDefined()
+    expect(allHandlers['data-engineer:create-migration']).toBeDefined()
+    expect(allHandlers['data-engineer:audit-database']).toBeDefined()
+    expect(allHandlers['data-engineer:implement-rls']).toBeDefined()
+  })
+
+  it('should include UX Design Expert handlers', () => {
+    expect(allHandlers['ux-design-expert:create-prototype']).toBeDefined()
+    expect(allHandlers['ux-design-expert:review-ux']).toBeDefined()
+    expect(allHandlers['ux-design-expert:create-wireframe']).toBeDefined()
+    expect(allHandlers['ux-design-expert:audit-accessibility']).toBeDefined()
+    expect(allHandlers['ux-design-expert:create-design-system']).toBeDefined()
+    expect(allHandlers['ux-design-expert:user-flow-analysis']).toBeDefined()
+  })
+
+  it('should return handler counts by category', () => {
+    const counts = getHandlerCounts()
+    expect(counts.total).toBeGreaterThan(40)
+    expect(counts.byCategory['data-engineer']).toBe(5)
+    expect(counts.byCategory['ux-design-expert']).toBe(6)
+  })
+})
+
+describe('Data Engineer Handlers', () => {
+  describe('handleCreateSchema', () => {
+    it('should create schema with default tables', async () => {
+      const context = createTestContext()
+      const result = await handleCreateSchema(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.schemaPath).toContain('database/schemas/')
+      expect(result.data?.tables).toHaveLength(2)
+      expect(result.data?.indexes).toBeDefined()
+    })
+
+    it('should create schema with custom tables', async () => {
+      const context = createTestContext()
+      const result = await handleCreateSchema(context, {
+        projectName: 'test-project',
+        tables: ['orders', 'products', 'customers'],
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.tables).toHaveLength(3)
+      expect(result.triggeredSkills).toContain('data-engineer:create-migration')
+    })
+
+    it('should respect dryRun option', async () => {
+      const context = createTestContext({
+        options: { ...defaultOptions, dryRun: true },
+      })
+
+      const result = await handleCreateSchema(context)
+
+      expect(result.success).toBe(true)
+      expect(context.deps.fs.write).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('handleOptimizeQuery', () => {
+    it('should require query input', async () => {
+      const context = createTestContext()
+      const result = await handleOptimizeQuery(context)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('Query is required')
+    })
+
+    it('should suggest avoiding SELECT *', async () => {
+      const context = createTestContext()
+      const result = await handleOptimizeQuery(context, {
+        query: 'SELECT * FROM users WHERE id = 1',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.suggestions).toBeDefined()
+      expect(result.data?.suggestions.some(s => s.description.includes('SELECT *'))).toBe(true)
+    })
+
+    it('should suggest index for WHERE clause', async () => {
+      const context = createTestContext()
+      const result = await handleOptimizeQuery(context, {
+        query: 'SELECT name FROM users WHERE email = "test@test.com"',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.suggestions.some(s => s.type === 'index')).toBe(true)
+    })
+  })
+
+  describe('handleCreateMigration', () => {
+    it('should create migration with confirmation', async () => {
+      const context = createTestContext()
+      const result = await handleCreateMigration(context, {
+        name: 'add_users_table',
+        description: 'Add users table',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.migrationPath).toContain('database/migrations/')
+      expect(result.data?.rollbackSupported).toBe(true)
+    })
+
+    it('should fail if user cancels', async () => {
+      const context = createTestContext()
+      vi.mocked(context.deps.prompt.confirm).mockResolvedValue(false)
+
+      const result = await handleCreateMigration(context, {
+        name: 'test_migration',
+      })
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('cancelled')
+    })
+  })
+
+  describe('handleAuditDatabase', () => {
+    it('should return audit results with score', async () => {
+      const context = createTestContext()
+      const result = await handleAuditDatabase(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.score).toBeGreaterThanOrEqual(0)
+      expect(result.data?.score).toBeLessThanOrEqual(100)
+      expect(result.data?.issues).toBeDefined()
+      expect(result.data?.recommendations).toBeDefined()
+    })
+  })
+
+  describe('handleImplementRls', () => {
+    it('should create RLS policies for tables', async () => {
+      const context = createTestContext()
+      const result = await handleImplementRls(context, {
+        tables: ['users', 'orders'],
+        tenantColumn: 'org_id',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.policies).toHaveLength(2)
+      expect(result.data?.tablesProtected).toContain('users')
+      expect(result.data?.tablesProtected).toContain('orders')
+    })
+  })
+
+  it('should have all handlers in dataEngineerHandlers map', () => {
+    expect(Object.keys(dataEngineerHandlers)).toHaveLength(5)
+    expect(dataEngineerHandlers['data-engineer:create-schema']).toBe(handleCreateSchema)
+    expect(dataEngineerHandlers['data-engineer:optimize-query']).toBe(handleOptimizeQuery)
+  })
+})
+
+describe('UX Design Expert Handlers', () => {
+  describe('handleCreatePrototype', () => {
+    it('should create prototype with default screens', async () => {
+      const context = createTestContext()
+      const result = await handleCreatePrototype(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.prototypePath).toContain('docs/prototypes/')
+      expect(result.data?.screens).toHaveLength(3)
+      expect(result.data?.fidelity).toBe('medium')
+    })
+
+    it('should create prototype with custom fidelity', async () => {
+      const context = createTestContext()
+      const result = await handleCreatePrototype(context, {
+        name: 'mobile-app',
+        fidelity: 'high',
+        screens: ['Login', 'Home', 'Profile', 'Settings'],
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.fidelity).toBe('high')
+      expect(result.data?.screens).toHaveLength(4)
+      expect(result.triggeredSkills).toContain('ux-design-expert:review-ux')
+    })
+  })
+
+  describe('handleReviewUx', () => {
+    it('should review UX and return score', async () => {
+      const context = createTestContext()
+      const result = await handleReviewUx(context, {
+        path: 'src/components',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.score).toBeGreaterThanOrEqual(0)
+      expect(result.data?.score).toBeLessThanOrEqual(100)
+      expect(result.data?.findings).toBeDefined()
+      expect(result.data?.recommendations).toBeDefined()
+    })
+  })
+
+  describe('handleCreateWireframe', () => {
+    it('should create wireframe with screens', async () => {
+      const context = createTestContext()
+      const result = await handleCreateWireframe(context, {
+        name: 'dashboard',
+        screens: ['Overview', 'Analytics', 'Reports'],
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.wireframePath).toContain('docs/wireframes/')
+      expect(result.data?.screens).toHaveLength(3)
+      expect(result.triggeredSkills).toContain('ux-design-expert:create-prototype')
+    })
+  })
+
+  describe('handleAuditAccessibility', () => {
+    it('should audit for WCAG AA by default', async () => {
+      const context = createTestContext()
+      const result = await handleAuditAccessibility(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.wcagLevel).toBe('AA')
+      expect(result.data?.violations).toBeDefined()
+      expect(result.data?.passed).toBeGreaterThanOrEqual(0)
+      expect(result.data?.score).toBeGreaterThanOrEqual(0)
+    })
+
+    it('should audit for custom WCAG level', async () => {
+      const context = createTestContext()
+      const result = await handleAuditAccessibility(context, {
+        level: 'AAA',
+        path: 'src/ui',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.wcagLevel).toBe('AAA')
+    })
+  })
+
+  describe('handleCreateDesignSystem', () => {
+    it('should create design system documentation', async () => {
+      const context = createTestContext()
+      const result = await handleCreateDesignSystem(context, {
+        name: 'brand-system',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.designSystemPath).toContain('docs/design-system/')
+      expect(result.data?.tokens).toBeDefined()
+      expect(result.data?.components).toBeDefined()
+      expect(result.data?.patterns).toBeDefined()
+    })
+  })
+
+  describe('handleUserFlowAnalysis', () => {
+    it('should analyze user flows', async () => {
+      const context = createTestContext()
+      const result = await handleUserFlowAnalysis(context, {
+        flows: ['Signup', 'Checkout', 'Return'],
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.flows).toHaveLength(3)
+      expect(result.data?.painPoints).toBeDefined()
+      expect(result.data?.opportunities).toBeDefined()
+    })
+  })
+
+  it('should have all handlers in uxDesignExpertHandlers map', () => {
+    expect(Object.keys(uxDesignExpertHandlers)).toHaveLength(6)
+    expect(uxDesignExpertHandlers['ux-design-expert:create-prototype']).toBe(handleCreatePrototype)
+    expect(uxDesignExpertHandlers['ux-design-expert:audit-accessibility']).toBe(handleAuditAccessibility)
   })
 })
