@@ -4,6 +4,9 @@
  * Agent Skills System for executing commands with authority validation
  */
 
+// Re-export AgentRole from agents for convenience
+export type { AgentRole } from '../agents'
+
 // Type exports
 export type {
   SkillCategory,

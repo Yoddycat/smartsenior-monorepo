@@ -9,5 +9,6 @@ export * from './agents'
 export * from './tasks'
 export * from './workflows'
 export * from './skills'
+export * from './cli'
 
 export const AIOS_VERSION = '0.1.0'
