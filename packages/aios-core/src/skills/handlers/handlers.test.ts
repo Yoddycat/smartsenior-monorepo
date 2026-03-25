@@ -27,6 +27,15 @@ import {
   hasHandler,
   listHandledSkills,
   getHandlerCounts,
+  // New SDC handlers
+  handleCreateNextStory,
+  handleCloseStory,
+  handlePrioritizeBacklog,
+  handleRefactor,
+  handleCodeRabbitReview,
+  handleSecurityAudit,
+  handleCritiqueSpec,
+  handleSetupMcp,
   // Data Engineer handlers
   handleCreateSchema,
   handleOptimizeQuery,
@@ -42,6 +51,9 @@ import {
   handleCreateDesignSystem,
   handleUserFlowAnalysis,
   uxDesignExpertHandlers,
+  // AIOS Master handlers
+  handleConfig,
+  aiosMasterHandlers,
 } from './index'
 
 // Helper to create test context
@@ -635,5 +647,360 @@ describe('UX Design Expert Handlers', () => {
     expect(Object.keys(uxDesignExpertHandlers)).toHaveLength(6)
     expect(uxDesignExpertHandlers['ux-design-expert:create-prototype']).toBe(handleCreatePrototype)
     expect(uxDesignExpertHandlers['ux-design-expert:audit-accessibility']).toBe(handleAuditAccessibility)
+  })
+})
+
+describe('New SDC Handlers', () => {
+  describe('handleCreateNextStory (SM)', () => {
+    it('should require epic ID', async () => {
+      const context = createTestContext()
+      const result = await handleCreateNextStory(context)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('Epic ID is required')
+    })
+
+    it('should create next story in sequence', async () => {
+      const context = createTestContext({
+        epicId: 'epic-1',
+      })
+      vi.mocked(context.deps.fs.glob).mockResolvedValue([])
+      vi.mocked(context.deps.prompt.input).mockResolvedValue('New Feature')
+
+      const result = await handleCreateNextStory(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.storyId).toBeDefined()
+      expect(result.data?.sequenceNumber).toBe(1)
+      expect(result.triggeredSkills).toContain('po:validate-story-draft')
+    })
+
+    it('should increment sequence number', async () => {
+      const context = createTestContext({
+        epicId: 'epic-1',
+      })
+      vi.mocked(context.deps.fs.glob).mockResolvedValue([
+        'docs/stories/epics/epic-1/1.1.story.md',
+        'docs/stories/epics/epic-1/1.2.story.md',
+      ])
+      vi.mocked(context.deps.prompt.input).mockResolvedValue('Third Story')
+
+      const result = await handleCreateNextStory(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.sequenceNumber).toBe(3)
+    })
+  })
+
+  describe('handleCloseStory (PO)', () => {
+    it('should require story path', async () => {
+      const context = createTestContext()
+      const result = await handleCloseStory(context)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('Story path is required')
+    })
+
+    it('should close story with confirmation', async () => {
+      const context = createTestContext({
+        story: { storyId: '1.1', storyPath: 'docs/stories/1.1.story.md' },
+      })
+      vi.mocked(context.deps.fs.exists).mockResolvedValue(true)
+      vi.mocked(context.deps.fs.read).mockResolvedValue('**Status:** InReview')
+
+      const result = await handleCloseStory(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.closed).toBe(true)
+      expect(result.data?.status).toBe('Done')
+    })
+
+    it('should fail if user cancels', async () => {
+      const context = createTestContext({
+        story: { storyId: '1.1', storyPath: 'docs/stories/1.1.story.md' },
+      })
+      vi.mocked(context.deps.fs.exists).mockResolvedValue(true)
+      vi.mocked(context.deps.prompt.confirm).mockResolvedValue(false)
+
+      const result = await handleCloseStory(context)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('cancelled')
+    })
+  })
+
+  describe('handlePrioritizeBacklog (PO)', () => {
+    it('should require epic ID', async () => {
+      const context = createTestContext()
+      const result = await handlePrioritizeBacklog(context)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('Epic ID is required')
+    })
+
+    it('should prioritize stories by status', async () => {
+      const context = createTestContext({
+        epicId: 'epic-1',
+      })
+      vi.mocked(context.deps.fs.glob).mockResolvedValue([
+        'docs/stories/epics/epic-1/1.1.story.md',
+        'docs/stories/epics/epic-1/1.2.story.md',
+      ])
+      vi.mocked(context.deps.fs.read)
+        .mockResolvedValueOnce('# 1.1 - Story One\n**Status:** Done')
+        .mockResolvedValueOnce('# 1.2 - Story Two\n**Status:** Draft')
+
+      const result = await handlePrioritizeBacklog(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.stories).toHaveLength(2)
+      expect(result.data?.reordered).toBe(true)
+    })
+  })
+
+  describe('handleRefactor (DEV)', () => {
+    it('should require target path', async () => {
+      const context = createTestContext()
+      const result = await handleRefactor(context)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('Target path is required')
+    })
+
+    it('should refactor with confirmation', async () => {
+      const context = createTestContext()
+      vi.mocked(context.deps.fs.exists).mockResolvedValue(true)
+      vi.mocked(context.deps.fs.read).mockResolvedValue('var x = 1; function foo() {}')
+
+      const result = await handleRefactor(context, {
+        path: 'src/utils.ts',
+        type: 'general',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.testsPassedBefore).toBe(true)
+      expect(result.data?.testsPassedAfter).toBe(true)
+    })
+
+    it('should fail if user cancels', async () => {
+      const context = createTestContext()
+      vi.mocked(context.deps.fs.exists).mockResolvedValue(true)
+      vi.mocked(context.deps.prompt.confirm).mockResolvedValue(false)
+
+      const result = await handleRefactor(context, { path: 'src/utils.ts' })
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('cancelled')
+    })
+  })
+
+  describe('handleCodeRabbitReview (QA)', () => {
+    it('should run review and return findings', async () => {
+      const context = createTestContext()
+      const result = await handleCodeRabbitReview(context, {
+        path: 'src',
+        severity: ['critical', 'high'],
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.findings).toBeDefined()
+      expect(result.data?.iterations).toBeGreaterThanOrEqual(0)
+      expect(['clean', 'issues_found', 'issues_fixed']).toContain(result.data?.status)
+    })
+
+    it('should respect dryRun option', async () => {
+      const context = createTestContext({
+        options: { ...defaultOptions, dryRun: true },
+      })
+
+      const result = await handleCodeRabbitReview(context)
+
+      expect(result.success).toBe(true)
+      expect(context.deps.fs.write).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('handleSecurityAudit (QA)', () => {
+    it('should return security score and vulnerabilities', async () => {
+      const context = createTestContext()
+      const result = await handleSecurityAudit(context, { path: 'src' })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.score).toBeGreaterThanOrEqual(0)
+      expect(result.data?.score).toBeLessThanOrEqual(100)
+      expect(result.data?.vulnerabilities).toBeDefined()
+      expect(typeof result.data?.passed).toBe('boolean')
+    })
+  })
+
+  describe('handleCritiqueSpec (QA)', () => {
+    it('should require spec path', async () => {
+      const context = createTestContext()
+      const result = await handleCritiqueSpec(context)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('Spec path is required')
+    })
+
+    it('should critique spec and return verdict', async () => {
+      const context = createTestContext({
+        spec: { specPath: 'docs/specs/feature.md' },
+      })
+      vi.mocked(context.deps.fs.exists).mockResolvedValue(true)
+      vi.mocked(context.deps.fs.read).mockResolvedValue(`
+## Overview
+This is a comprehensive specification.
+
+## Requirements
+FR-001: The system shall do something.
+
+## Non-Functional
+NFR-001: Performance requirements.
+
+## Constraints
+System limitations.
+
+## References
+PRD-001
+`)
+
+      const result = await handleCritiqueSpec(context)
+
+      expect(result.success).toBe(true)
+      expect(['APPROVED', 'NEEDS_REVISION', 'BLOCKED']).toContain(result.data?.verdict)
+      expect(result.data?.dimensions).toHaveLength(5)
+      expect(result.data?.averageScore).toBeGreaterThanOrEqual(0)
+    })
+
+    it('should trigger plan-implementation on APPROVED', async () => {
+      const context = createTestContext({
+        spec: { specPath: 'docs/specs/feature.md' },
+      })
+      vi.mocked(context.deps.fs.exists).mockResolvedValue(true)
+      vi.mocked(context.deps.fs.read).mockResolvedValue(`
+## Overview
+Complete spec with all sections.
+
+## Requirements
+FR-001: Must do this. FR-002: Must do that.
+
+## Non-Functional
+NFR-001: Performance. NFR-002: Security.
+
+## Constraints
+CON-001: Budget limits.
+
+## References
+PRD-001, Epic-1
+
+Given precondition When action Then result.
+`)
+
+      const result = await handleCritiqueSpec(context)
+
+      expect(result.success).toBe(true)
+      if (result.data?.verdict === 'APPROVED') {
+        expect(result.triggeredSkills).toContain('architect:plan-implementation')
+      }
+    })
+  })
+
+  describe('handleSetupMcp (DevOps)', () => {
+    it('should require MCP name', async () => {
+      const context = createTestContext()
+      const result = await handleSetupMcp(context)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('MCP name is required')
+    })
+
+    it('should setup MCP with confirmation', async () => {
+      const context = createTestContext()
+      vi.mocked(context.deps.fs.exists).mockResolvedValue(true)
+
+      const result = await handleSetupMcp(context, {
+        name: 'playwright',
+        type: 'docker',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.name).toBe('playwright')
+      expect(result.data?.configured).toBe(true)
+    })
+
+    it('should fail if user cancels', async () => {
+      const context = createTestContext()
+      vi.mocked(context.deps.prompt.confirm).mockResolvedValue(false)
+
+      const result = await handleSetupMcp(context, { name: 'test-mcp' })
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('cancelled')
+    })
+  })
+})
+
+describe('AIOS Master Handlers', () => {
+  describe('handleConfig', () => {
+    it('should view config by default', async () => {
+      const context = createTestContext()
+      vi.mocked(context.deps.fs.exists).mockResolvedValue(true)
+      vi.mocked(context.deps.fs.read).mockResolvedValue('debug: false')
+
+      const result = await handleConfig(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.action).toBe('view')
+      expect(result.data?.modified).toBe(false)
+    })
+
+    it('should set config with confirmation', async () => {
+      const context = createTestContext()
+      vi.mocked(context.deps.fs.exists).mockResolvedValue(true)
+      vi.mocked(context.deps.fs.read).mockResolvedValue('')
+
+      const result = await handleConfig(context, {
+        action: 'set',
+        key: 'debug',
+        value: true,
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.action).toBe('set')
+      expect(result.data?.modified).toBe(true)
+    })
+
+    it('should require key for set action', async () => {
+      const context = createTestContext()
+      const result = await handleConfig(context, { action: 'set' })
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('key is required')
+    })
+
+    it('should reset config with confirmation', async () => {
+      const context = createTestContext()
+
+      const result = await handleConfig(context, { action: 'reset' })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.action).toBe('reset')
+      expect(result.data?.modified).toBe(true)
+    })
+
+    it('should fail reset if user cancels', async () => {
+      const context = createTestContext()
+      vi.mocked(context.deps.prompt.confirm).mockResolvedValue(false)
+
+      const result = await handleConfig(context, { action: 'reset' })
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('cancelled')
+    })
+  })
+
+  it('should have all handlers in aiosMasterHandlers map', () => {
+    expect(Object.keys(aiosMasterHandlers)).toHaveLength(5)
+    expect(aiosMasterHandlers['aios-master:config']).toBe(handleConfig)
   })
 })
