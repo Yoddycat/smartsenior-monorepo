@@ -41,8 +41,43 @@ export {
   registerSkills,
 } from './registry'
 
-// Definition helpers (will be added in Phase 2)
+// Definition helpers
 export { defineSkill, defineSkillWithHandler } from './definitions/factory'
 
 // Auto-register all skill definitions
 export { registerAllSkills } from './definitions'
+
+// Handler exports
+export {
+  // Types
+  type HandlerOptions,
+  type StoryContext,
+  type GitContext,
+  type QAContext,
+  type QAIssue,
+  type SpecContext,
+  type HandlerDependencies,
+  type ExtendedSkillContext,
+  type ExtendedSkillHandler,
+  type HandlerRegistration,
+  // Base utilities
+  success,
+  failure,
+  successWithTriggers,
+  defaultDependencies,
+  defaultOptions,
+  withErrorHandling,
+  withTimeout,
+  withDryRun,
+  withConfirmation,
+  composeHandlers,
+  delegateHandler,
+  noopHandler,
+  validateContext,
+  // All handlers
+  allHandlers,
+  sdcHandlers,
+  getHandler,
+  hasHandler,
+  listHandledSkills,
+} from './handlers'
