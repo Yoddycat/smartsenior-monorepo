@@ -18,6 +18,7 @@ import { architectSkills } from './architect'
 import { analystSkills } from './analyst'
 import { dataEngineerSkills } from './data-engineer'
 import { aiosMasterSkills } from './aios-master'
+import { uxDesignExpertSkills } from './ux-design-expert'
 
 // Re-export individual skill collections
 export { smSkills } from './sm'
@@ -30,6 +31,7 @@ export { architectSkills } from './architect'
 export { analystSkills } from './analyst'
 export { dataEngineerSkills } from './data-engineer'
 export { aiosMasterSkills } from './aios-master'
+export { uxDesignExpertSkills } from './ux-design-expert'
 
 // Re-export factory functions
 export {
@@ -62,6 +64,7 @@ export const ALL_SKILLS: Skill[] = [
   ...analystSkills,
   ...dataEngineerSkills,
   ...aiosMasterSkills,
+  ...uxDesignExpertSkills,
 ]
 
 /**
@@ -112,6 +115,8 @@ export function getSkillsByAgent(agent: string): Skill[] {
       return dataEngineerSkills
     case 'aios-master':
       return aiosMasterSkills
+    case 'ux-design-expert':
+      return uxDesignExpertSkills
     default:
       return []
   }
