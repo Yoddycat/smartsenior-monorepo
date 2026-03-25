@@ -13,6 +13,11 @@ import { poSkills } from './po'
 import { devSkills } from './dev'
 import { qaSkills } from './qa'
 import { devopsSkills } from './devops'
+import { pmSkills } from './pm'
+import { architectSkills } from './architect'
+import { analystSkills } from './analyst'
+import { dataEngineerSkills } from './data-engineer'
+import { aiosMasterSkills } from './aios-master'
 
 // Re-export individual skill collections
 export { smSkills } from './sm'
@@ -20,6 +25,11 @@ export { poSkills } from './po'
 export { devSkills } from './dev'
 export { qaSkills } from './qa'
 export { devopsSkills } from './devops'
+export { pmSkills } from './pm'
+export { architectSkills } from './architect'
+export { analystSkills } from './analyst'
+export { dataEngineerSkills } from './data-engineer'
+export { aiosMasterSkills } from './aios-master'
 
 // Re-export factory functions
 export {
@@ -47,6 +57,11 @@ export const ALL_SKILLS: Skill[] = [
   ...devSkills,
   ...qaSkills,
   ...devopsSkills,
+  ...pmSkills,
+  ...architectSkills,
+  ...analystSkills,
+  ...dataEngineerSkills,
+  ...aiosMasterSkills,
 ]
 
 /**
@@ -87,6 +102,16 @@ export function getSkillsByAgent(agent: string): Skill[] {
       return qaSkills
     case 'devops':
       return devopsSkills
+    case 'pm':
+      return pmSkills
+    case 'architect':
+      return architectSkills
+    case 'analyst':
+      return analystSkills
+    case 'data-engineer':
+      return dataEngineerSkills
+    case 'aios-master':
+      return aiosMasterSkills
     default:
       return []
   }

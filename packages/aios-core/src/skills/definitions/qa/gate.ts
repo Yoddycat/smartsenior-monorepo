@@ -66,6 +66,19 @@ export const securityAuditSkill: Skill = defineQASkill({
 })
 
 /**
+ * *critique-spec - Critique specification document
+ */
+export const critiqueSpecSkill: Skill = defineQASkill({
+  command: '*critique-spec',
+  name: 'Critique Specification',
+  description: 'Review and critique specification document. Phase 5 of spec pipeline. Returns APPROVED (>=4.0), NEEDS_REVISION (3.0-3.9), or BLOCKED (<3.0).',
+  dependsOn: ['pm:write-spec'],
+  canTrigger: ['architect:plan-implementation'],
+  aliases: ['*spec-critique'],
+  tags: ['quality', 'spec-pipeline', 'review'],
+})
+
+/**
  * All QA skills
  */
 export const qaSkills: Skill[] = [
@@ -74,4 +87,5 @@ export const qaSkills: Skill[] = [
   qaLoopSkill,
   coderabbitReviewSkill,
   securityAuditSkill,
+  critiqueSpecSkill,
 ]

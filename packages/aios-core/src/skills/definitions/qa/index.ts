@@ -11,4 +11,5 @@ export {
   qaLoopSkill,
   coderabbitReviewSkill,
   securityAuditSkill,
+  critiqueSpecSkill,
 } from './gate'
