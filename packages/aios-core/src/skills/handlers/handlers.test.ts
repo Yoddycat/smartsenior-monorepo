@@ -54,6 +54,14 @@ import {
   // AIOS Master handlers
   handleConfig,
   aiosMasterHandlers,
+  // Architect handlers
+  handleCreateArchitecture,
+  handleReviewArchitecture,
+  handleAssessComplexity,
+  architectHandlers,
+  // Analyst handlers
+  handleCompetitorAnalysis,
+  analystHandlers,
 } from './index'
 
 // Helper to create test context
@@ -1002,5 +1010,219 @@ describe('AIOS Master Handlers', () => {
   it('should have all handlers in aiosMasterHandlers map', () => {
     expect(Object.keys(aiosMasterHandlers)).toHaveLength(5)
     expect(aiosMasterHandlers['aios-master:config']).toBe(handleConfig)
+  })
+})
+
+describe('Architect Handlers', () => {
+  describe('handleCreateArchitecture', () => {
+    it('should create architecture documentation', async () => {
+      const context = createTestContext()
+      const result = await handleCreateArchitecture(context, {
+        projectName: 'test-project',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.architecturePath).toContain('docs/architecture/')
+      expect(result.data?.components).toBeDefined()
+      expect(result.data?.components.length).toBeGreaterThan(0)
+      expect(result.data?.decisions).toBeDefined()
+    })
+
+    it('should use default project name', async () => {
+      const context = createTestContext()
+      const result = await handleCreateArchitecture(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.architecturePath).toContain('project-architecture.md')
+    })
+
+    it('should respect dryRun option', async () => {
+      const context = createTestContext({
+        options: { ...defaultOptions, dryRun: true },
+      })
+
+      const result = await handleCreateArchitecture(context)
+
+      expect(result.success).toBe(true)
+      expect(context.deps.fs.write).not.toHaveBeenCalled()
+    })
+
+    it('should include architecture decisions', async () => {
+      const context = createTestContext()
+      const result = await handleCreateArchitecture(context, {
+        projectName: 'my-app',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.decisions).toHaveLength(1)
+      expect(result.data?.decisions[0].title).toBe('Technology Stack')
+    })
+  })
+
+  describe('handleReviewArchitecture', () => {
+    it('should review architecture and return score', async () => {
+      const context = createTestContext()
+      const result = await handleReviewArchitecture(context, {
+        targetPath: 'src',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.score).toBeGreaterThanOrEqual(0)
+      expect(result.data?.score).toBeLessThanOrEqual(100)
+      expect(result.data?.strengths).toBeDefined()
+      expect(result.data?.weaknesses).toBeDefined()
+    })
+
+    it('should identify technical debt', async () => {
+      const context = createTestContext()
+      const result = await handleReviewArchitecture(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.technicalDebt).toBeDefined()
+      expect(result.data?.technicalDebt.length).toBeGreaterThan(0)
+      expect(result.data?.technicalDebt[0]).toHaveProperty('severity')
+      expect(result.data?.technicalDebt[0]).toHaveProperty('effort')
+    })
+
+    it('should provide recommendations', async () => {
+      const context = createTestContext()
+      const result = await handleReviewArchitecture(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.recommendations).toBeDefined()
+      expect(result.data?.recommendations.length).toBeGreaterThan(0)
+    })
+
+    it('should trigger plan-implementation', async () => {
+      const context = createTestContext()
+      const result = await handleReviewArchitecture(context)
+
+      expect(result.success).toBe(true)
+      expect(result.triggeredSkills).toContain('architect:plan-implementation')
+    })
+
+    it('should respect dryRun option', async () => {
+      const context = createTestContext({
+        options: { ...defaultOptions, dryRun: true },
+      })
+
+      const result = await handleReviewArchitecture(context)
+
+      expect(result.success).toBe(true)
+      expect(context.deps.fs.write).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('handleAssessComplexity', () => {
+    it('should assess complexity and return classification', async () => {
+      const context = createTestContext()
+      const result = await handleAssessComplexity(context)
+
+      expect(result.success).toBe(true)
+      expect(['SIMPLE', 'STANDARD', 'COMPLEX']).toContain(result.data?.classification)
+      expect(result.data?.score).toBeGreaterThanOrEqual(0)
+      expect(result.data?.dimensions).toHaveLength(5)
+    })
+
+    it('should return SIMPLE for low complexity', async () => {
+      const context = createTestContext({
+        spec: { specPath: 'docs/spec.md' },
+      })
+      vi.mocked(context.deps.fs.exists).mockResolvedValue(true)
+      vi.mocked(context.deps.fs.read).mockResolvedValue('Simple feature')
+
+      const result = await handleAssessComplexity(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.classification).toBe('SIMPLE')
+      expect(result.data?.recommendedPhases).toBe(3)
+    })
+  })
+
+  it('should have all handlers in architectHandlers map', () => {
+    expect(Object.keys(architectHandlers)).toHaveLength(5)
+    expect(architectHandlers['architect:create-architecture']).toBe(handleCreateArchitecture)
+    expect(architectHandlers['architect:review-architecture']).toBe(handleReviewArchitecture)
+    expect(architectHandlers['architect:assess-complexity']).toBe(handleAssessComplexity)
+  })
+})
+
+describe('Analyst Handlers', () => {
+  describe('handleCompetitorAnalysis', () => {
+    it('should analyze competitors and return results', async () => {
+      const context = createTestContext()
+      const result = await handleCompetitorAnalysis(context, {
+        industry: 'tech',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.analysisPath).toContain('docs/research/competitor-analysis')
+      expect(result.data?.competitors).toBeDefined()
+      expect(result.data?.competitors.length).toBeGreaterThan(0)
+    })
+
+    it('should use default industry', async () => {
+      const context = createTestContext()
+      const result = await handleCompetitorAnalysis(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.analysisPath).toBeDefined()
+    })
+
+    it('should analyze provided competitors', async () => {
+      const context = createTestContext()
+      const result = await handleCompetitorAnalysis(context, {
+        competitors: ['Company A', 'Company B', 'Company C'],
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.competitors).toHaveLength(3)
+      expect(result.data?.competitors[0].name).toBe('Company A')
+    })
+
+    it('should identify opportunities and threats', async () => {
+      const context = createTestContext()
+      const result = await handleCompetitorAnalysis(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.opportunities).toBeDefined()
+      expect(result.data?.opportunities.length).toBeGreaterThan(0)
+      expect(result.data?.threats).toBeDefined()
+      expect(result.data?.threats.length).toBeGreaterThan(0)
+    })
+
+    it('should return market position', async () => {
+      const context = createTestContext()
+      const result = await handleCompetitorAnalysis(context)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.marketPosition).toBeDefined()
+    })
+
+    it('should respect dryRun option', async () => {
+      const context = createTestContext({
+        options: { ...defaultOptions, dryRun: true },
+      })
+
+      const result = await handleCompetitorAnalysis(context)
+
+      expect(result.success).toBe(true)
+      expect(context.deps.fs.write).not.toHaveBeenCalled()
+    })
+
+    it('should include competitor strengths and weaknesses', async () => {
+      const context = createTestContext()
+      const result = await handleCompetitorAnalysis(context)
+
+      expect(result.success).toBe(true)
+      const firstCompetitor = result.data?.competitors[0]
+      expect(firstCompetitor?.strengths).toBeDefined()
+      expect(firstCompetitor?.weaknesses).toBeDefined()
+    })
+  })
+
+  it('should have all handlers in analystHandlers map', () => {
+    expect(Object.keys(analystHandlers)).toHaveLength(4)
+    expect(analystHandlers['analyst:competitor-analysis']).toBe(handleCompetitorAnalysis)
   })
 })

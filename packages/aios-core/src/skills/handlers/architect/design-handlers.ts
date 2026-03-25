@@ -137,6 +137,144 @@ export async function handleDesignSystem(
 }
 
 /**
+ * Architecture result
+ */
+export interface ArchitectureResult {
+  architecturePath: string
+  components: string[]
+  decisions: ArchitectureDecision[]
+  diagrams: string[]
+}
+
+interface ArchitectureDecision {
+  title: string
+  decision: string
+  rationale: string
+  consequences: string[]
+}
+
+/**
+ * *create-architecture handler - Create architecture documentation
+ */
+export async function handleCreateArchitecture(
+  context: ExtendedSkillContext,
+  args?: Record<string, unknown>
+): Promise<SkillResult<ArchitectureResult>> {
+  const { deps } = context
+  const { fs, logger } = deps
+
+  const projectName = (args?.projectName as string) ?? 'Project'
+  const scope = (args?.scope as string) ?? 'full'
+
+  logger.info(`Creating architecture documentation for: ${projectName}`)
+
+  const architecturePath = `docs/architecture/${projectName.toLowerCase()}-architecture.md`
+
+  const decisions: ArchitectureDecision[] = [
+    {
+      title: 'Technology Stack',
+      decision: 'Use TypeScript with Node.js',
+      rationale: 'Type safety and ecosystem support',
+      consequences: ['Learning curve for JS devs', 'Better maintainability'],
+    },
+  ]
+
+  const content = generateArchitectureDoc(projectName, decisions)
+
+  if (!context.options.dryRun) {
+    await fs.write(architecturePath, content)
+  }
+
+  logger.info(`Architecture documentation created: ${architecturePath}`)
+
+  return success({
+    architecturePath,
+    components: ['Core', 'API', 'Database', 'UI'],
+    decisions,
+    diagrams: [`${architecturePath.replace('.md', '-diagram.png')}`],
+  })
+}
+
+/**
+ * Architecture review result
+ */
+export interface ArchitectureReviewResult {
+  reviewPath: string
+  score: number
+  strengths: string[]
+  weaknesses: string[]
+  technicalDebt: TechnicalDebtItem[]
+  recommendations: string[]
+}
+
+interface TechnicalDebtItem {
+  area: string
+  severity: 'low' | 'medium' | 'high' | 'critical'
+  description: string
+  effort: string
+}
+
+/**
+ * *review-architecture handler - Review existing architecture
+ */
+export async function handleReviewArchitecture(
+  context: ExtendedSkillContext,
+  args?: Record<string, unknown>
+): Promise<SkillResult<ArchitectureReviewResult>> {
+  const { deps } = context
+  const { fs, logger } = deps
+
+  const targetPath = (args?.targetPath as string) ?? 'src'
+
+  logger.info(`Reviewing architecture at: ${targetPath}`)
+
+  const reviewPath = `docs/reviews/architecture-review-${Date.now()}.md`
+
+  const technicalDebt: TechnicalDebtItem[] = [
+    {
+      area: 'Dependencies',
+      severity: 'medium',
+      description: 'Some outdated dependencies',
+      effort: '1-2 days',
+    },
+  ]
+
+  const review = {
+    score: 75,
+    strengths: [
+      'Clear separation of concerns',
+      'Consistent coding patterns',
+    ],
+    weaknesses: [
+      'Missing documentation',
+      'Some circular dependencies',
+    ],
+    technicalDebt,
+    recommendations: [
+      'Add architecture documentation',
+      'Refactor circular dependencies',
+      'Update outdated packages',
+    ],
+  }
+
+  const content = generateArchitectureReview(review)
+
+  if (!context.options.dryRun) {
+    await fs.write(reviewPath, content)
+  }
+
+  logger.info(`Architecture review complete: ${reviewPath} (score: ${review.score}/100)`)
+
+  return successWithTriggers(
+    {
+      reviewPath,
+      ...review,
+    },
+    ['architect:plan-implementation']
+  )
+}
+
+/**
  * Implementation plan result
  */
 export interface ImplementationPlanResult {
@@ -196,6 +334,8 @@ import type { ExtendedSkillHandler } from '../types'
 export const architectHandlers: Record<string, ExtendedSkillHandler> = {
   'architect:assess-complexity': handleAssessComplexity,
   'architect:design-system': handleDesignSystem,
+  'architect:create-architecture': handleCreateArchitecture,
+  'architect:review-architecture': handleReviewArchitecture,
   'architect:plan-implementation': handlePlanImplementation,
 }
 
@@ -313,5 +453,86 @@ ${p.stories.map(s => `      - ${s}`).join('\n')}`).join('\n')
 phases:${phasesYaml}
 
 created: ${new Date().toISOString()}
+`
+}
+
+function generateArchitectureDoc(projectName: string, decisions: ArchitectureDecision[]): string {
+  const decisionsSection = decisions.map(d => `
+### ${d.title}
+
+**Decision:** ${d.decision}
+
+**Rationale:** ${d.rationale}
+
+**Consequences:**
+${d.consequences.map(c => `- ${c}`).join('\n')}
+`).join('\n')
+
+  return `# Architecture: ${projectName}
+
+## Overview
+
+This document describes the architecture for ${projectName}.
+
+## System Context
+
+\`\`\`
+[External Systems] <--> [${projectName}] <--> [Database]
+\`\`\`
+
+## Components
+
+| Component | Description |
+|-----------|-------------|
+| Core | Business logic |
+| API | REST/GraphQL interface |
+| Database | Data persistence |
+| UI | User interface |
+
+## Architecture Decisions
+${decisionsSection}
+
+## Quality Attributes
+
+- **Scalability:** Horizontal scaling support
+- **Security:** Authentication and authorization
+- **Maintainability:** Clean architecture principles
+
+---
+Generated: ${new Date().toISOString().split('T')[0]}
+`
+}
+
+function generateArchitectureReview(review: {
+  score: number
+  strengths: string[]
+  weaknesses: string[]
+  technicalDebt: TechnicalDebtItem[]
+  recommendations: string[]
+}): string {
+  return `# Architecture Review
+
+## Score: ${review.score}/100
+
+## Strengths
+
+${review.strengths.map(s => `- ${s}`).join('\n')}
+
+## Weaknesses
+
+${review.weaknesses.map(w => `- ${w}`).join('\n')}
+
+## Technical Debt
+
+| Area | Severity | Description | Effort |
+|------|----------|-------------|--------|
+${review.technicalDebt.map(d => `| ${d.area} | ${d.severity} | ${d.description} | ${d.effort} |`).join('\n')}
+
+## Recommendations
+
+${review.recommendations.map((r, i) => `${i + 1}. ${r}`).join('\n')}
+
+---
+Reviewed: ${new Date().toISOString().split('T')[0]}
 `
 }

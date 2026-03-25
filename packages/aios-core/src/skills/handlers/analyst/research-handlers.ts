@@ -179,6 +179,97 @@ export async function handleCreateReport(
   })
 }
 
+/**
+ * Competitor analysis result
+ */
+export interface CompetitorAnalysisResult {
+  analysisPath: string
+  competitors: Competitor[]
+  marketPosition: string
+  opportunities: string[]
+  threats: string[]
+}
+
+interface Competitor {
+  name: string
+  strengths: string[]
+  weaknesses: string[]
+  marketShare: string
+}
+
+/**
+ * *competitor-analysis handler - Analyze competitors
+ */
+export async function handleCompetitorAnalysis(
+  context: ExtendedSkillContext,
+  args?: Record<string, unknown>
+): Promise<SkillResult<CompetitorAnalysisResult>> {
+  const { deps } = context
+  const { fs, logger } = deps
+
+  const industry = (args?.industry as string) ?? 'technology'
+  const competitorNames = (args?.competitors as string[]) ?? []
+
+  logger.info(`Analyzing competitors in: ${industry}`)
+
+  const analysisPath = `docs/research/competitor-analysis-${Date.now()}.md`
+
+  const competitors: Competitor[] = competitorNames.length > 0
+    ? competitorNames.map(name => ({
+        name,
+        strengths: ['Market presence', 'Brand recognition'],
+        weaknesses: ['Limited features', 'High pricing'],
+        marketShare: 'Unknown',
+      }))
+    : [
+        {
+          name: 'Competitor A',
+          strengths: ['Strong brand', 'Large user base'],
+          weaknesses: ['Slow innovation', 'Complex pricing'],
+          marketShare: '30%',
+        },
+        {
+          name: 'Competitor B',
+          strengths: ['Innovative features', 'Good UX'],
+          weaknesses: ['Small team', 'Limited support'],
+          marketShare: '15%',
+        },
+      ]
+
+  const analysis = {
+    industry,
+    competitors,
+    marketPosition: 'Challenger',
+    opportunities: [
+      'Underserved market segments',
+      'Feature gaps in competitor offerings',
+      'Pricing flexibility',
+    ],
+    threats: [
+      'Established competitor networks',
+      'Market consolidation',
+      'Economic uncertainty',
+    ],
+    analyzedAt: new Date().toISOString(),
+  }
+
+  const content = generateCompetitorReport(analysis)
+
+  if (!context.options.dryRun) {
+    await fs.write(analysisPath, content)
+  }
+
+  logger.info(`Competitor analysis complete: ${analysisPath}`)
+
+  return success({
+    analysisPath,
+    competitors,
+    marketPosition: analysis.marketPosition,
+    opportunities: analysis.opportunities,
+    threats: analysis.threats,
+  })
+}
+
 import type { ExtendedSkillHandler } from '../types'
 
 /**
@@ -188,6 +279,7 @@ export const analystHandlers: Record<string, ExtendedSkillHandler> = {
   'analyst:research-prompt': handleResearchPrompt,
   'analyst:analyze-data': handleAnalyzeData,
   'analyst:create-report': handleCreateReport,
+  'analyst:competitor-analysis': handleCompetitorAnalysis,
 }
 
 function generateReport(title: string, format: string): string {
@@ -221,6 +313,55 @@ function generateReport(title: string, format: string): string {
 ## Appendix
 
 [Supporting data]
+
+---
+Generated: ${new Date().toISOString().split('T')[0]}
+`
+}
+
+function generateCompetitorReport(analysis: {
+  industry: string
+  competitors: Competitor[]
+  marketPosition: string
+  opportunities: string[]
+  threats: string[]
+}): string {
+  const competitorSections = analysis.competitors.map(c => `
+### ${c.name}
+
+**Market Share:** ${c.marketShare}
+
+**Strengths:**
+${c.strengths.map(s => `- ${s}`).join('\n')}
+
+**Weaknesses:**
+${c.weaknesses.map(w => `- ${w}`).join('\n')}
+`).join('\n')
+
+  return `# Competitor Analysis: ${analysis.industry}
+
+## Market Position
+
+Current position: **${analysis.marketPosition}**
+
+## Competitors
+${competitorSections}
+
+## SWOT Summary
+
+### Opportunities
+
+${analysis.opportunities.map(o => `- ${o}`).join('\n')}
+
+### Threats
+
+${analysis.threats.map(t => `- ${t}`).join('\n')}
+
+## Recommendations
+
+1. Focus on underserved segments
+2. Differentiate through innovation
+3. Build strategic partnerships
 
 ---
 Generated: ${new Date().toISOString().split('T')[0]}

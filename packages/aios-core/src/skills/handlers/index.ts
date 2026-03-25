@@ -84,6 +84,8 @@ export {
   architectHandlers,
   handleAssessComplexity,
   handleDesignSystem,
+  handleCreateArchitecture,
+  handleReviewArchitecture,
   handlePlanImplementation,
 } from './architect'
 
@@ -93,6 +95,7 @@ export {
   handleResearchPrompt,
   handleAnalyzeData,
   handleCreateReport,
+  handleCompetitorAnalysis,
 } from './analyst'
 
 // AIOS Master handlers
@@ -165,6 +168,8 @@ export type {
 export type {
   ComplexityResult,
   DesignResult,
+  ArchitectureResult,
+  ArchitectureReviewResult,
   ImplementationPlanResult,
 } from './architect'
 
@@ -173,6 +178,7 @@ export type {
   ResearchResult,
   AnalysisResult,
   ReportResult,
+  CompetitorAnalysisResult,
 } from './analyst'
 
 // AIOS Master Result types
