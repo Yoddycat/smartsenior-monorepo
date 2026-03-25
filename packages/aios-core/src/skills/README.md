@@ -15,8 +15,8 @@ O Skills System permite que agentes executem comandos (`*command`) com:
 | Métrica | Valor |
 |---------|-------|
 | Total de skills | 51 |
-| Handlers implementados | 42 (82%) |
-| Testes | 77 |
+| Handlers implementados | 51 (100%) |
+| Testes | 103 |
 | Agentes | 11 |
 
 ## Instalação
@@ -26,7 +26,7 @@ import { initializeSkillSystem } from '@smartsenior/aios-core/skills'
 
 // Inicializa todas as skills e handlers
 const result = initializeSkillSystem()
-// { skills: 51, handlers: { registered: 42 }, coverage: 82 }
+// { skills: 51, handlers: { registered: 51 }, coverage: 100 }
 ```
 
 ## Estrutura
@@ -63,19 +63,22 @@ skills/
 
 ## Skills por Agente
 
-### @sm (Scrum Master) - 2 skills
+### @sm (Scrum Master) - 3 skills
 | Comando | Descrição | Handler |
 |---------|-----------|---------|
 | `*draft` | Criar story draft | ✅ |
 | `*story-checklist` | Validar contra checklist | ✅ |
+| `*create-next-story` | Criar próxima story do épico | ✅ |
 
-### @po (Product Owner) - 2 skills
+### @po (Product Owner) - 4 skills
 | Comando | Descrição | Handler |
 |---------|-----------|---------|
 | `*validate-story-draft` | Validar story (10 pontos) | ✅ |
 | `*accept-story` | Aceitar story após QA | ✅ |
+| `*close-story` | Marcar story como Done | ✅ |
+| `*prioritize-backlog` | Reordenar backlog | ✅ |
 
-### @dev (Developer) - 5 skills
+### @dev (Developer) - 6 skills
 | Comando | Descrição | Handler |
 |---------|-----------|---------|
 | `*develop` | Implementar story | ✅ |
@@ -83,21 +86,26 @@ skills/
 | `*run-tests` | Executar testes | ✅ |
 | `*lint` | Executar linting | ✅ |
 | `*typecheck` | Verificar tipos TypeScript | ✅ |
+| `*refactor` | Refatorar código com safety checks | ✅ |
 
-### @qa (Quality Assurance) - 3 skills
+### @qa (Quality Assurance) - 6 skills
 | Comando | Descrição | Handler |
 |---------|-----------|---------|
 | `*gate` | Executar QA gate (7 checks) | ✅ |
 | `*review` | Code review | ✅ |
 | `*qa-loop` | Loop iterativo de QA | ✅ |
+| `*coderabbit-review` | Review automatizado + self-healing | ✅ |
+| `*security-audit` | Auditoria OWASP | ✅ |
+| `*critique-spec` | Criticar especificação | ✅ |
 
-### @devops (DevOps) - 4 skills (EXCLUSIVO)
+### @devops (DevOps) - 5 skills (EXCLUSIVO)
 | Comando | Descrição | Handler |
 |---------|-----------|---------|
 | `*push` | Push para remote | ✅ |
 | `*create-pr` | Criar pull request | ✅ |
 | `*merge-pr` | Merge de PR | ✅ |
 | `*release` | Criar release | ✅ |
+| `*setup-mcp` | Configurar MCP server | ✅ |
 
 ### @pm (Project Manager) - 5 skills
 | Comando | Descrição | Handler |
@@ -141,13 +149,14 @@ skills/
 | `*create-design-system` | Criar design system | ✅ |
 | `*user-flow-analysis` | Análise de user flow | ✅ |
 
-### @aios-master (AIOS Master) - 4 skills
+### @aios-master (AIOS Master) - 5 skills
 | Comando | Descrição | Handler |
 |---------|-----------|---------|
 | `*run-workflow` | Executar workflow | ✅ |
 | `*help` | Mostrar ajuda | ✅ |
 | `*status` | Status do sistema | ✅ |
 | `*delegate` | Delegar tarefa | ✅ |
+| `*config` | Gerenciar configuração | ✅ |
 
 ## Sistema de Autoridade
 
@@ -399,24 +408,26 @@ cd packages/aios-core
 npm test
 ```
 
-77 testes cobrindo:
+103 testes cobrindo:
 - Base Handler Utilities (7 testes)
 - Handler Wrappers (3 testes)
 - SDC Handlers (12 testes)
-- Handler Registry (6 testes)
+- Handler Registry (9 testes)
 - Data Engineer Handlers (10 testes)
 - UX Design Expert Handlers (10 testes)
+- New SDC Handlers (26 testes)
+- AIOS Master Handlers (7 testes)
 - Skills Registry (29 testes)
 
 ## Cobertura de Handlers por Categoria
 
 | Categoria | Handlers | Cobertura |
 |-----------|----------|-----------|
-| SDC | 16 | 100% |
+| SDC | 25 | 100% |
 | PM | 5 | 100% |
 | Architect | 3 | 100% |
 | Analyst | 3 | 100% |
-| AIOS Master | 4 | 100% |
+| AIOS Master | 5 | 100% |
 | Data Engineer | 5 | 100% |
 | UX Design Expert | 6 | 100% |
-| **Total** | **42/51** | **82%** |
+| **Total** | **51/51** | **100%** |
