@@ -10,8 +10,10 @@ export {
   handleHelp,
   handleStatus,
   handleDelegate,
+  handleConfig,
   type WorkflowRunResult,
   type HelpResult,
   type StatusResult,
   type DelegateResult,
+  type ConfigResult,
 } from './workflow-handlers'

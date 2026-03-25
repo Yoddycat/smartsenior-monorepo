@@ -291,3 +291,168 @@ function evaluateDoD(content: string): number {
 function evaluateAlignment(content: string): number {
   return /(PRD|Epic|FR-|NFR-|REQ-)/i.test(content) ? 1 : 0
 }
+
+/**
+ * Close story result
+ */
+export interface CloseStoryResult {
+  storyId: string
+  closed: boolean
+  status: 'Done'
+  closedAt: string
+}
+
+/**
+ * *close-story handler - Mark story as completed
+ */
+export async function handleCloseStory(
+  context: ExtendedSkillContext,
+  args?: Record<string, unknown>
+): Promise<SkillResult<CloseStoryResult>> {
+  const { deps, story } = context
+  const { fs, logger, prompt } = deps
+
+  const storyPath = story?.storyPath ?? (args?.storyPath as string)
+  const storyId = story?.storyId ?? (args?.storyId as string)
+
+  if (!storyPath) {
+    return failure('Story path is required')
+  }
+
+  // Check file exists
+  const exists = await fs.exists(storyPath)
+  if (!exists) {
+    return failure(`Story file not found: ${storyPath}`)
+  }
+
+  // Confirm closure
+  const confirmed = await prompt.confirm(
+    `Close story ${storyId} as Done? This should only be done after QA approval.`
+  )
+  if (!confirmed) {
+    return failure('Story closure cancelled by user')
+  }
+
+  logger.info(`Closing story: ${storyId}`)
+
+  // Read and update story
+  const content = await fs.read(storyPath)
+
+  // Check if QA has passed
+  if (!/\*\*Status:\*\*\s*(InReview|Ready)/i.test(content)) {
+    const forceClose = await prompt.confirm(
+      'Story is not in InReview status. Force close anyway?'
+    )
+    if (!forceClose) {
+      return failure('Story must be in InReview status to close')
+    }
+  }
+
+  const closedAt = new Date().toISOString()
+  const updatedContent = content
+    .replace(/\*\*Status:\*\*\s*\w+/i, '**Status:** Done')
+    .replace(
+      /## Change Log/i,
+      `## Change Log\n\n| ${closedAt.split('T')[0]} | @po | Story closed |`
+    )
+
+  if (!context.options.dryRun) {
+    await fs.write(storyPath, updatedContent)
+  }
+
+  logger.info(`Story ${storyId} closed successfully`)
+
+  return success({
+    storyId: storyId ?? '',
+    closed: true,
+    status: 'Done' as const,
+    closedAt,
+  })
+}
+
+/**
+ * Prioritize backlog result
+ */
+export interface PrioritizeBacklogResult {
+  epicId: string
+  stories: BacklogItem[]
+  reordered: boolean
+}
+
+interface BacklogItem {
+  storyId: string
+  title: string
+  priority: number
+  status: string
+}
+
+/**
+ * *prioritize-backlog handler - Reorder backlog priorities
+ */
+export async function handlePrioritizeBacklog(
+  context: ExtendedSkillContext,
+  args?: Record<string, unknown>
+): Promise<SkillResult<PrioritizeBacklogResult>> {
+  const { deps, epicId } = context
+  const { fs, logger } = deps
+
+  const targetEpicId = (args?.epicId as string) ?? epicId
+  if (!targetEpicId) {
+    return failure('Epic ID is required')
+  }
+
+  logger.info(`Prioritizing backlog for epic: ${targetEpicId}`)
+
+  // Find all stories in the epic
+  const storiesDir = `docs/stories/epics/${targetEpicId}`
+  const storyFiles = await fs.glob(`${storiesDir}/*.story.md`)
+
+  if (storyFiles.length === 0) {
+    return failure(`No stories found for epic: ${targetEpicId}`)
+  }
+
+  // Read and parse stories
+  const stories: BacklogItem[] = []
+  for (const file of storyFiles) {
+    const content = await fs.read(file)
+    const titleMatch = content.match(/^#\s+([\d.]+)\s*-\s*(.+)/m)
+    const statusMatch = content.match(/\*\*Status:\*\*\s*(\w+)/i)
+
+    if (titleMatch) {
+      stories.push({
+        storyId: titleMatch[1],
+        title: titleMatch[2],
+        priority: stories.length + 1,
+        status: statusMatch?.[1] ?? 'Draft',
+      })
+    }
+  }
+
+  // Sort by status priority (Draft/Ready first, then InProgress, then Done)
+  const statusPriority: Record<string, number> = {
+    'Draft': 1,
+    'Ready': 2,
+    'InProgress': 3,
+    'InReview': 4,
+    'Done': 5,
+  }
+
+  stories.sort((a, b) => {
+    const aPriority = statusPriority[a.status] ?? 10
+    const bPriority = statusPriority[b.status] ?? 10
+    return aPriority - bPriority
+  })
+
+  // Update priorities
+  stories.forEach((s, i) => {
+    s.priority = i + 1
+  })
+
+  logger.info(`Backlog prioritized: ${stories.length} stories`)
+
+  return success({
+    epicId: targetEpicId,
+    stories,
+    reordered: true,
+  })
+}

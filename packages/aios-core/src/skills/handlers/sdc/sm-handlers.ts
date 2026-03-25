@@ -261,3 +261,88 @@ function generateStoryTemplate(storyId: string, title: string, epicId: string): 
 | ${new Date().toISOString().split('T')[0]} | @sm | Story created |
 `
 }
+
+/**
+ * Create next story result
+ */
+export interface CreateNextStoryResult {
+  storyId: string
+  storyPath: string
+  title: string
+  epicId: string
+  sequenceNumber: number
+}
+
+/**
+ * *create-next-story handler - Create the next story in epic sequence
+ */
+export async function handleCreateNextStory(
+  context: ExtendedSkillContext,
+  args?: Record<string, unknown>
+): Promise<SkillResult<CreateNextStoryResult>> {
+  const { deps, epicId } = context
+  const { fs, logger, prompt } = deps
+
+  // Get epic context
+  const targetEpicId = (args?.epicId as string) ?? epicId
+  if (!targetEpicId) {
+    return failure('Epic ID is required. Provide epicId in context or args.')
+  }
+
+  logger.info(`Creating next story for epic: ${targetEpicId}`)
+
+  // Find existing stories to determine next number
+  const storiesDir = `docs/stories/epics/${targetEpicId}`
+  const existingStories = await fs.glob(`${storiesDir}/*.story.md`)
+
+  // Calculate next story number
+  const storyNumbers = existingStories
+    .map(path => {
+      const match = path.match(/(\d+)\.(\d+)\.story\.md$/)
+      return match ? parseInt(match[2], 10) : 0
+    })
+    .filter(n => n > 0)
+
+  const nextNumber = storyNumbers.length > 0 ? Math.max(...storyNumbers) + 1 : 1
+  const epicNumber = targetEpicId.replace('epic-', '').split('-')[0] || '1'
+  const storyId = `${epicNumber}.${nextNumber}`
+
+  // Get story title from user or args
+  const title = (args?.title as string) ?? await prompt.input(`Enter title for story ${storyId}:`)
+
+  if (!title) {
+    return failure('Story title is required')
+  }
+
+  // Generate story content from template
+  const storyContent = generateStoryTemplate(storyId, title, targetEpicId)
+
+  // Write story file
+  const storyPath = `${storiesDir}/${storyId}.story.md`
+
+  if (context.options.dryRun) {
+    logger.info(`[DRY RUN] Would create story at: ${storyPath}`)
+    return success({
+      storyId,
+      storyPath,
+      title,
+      epicId: targetEpicId,
+      sequenceNumber: nextNumber,
+    }, ['Executed in dry-run mode'])
+  }
+
+  await fs.write(storyPath, storyContent)
+  logger.info(`Created next story: ${storyPath} (sequence #${nextNumber})`)
+
+  // Trigger validation by PO
+  return successWithTriggers(
+    {
+      storyId,
+      storyPath,
+      title,
+      epicId: targetEpicId,
+      sequenceNumber: nextNumber,
+    },
+    ['po:validate-story-draft']
+  )
+}

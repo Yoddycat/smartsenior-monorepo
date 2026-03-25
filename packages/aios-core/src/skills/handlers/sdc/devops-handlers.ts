@@ -289,3 +289,81 @@ export async function handleRelease(
     'Release handler is a placeholder. Integrate with gh CLI.',
   ])
 }
+
+/**
+ * MCP setup result
+ */
+export interface McpSetupResult {
+  name: string
+  configured: boolean
+  configPath: string
+  tools: string[]
+}
+
+/**
+ * *setup-mcp handler - Configure MCP server
+ * EXCLUSIVE to DevOps
+ */
+export async function handleSetupMcp(
+  context: ExtendedSkillContext,
+  args?: Record<string, unknown>
+): Promise<SkillResult<McpSetupResult>> {
+  const { deps } = context
+  const { fs, logger, prompt } = deps
+
+  const mcpName = args?.name as string
+  const mcpType = (args?.type as string) ?? 'docker'
+
+  if (!mcpName) {
+    return failure('MCP name is required')
+  }
+
+  logger.info(`Setting up MCP server: ${mcpName} (type: ${mcpType})`)
+
+  // Confirm setup
+  const confirmed = await prompt.confirm(
+    `Configure MCP server "${mcpName}"? This will modify MCP configuration.`
+  )
+  if (!confirmed) {
+    return failure('MCP setup cancelled by user')
+  }
+
+  // Determine config path based on type
+  const configPath = mcpType === 'docker'
+    ? '~/.docker/mcp/catalogs/docker-mcp.yaml'
+    : '~/.claude.json'
+
+  if (context.options.dryRun) {
+    logger.info('[DRY RUN] Would configure MCP server')
+    return success(
+      {
+        name: mcpName,
+        configured: true,
+        configPath,
+        tools: [],
+      },
+      ['Executed in dry-run mode']
+    )
+  }
+
+  // Placeholder: would write actual MCP configuration
+  const tools: string[] = []
+
+  // Check if config exists
+  const exists = await fs.exists(configPath)
+  if (!exists) {
+    logger.warn(`Config file not found: ${configPath}. Would create new.`)
+  }
+
+  logger.info(`MCP server "${mcpName}" configured`)
+
+  return success(
+    {
+      name: mcpName,
+      configured: true,
+      configPath,
+      tools,
+    },
+    ['MCP setup handler is a placeholder. Integration requires Docker MCP Toolkit.']
+  )
+}

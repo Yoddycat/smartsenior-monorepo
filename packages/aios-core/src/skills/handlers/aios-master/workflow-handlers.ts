@@ -266,6 +266,143 @@ export async function handleDelegate(
   )
 }
 
+/**
+ * Config result
+ */
+export interface ConfigResult {
+  action: 'view' | 'set' | 'reset'
+  configPath: string
+  settings: Record<string, unknown>
+  modified: boolean
+}
+
+/**
+ * *config handler - Manage AIOS configuration
+ */
+export async function handleConfig(
+  context: ExtendedSkillContext,
+  args?: Record<string, unknown>
+): Promise<SkillResult<ConfigResult>> {
+  const { deps } = context
+  const { fs, logger, prompt } = deps
+
+  const action = (args?.action as 'view' | 'set' | 'reset') ?? 'view'
+  const key = args?.key as string
+  const value = args?.value as unknown
+
+  const configPath = '.aios/config.yaml'
+
+  logger.info(`Config action: ${action}`)
+
+  // Check if config exists
+  const exists = await fs.exists(configPath)
+
+  if (action === 'view') {
+    if (!exists) {
+      return success({
+        action: 'view',
+        configPath,
+        settings: {},
+        modified: false,
+      }, ['Config file not found. Using defaults.'])
+    }
+
+    const content = await fs.read(configPath)
+    // Parse YAML (placeholder - would use yaml parser)
+    const settings: Record<string, unknown> = { raw: content }
+
+    return success({
+      action: 'view',
+      configPath,
+      settings,
+      modified: false,
+    })
+  }
+
+  if (action === 'set') {
+    if (!key) {
+      return failure('Config key is required for set action')
+    }
+
+    // Confirm change
+    const confirmed = await prompt.confirm(
+      `Set config "${key}" to "${String(value)}"?`
+    )
+    if (!confirmed) {
+      return failure('Config change cancelled by user')
+    }
+
+    if (context.options.dryRun) {
+      logger.info(`[DRY RUN] Would set ${key}=${String(value)}`)
+      return success({
+        action: 'set',
+        configPath,
+        settings: { [key]: value },
+        modified: false,
+      }, ['Executed in dry-run mode'])
+    }
+
+    // Read existing config or create new
+    let content = ''
+    if (exists) {
+      content = await fs.read(configPath)
+    }
+
+    // Simple key: value append (would use proper YAML parsing)
+    content += `\n${key}: ${String(value)}`
+    await fs.write(configPath, content)
+
+    logger.info(`Config updated: ${key}=${String(value)}`)
+
+    return success({
+      action: 'set',
+      configPath,
+      settings: { [key]: value },
+      modified: true,
+    })
+  }
+
+  if (action === 'reset') {
+    const confirmed = await prompt.confirm(
+      'Reset all AIOS configuration to defaults?'
+    )
+    if (!confirmed) {
+      return failure('Config reset cancelled by user')
+    }
+
+    if (context.options.dryRun) {
+      logger.info('[DRY RUN] Would reset config')
+      return success({
+        action: 'reset',
+        configPath,
+        settings: {},
+        modified: false,
+      }, ['Executed in dry-run mode'])
+    }
+
+    // Write default config
+    const defaultConfig = `# AIOS Configuration
+# Reset at ${new Date().toISOString()}
+
+debug: false
+autoSave: true
+maxIterations: 5
+`
+    await fs.write(configPath, defaultConfig)
+
+    logger.info('Config reset to defaults')
+
+    return success({
+      action: 'reset',
+      configPath,
+      settings: { debug: false, autoSave: true, maxIterations: 5 },
+      modified: true,
+    })
+  }
+
+  return failure(`Unknown config action: ${action}`)
+}
+
 import type { ExtendedSkillHandler } from '../types'
 
 /**
@@ -276,4 +413,5 @@ export const aiosMasterHandlers: Record<string, ExtendedSkillHandler> = {
   'aios-master:help': handleHelp,
   'aios-master:status': handleStatus,
   'aios-master:delegate': handleDelegate,
+  'aios-master:config': handleConfig,
 }

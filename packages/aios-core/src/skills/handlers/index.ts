@@ -41,24 +41,32 @@ export {
   // SM
   handleDraft,
   handleStoryChecklist,
+  handleCreateNextStory,
   // PO
   handleValidateStoryDraft,
   handleAcceptStory,
+  handleCloseStory,
+  handlePrioritizeBacklog,
   // DEV
   handleDevelop,
   handleCommit,
   handleRunTests,
   handleLint,
   handleTypecheck,
+  handleRefactor,
   // QA
   handleGate,
   handleReview,
   handleQALoop,
+  handleCodeRabbitReview,
+  handleSecurityAudit,
+  handleCritiqueSpec,
   // DevOps
   handlePush,
   handleCreatePR,
   handleMergePR,
   handleRelease,
+  handleSetupMcp,
 } from './sdc'
 
 // PM handlers
@@ -94,6 +102,7 @@ export {
   handleHelp,
   handleStatus,
   handleDelegate,
+  handleConfig,
 } from './aios-master'
 
 // Data Engineer handlers
@@ -121,19 +130,27 @@ export {
 export type {
   DraftResult,
   ChecklistResult,
+  CreateNextStoryResult,
   ValidationResult,
+  CloseStoryResult,
+  PrioritizeBacklogResult,
   DevelopResult,
   CommitResult,
   TestResult,
   LintResult,
   TypecheckResult,
+  RefactorResult,
   GateResult,
   ReviewResult,
   QALoopResult,
+  CodeRabbitResult,
+  SecurityAuditResult,
+  CritiqueSpecResult,
   PushResult,
   PRResult,
   MergeResult,
   ReleaseResult,
+  McpSetupResult,
 } from './sdc'
 
 // PM Result types
@@ -164,6 +181,7 @@ export type {
   HelpResult,
   StatusResult,
   DelegateResult,
+  ConfigResult,
 } from './aios-master'
 
 // Data Engineer Result types
