@@ -61,7 +61,42 @@ export {
   handleRelease,
 } from './sdc'
 
-// Result types
+// PM handlers
+export {
+  pmHandlers,
+  handleCreatePrd,
+  handleCreateEpic,
+  handleExecuteEpic,
+  handleGatherRequirements,
+  handleWriteSpec,
+} from './pm'
+
+// Architect handlers
+export {
+  architectHandlers,
+  handleAssessComplexity,
+  handleDesignSystem,
+  handlePlanImplementation,
+} from './architect'
+
+// Analyst handlers
+export {
+  analystHandlers,
+  handleResearchPrompt,
+  handleAnalyzeData,
+  handleCreateReport,
+} from './analyst'
+
+// AIOS Master handlers
+export {
+  aiosMasterHandlers,
+  handleRunWorkflow,
+  handleHelp,
+  handleStatus,
+  handleDelegate,
+} from './aios-master'
+
+// SDC Result types
 export type {
   DraftResult,
   ChecklistResult,
@@ -80,7 +115,41 @@ export type {
   ReleaseResult,
 } from './sdc'
 
+// PM Result types
+export type {
+  PrdResult,
+  EpicResult,
+  RequirementsResult,
+  SpecResult,
+} from './pm'
+
+// Architect Result types
+export type {
+  ComplexityResult,
+  DesignResult,
+  ImplementationPlanResult,
+} from './architect'
+
+// Analyst Result types
+export type {
+  ResearchResult,
+  AnalysisResult,
+  ReportResult,
+} from './analyst'
+
+// AIOS Master Result types
+export type {
+  WorkflowRunResult,
+  HelpResult,
+  StatusResult,
+  DelegateResult,
+} from './aios-master'
+
 import { sdcHandlers } from './sdc'
+import { pmHandlers } from './pm'
+import { architectHandlers } from './architect'
+import { analystHandlers } from './analyst'
+import { aiosMasterHandlers } from './aios-master'
 import type { ExtendedSkillHandler } from './types'
 
 /**
@@ -88,6 +157,10 @@ import type { ExtendedSkillHandler } from './types'
  */
 export const allHandlers: Record<string, ExtendedSkillHandler> = {
   ...sdcHandlers,
+  ...pmHandlers,
+  ...architectHandlers,
+  ...analystHandlers,
+  ...aiosMasterHandlers,
 }
 
 /**
@@ -109,4 +182,25 @@ export function hasHandler(skillId: string): boolean {
  */
 export function listHandledSkills(): string[] {
   return Object.keys(allHandlers)
+}
+
+/**
+ * Get handler count by category
+ */
+export function getHandlerCounts(): {
+  total: number
+  byCategory: Record<string, number>
+} {
+  const byCategory: Record<string, number> = {
+    sdc: Object.keys(sdcHandlers).length,
+    pm: Object.keys(pmHandlers).length,
+    architect: Object.keys(architectHandlers).length,
+    analyst: Object.keys(analystHandlers).length,
+    'aios-master': Object.keys(aiosMasterHandlers).length,
+  }
+
+  return {
+    total: Object.keys(allHandlers).length,
+    byCategory,
+  }
 }
