@@ -1,11 +1,12 @@
 /**
  * AIOS Skills - Definitions Index
  *
- * Auto-registration of all skill definitions
+ * Auto-registration of all skill definitions with handlers
  */
 
 import { getRegistry } from '../registry'
 import type { Skill } from '../types'
+import type { ExtendedSkillHandler } from '../handlers/types'
 
 // Import all skill definitions
 import { smSkills } from './sm'
@@ -78,6 +79,37 @@ export function registerAllSkills(): void {
 
   for (const skill of ALL_SKILLS) {
     registry.register(skill)
+  }
+}
+
+/**
+ * Register all skills with their handlers
+ *
+ * This function registers both skills and their handlers in one call.
+ * Handlers are looked up from the provided handler map.
+ */
+export function registerAllSkillsWithHandlers(
+  handlers: Record<string, ExtendedSkillHandler>
+): {
+  skills: number
+  handlers: { registered: number; notFound: number }
+} {
+  const registry = getRegistry()
+
+  // First register all skills
+  for (const skill of ALL_SKILLS) {
+    registry.register(skill)
+  }
+
+  // Then register handlers
+  const result = registry.registerHandlers(handlers as Record<string, never>)
+
+  return {
+    skills: ALL_SKILLS.length,
+    handlers: {
+      registered: result.registered.length,
+      notFound: result.notFound.length,
+    },
   }
 }
 

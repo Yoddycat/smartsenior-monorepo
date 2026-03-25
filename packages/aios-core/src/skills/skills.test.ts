@@ -295,3 +295,117 @@ describe('Registry Integration', () => {
     expect(devResults.length).toBeGreaterThan(0)
   })
 })
+
+describe('Handler Integration', () => {
+  beforeEach(() => {
+    SkillRegistry.reset()
+  })
+
+  it('should register handler for existing skill', () => {
+    const registry = SkillRegistry.getInstance()
+    registerAllSkills()
+
+    const mockHandler = async () => ({ success: true, data: 'test' })
+    const registered = registry.registerHandler('dev:develop', mockHandler)
+
+    expect(registered).toBe(true)
+    expect(registry.hasHandler('dev:develop')).toBe(true)
+  })
+
+  it('should not register handler for non-existent skill', () => {
+    const registry = SkillRegistry.getInstance()
+
+    const mockHandler = async () => ({ success: true, data: 'test' })
+    const registered = registry.registerHandler('unknown:skill', mockHandler)
+
+    expect(registered).toBe(false)
+  })
+
+  it('should register multiple handlers from map', () => {
+    const registry = SkillRegistry.getInstance()
+    registerAllSkills()
+
+    const handlers = {
+      'dev:develop': async () => ({ success: true, data: 'develop' }),
+      'dev:commit': async () => ({ success: true, data: 'commit' }),
+      'unknown:skill': async () => ({ success: true, data: 'unknown' }),
+    }
+
+    const result = registry.registerHandlers(handlers)
+
+    expect(result.registered).toContain('dev:develop')
+    expect(result.registered).toContain('dev:commit')
+    expect(result.notFound).toContain('unknown:skill')
+  })
+
+  it('should get skills with and without handlers', () => {
+    const registry = SkillRegistry.getInstance()
+    registerAllSkills()
+
+    // Initially no handlers
+    const withoutHandlers = registry.getSkillsWithoutHandlers()
+    expect(withoutHandlers.length).toBe(registry.getAll().length)
+
+    // Register one handler
+    registry.registerHandler('dev:develop', async () => ({ success: true }))
+
+    const withHandlers = registry.getSkillsWithHandlers()
+    expect(withHandlers.length).toBe(1)
+    expect(withHandlers[0].id).toBe('dev:develop')
+
+    const stillWithout = registry.getSkillsWithoutHandlers()
+    expect(stillWithout.length).toBe(registry.getAll().length - 1)
+  })
+
+  it('should return handler stats', () => {
+    const registry = SkillRegistry.getInstance()
+    registerAllSkills()
+
+    // Initially 0 coverage
+    let stats = registry.getHandlerStats()
+    expect(stats.total).toBeGreaterThan(0)
+    expect(stats.withHandlers).toBe(0)
+    expect(stats.coveragePercent).toBe(0)
+
+    // Register some handlers
+    registry.registerHandler('dev:develop', async () => ({ success: true }))
+    registry.registerHandler('dev:commit', async () => ({ success: true }))
+
+    stats = registry.getHandlerStats()
+    expect(stats.withHandlers).toBe(2)
+    expect(stats.coveragePercent).toBeGreaterThan(0)
+  })
+})
+
+describe('initializeSkillSystem', () => {
+  beforeEach(() => {
+    SkillRegistry.reset()
+  })
+
+  it('should initialize complete skill system', async () => {
+    const { initializeSkillSystem } = await import('./index')
+
+    const result = initializeSkillSystem()
+
+    expect(result.skills).toBeGreaterThan(0)
+    expect(result.handlers.registered).toBeGreaterThan(0)
+    expect(result.coverage).toBeGreaterThan(0)
+  })
+
+  it('should provide system status', async () => {
+    const { initializeSkillSystem, getSkillSystemStatus } = await import('./index')
+
+    // Before initialization
+    let status = getSkillSystemStatus()
+    expect(status.initialized).toBe(false)
+
+    // After initialization
+    initializeSkillSystem()
+    status = getSkillSystemStatus()
+
+    expect(status.initialized).toBe(true)
+    expect(status.skills.total).toBeGreaterThan(0)
+    expect(status.handlers.total).toBeGreaterThan(0)
+    expect(status.handlers.withHandlers.length).toBeGreaterThan(0)
+  })
+})

@@ -324,6 +324,82 @@ export class SkillRegistry {
 
     return result.sort((a, b) => a.command.localeCompare(b.command))
   }
+
+  /**
+   * Register a handler for an existing skill
+   */
+  registerHandler(skillId: string, handler: SkillHandler): boolean {
+    const skill = this.skills.get(skillId)
+    if (!skill) {
+      return false
+    }
+
+    skill.handler = handler
+    return true
+  }
+
+  /**
+   * Register multiple handlers from a map
+   */
+  registerHandlers(handlers: Record<string, SkillHandler>): {
+    registered: string[]
+    notFound: string[]
+  } {
+    const registered: string[] = []
+    const notFound: string[] = []
+
+    for (const [skillId, handler] of Object.entries(handlers)) {
+      if (this.registerHandler(skillId, handler)) {
+        registered.push(skillId)
+      } else {
+        notFound.push(skillId)
+      }
+    }
+
+    return { registered, notFound }
+  }
+
+  /**
+   * Get skills that have handlers
+   */
+  getSkillsWithHandlers(): RegisteredSkill[] {
+    return this.getAll().filter(s => s.handler !== undefined)
+  }
+
+  /**
+   * Get skills that don't have handlers
+   */
+  getSkillsWithoutHandlers(): RegisteredSkill[] {
+    return this.getAll().filter(s => s.handler === undefined)
+  }
+
+  /**
+   * Check if a skill has a handler
+   */
+  hasHandler(skillId: string): boolean {
+    const skill = this.get(skillId)
+    return skill?.handler !== undefined
+  }
+
+  /**
+   * Get handler coverage statistics
+   */
+  getHandlerStats(): {
+    total: number
+    withHandlers: number
+    withoutHandlers: number
+    coveragePercent: number
+  } {
+    const all = this.getAll()
+    const withHandlers = all.filter(s => s.handler !== undefined).length
+
+    return {
+      total: all.length,
+      withHandlers,
+      withoutHandlers: all.length - withHandlers,
+      coveragePercent: all.length > 0 ? Math.round((withHandlers / all.length) * 100) : 0,
+    }
+  }
 }
 
 /**
