@@ -10,6 +10,15 @@ O Skills System permite que agentes executem comandos (`*command`) com:
 - Dependências entre skills
 - Execução com contexto completo
 
+## Métricas Atuais
+
+| Métrica | Valor |
+|---------|-------|
+| Total de skills | 51 |
+| Handlers implementados | 42 (82%) |
+| Testes | 77 |
+| Agentes | 11 |
+
 ## Instalação
 
 ```typescript
@@ -17,7 +26,7 @@ import { initializeSkillSystem } from '@smartsenior/aios-core/skills'
 
 // Inicializa todas as skills e handlers
 const result = initializeSkillSystem()
-// { skills: 51, handlers: { registered: 16 }, coverage: 31 }
+// { skills: 51, handlers: { registered: 42 }, coverage: 82 }
 ```
 
 ## Estrutura
@@ -43,108 +52,102 @@ skills/
 └── handlers/             # Implementação de execução
     ├── types.ts          # Tipos de handlers
     ├── base.ts           # Utilitários
-    └── sdc/              # Handlers do Story Development Cycle
+    ├── sdc/              # Handlers do Story Development Cycle
+    ├── pm/               # PM handlers
+    ├── architect/        # Architect handlers
+    ├── analyst/          # Analyst handlers
+    ├── aios-master/      # AIOS Master handlers
+    ├── data-engineer/    # Data Engineer handlers
+    └── ux-design-expert/ # UX Design Expert handlers
 ```
 
 ## Skills por Agente
 
-### @sm (Scrum Master)
-| Comando | Descrição |
-|---------|-----------|
-| `*draft` | Criar story draft |
-| `*story-checklist` | Validar contra checklist |
-| `*create-next-story` | Criar próxima story do epic |
+### @sm (Scrum Master) - 2 skills
+| Comando | Descrição | Handler |
+|---------|-----------|---------|
+| `*draft` | Criar story draft | ✅ |
+| `*story-checklist` | Validar contra checklist | ✅ |
 
-### @po (Product Owner)
-| Comando | Descrição |
-|---------|-----------|
-| `*validate-story-draft` | Validar story (10 pontos) |
-| `*close-story` | Fechar story como Done |
-| `*accept-story` | Aceitar story após QA |
-| `*prioritize-backlog` | Priorizar backlog |
+### @po (Product Owner) - 2 skills
+| Comando | Descrição | Handler |
+|---------|-----------|---------|
+| `*validate-story-draft` | Validar story (10 pontos) | ✅ |
+| `*accept-story` | Aceitar story após QA | ✅ |
 
-### @dev (Developer)
-| Comando | Descrição |
-|---------|-----------|
-| `*develop` | Implementar story |
-| `*commit` | Criar commit git |
-| `*run-tests` | Executar testes |
-| `*lint` | Executar linting |
-| `*typecheck` | Verificar tipos TypeScript |
-| `*refactor` | Refatorar código |
+### @dev (Developer) - 5 skills
+| Comando | Descrição | Handler |
+|---------|-----------|---------|
+| `*develop` | Implementar story | ✅ |
+| `*commit` | Criar commit git | ✅ |
+| `*run-tests` | Executar testes | ✅ |
+| `*lint` | Executar linting | ✅ |
+| `*typecheck` | Verificar tipos TypeScript | ✅ |
 
-### @qa (Quality Assurance)
-| Comando | Descrição |
-|---------|-----------|
-| `*gate` | Executar QA gate (7 checks) |
-| `*review` | Code review |
-| `*qa-loop` | Loop iterativo de QA |
-| `*coderabbit-review` | Review automatizado |
-| `*security-audit` | Auditoria de segurança |
-| `*critique-spec` | Criticar especificação |
+### @qa (Quality Assurance) - 3 skills
+| Comando | Descrição | Handler |
+|---------|-----------|---------|
+| `*gate` | Executar QA gate (7 checks) | ✅ |
+| `*review` | Code review | ✅ |
+| `*qa-loop` | Loop iterativo de QA | ✅ |
 
-### @devops (DevOps) - EXCLUSIVO
-| Comando | Descrição |
-|---------|-----------|
-| `*push` | Push para remote |
-| `*create-pr` | Criar pull request |
-| `*merge-pr` | Merge de PR |
-| `*release` | Criar release |
-| `*setup-mcp` | Configurar MCP server |
+### @devops (DevOps) - 4 skills (EXCLUSIVO)
+| Comando | Descrição | Handler |
+|---------|-----------|---------|
+| `*push` | Push para remote | ✅ |
+| `*create-pr` | Criar pull request | ✅ |
+| `*merge-pr` | Merge de PR | ✅ |
+| `*release` | Criar release | ✅ |
 
-### @pm (Project Manager)
-| Comando | Descrição |
-|---------|-----------|
-| `*create-prd` | Criar PRD |
-| `*create-epic` | Criar epic |
-| `*execute-epic` | Executar epic |
-| `*gather-requirements` | Coletar requisitos |
-| `*write-spec` | Escrever especificação |
+### @pm (Project Manager) - 5 skills
+| Comando | Descrição | Handler |
+|---------|-----------|---------|
+| `*create-prd` | Criar PRD | ✅ |
+| `*create-epic` | Criar epic | ✅ |
+| `*execute-epic` | Executar epic | ✅ |
+| `*gather-requirements` | Coletar requisitos | ✅ |
+| `*write-spec` | Escrever especificação | ✅ |
 
-### @architect (Architect)
-| Comando | Descrição |
-|---------|-----------|
-| `*assess-complexity` | Avaliar complexidade |
-| `*design-system` | Criar design de sistema |
-| `*create-architecture` | Criar arquitetura |
-| `*review-architecture` | Revisar arquitetura |
-| `*plan-implementation` | Planejar implementação |
+### @architect (Architect) - 3 skills
+| Comando | Descrição | Handler |
+|---------|-----------|---------|
+| `*assess-complexity` | Avaliar complexidade | ✅ |
+| `*design-system` | Criar design de sistema | ✅ |
+| `*plan-implementation` | Planejar implementação | ✅ |
 
-### @analyst (Analyst)
-| Comando | Descrição |
-|---------|-----------|
-| `*research-prompt` | Pesquisa para spec |
-| `*analyze-data` | Analisar dados |
-| `*create-report` | Criar relatório |
-| `*competitor-analysis` | Análise de competidores |
+### @analyst (Analyst) - 3 skills
+| Comando | Descrição | Handler |
+|---------|-----------|---------|
+| `*research-prompt` | Pesquisa para spec | ✅ |
+| `*analyze-data` | Analisar dados | ✅ |
+| `*create-report` | Criar relatório | ✅ |
 
-### @data-engineer (Data Engineer)
-| Comando | Descrição |
-|---------|-----------|
-| `*create-schema` | Criar schema DDL |
-| `*optimize-query` | Otimizar queries |
-| `*create-migration` | Criar migration |
-| `*audit-database` | Auditar banco |
-| `*implement-rls` | Implementar RLS |
+### @data-engineer (Data Engineer) - 5 skills
+| Comando | Descrição | Handler |
+|---------|-----------|---------|
+| `*create-schema` | Criar schema DDL | ✅ |
+| `*optimize-query` | Otimizar queries | ✅ |
+| `*create-migration` | Criar migration | ✅ |
+| `*audit-database` | Auditar banco | ✅ |
+| `*implement-rls` | Implementar RLS | ✅ |
 
-### @aios-master (AIOS Master)
-| Comando | Descrição |
-|---------|-----------|
-| `*run-workflow` | Executar workflow |
-| `*help` | Mostrar ajuda |
-| `*status` | Status do sistema |
-| `*config` | Gerenciar configuração |
-| `*delegate` | Delegar tarefa |
+### @ux-design-expert (UX Design Expert) - 6 skills
+| Comando | Descrição | Handler |
+|---------|-----------|---------|
+| `*create-prototype` | Criar protótipo | ✅ |
+| `*review-ux` | Revisar UX/UI | ✅ |
+| `*create-wireframe` | Criar wireframe | ✅ |
+| `*audit-accessibility` | Auditoria WCAG | ✅ |
+| `*create-design-system` | Criar design system | ✅ |
+| `*user-flow-analysis` | Análise de user flow | ✅ |
 
-### @ux-design-expert (UX Design Expert)
-| Comando | Descrição |
-|---------|-----------|
-| `*create-prototype` | Criar protótipo |
-| `*review-ux` | Revisar UX/UI |
-| `*create-wireframe` | Criar wireframe |
-| `*audit-accessibility` | Auditoria WCAG |
-| `*create-design-system` | Criar design system |
-| `*user-flow-analysis` | Análise de user flow |
+### @aios-master (AIOS Master) - 4 skills
+| Comando | Descrição | Handler |
+|---------|-----------|---------|
+| `*run-workflow` | Executar workflow | ✅ |
+| `*help` | Mostrar ajuda | ✅ |
+| `*status` | Status do sistema | ✅ |
+| `*delegate` | Delegar tarefa | ✅ |
 
 ## Sistema de Autoridade
 
@@ -255,6 +258,7 @@ const devSkill = defineDevSkill({
 import {
   success,
   failure,
+  successWithTriggers,
   withErrorHandling,
   type ExtendedSkillContext,
 } from '@smartsenior/aios-core/skills'
@@ -263,7 +267,7 @@ import {
 async function myHandler(
   context: ExtendedSkillContext,
   args?: Record<string, unknown>
-) {
+): Promise<SkillResult<MyResult>> {
   const { deps, story } = context
 
   if (!story?.storyId) {
@@ -281,16 +285,61 @@ async function myHandler(
 const safeHandler = withErrorHandling(myHandler)
 ```
 
+### Dependências Injetadas nos Handlers
+
+```typescript
+interface HandlerDependencies {
+  fs: {
+    read(path: string): Promise<string>
+    write(path: string, content: string): Promise<void>
+    exists(path: string): Promise<boolean>
+    glob(pattern: string): Promise<string[]>
+  }
+  git: {
+    status(): Promise<{ hasChanges: boolean }>
+    add(files: string[]): Promise<void>
+    commit(message: string): Promise<string>
+    push(remote?: string, branch?: string): Promise<void>
+    branch(): Promise<string>
+  }
+  logger: {
+    info(message: string): void
+    warn(message: string): void
+    error(message: string): void
+    debug(message: string): void
+  }
+  prompt: {
+    confirm(message: string): Promise<boolean>
+    input(message: string): Promise<string>
+    select<T>(message: string, options: T[]): Promise<T>
+  }
+}
+```
+
 ### Status do Sistema
 
 ```typescript
-import { getSkillSystemStatus } from '@smartsenior/aios-core/skills'
+import { getSkillSystemStatus, getHandlerCounts } from '@smartsenior/aios-core/skills'
 
 const status = getSkillSystemStatus()
 // {
 //   initialized: true,
 //   skills: { total: 51, byOwner: {...}, byCategory: {...} },
-//   handlers: { total: 16, coverage: 31, withHandlers: [...], withoutHandlers: [...] }
+//   handlers: { total: 42, coverage: 82, withHandlers: [...], withoutHandlers: [...] }
+// }
+
+const counts = getHandlerCounts()
+// {
+//   total: 42,
+//   byCategory: {
+//     sdc: 16,
+//     pm: 5,
+//     architect: 3,
+//     analyst: 3,
+//     'aios-master': 4,
+//     'data-engineer': 5,
+//     'ux-design-expert': 6
+//   }
 // }
 ```
 
@@ -314,6 +363,35 @@ const status = getSkillSystemStatus()
 @pm *gather-requirements → @architect *assess-complexity → @analyst *research-prompt → @pm *write-spec → @qa *critique-spec → @architect *plan-implementation
 ```
 
+## Handler Utilities
+
+```typescript
+// Resultado de sucesso
+success(data)
+success(data, ['warning1', 'warning2'])
+
+// Resultado de erro
+failure('Error message')
+
+// Sucesso com skills triggered
+successWithTriggers(data, ['next:skill', 'another:skill'])
+
+// Wrapper para error handling automático
+const safeHandler = withErrorHandling(myHandler)
+
+// Wrapper para dry-run
+const dryRunHandler = withDryRun(myHandler, mockResult)
+
+// Wrapper para timeout
+const timedHandler = withTimeout(myHandler, 30000)
+
+// Wrapper para confirmação
+const confirmedHandler = withConfirmation(myHandler, 'Proceed?')
+
+// Compor handlers
+const composedHandler = composeHandlers(handler1, handler2, handler3)
+```
+
 ## Testes
 
 ```bash
@@ -321,9 +399,24 @@ cd packages/aios-core
 npm test
 ```
 
-54 testes cobrindo:
-- Registry (registro, filtros, execução)
-- Authority (validação, presets, bloqueios)
-- Skill Definitions (todas as skills)
-- Handlers (SDC completo)
-- Integração (inicialização, status)
+77 testes cobrindo:
+- Base Handler Utilities (7 testes)
+- Handler Wrappers (3 testes)
+- SDC Handlers (12 testes)
+- Handler Registry (6 testes)
+- Data Engineer Handlers (10 testes)
+- UX Design Expert Handlers (10 testes)
+- Skills Registry (29 testes)
+
+## Cobertura de Handlers por Categoria
+
+| Categoria | Handlers | Cobertura |
+|-----------|----------|-----------|
+| SDC | 16 | 100% |
+| PM | 5 | 100% |
+| Architect | 3 | 100% |
+| Analyst | 3 | 100% |
+| AIOS Master | 4 | 100% |
+| Data Engineer | 5 | 100% |
+| UX Design Expert | 6 | 100% |
+| **Total** | **42/51** | **82%** |
